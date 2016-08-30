@@ -29,7 +29,9 @@ public class RavenBuild {
 	
 	public void run() {
 		BuildConfiguration buildConfiguration = new BuildConfiguration();
-		pluginSystem.loadPlugins();
+		buildConfiguration.load(buildOptions.buildConfigFile());
+		
+		pluginSystem.loadPlugins(buildConfiguration);
 		
 		taskgraph.run(buildOptions.task(), buildOptions.taskOptions());
 	}

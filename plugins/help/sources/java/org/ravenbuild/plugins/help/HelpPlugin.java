@@ -11,4 +11,9 @@ public class HelpPlugin implements BuildPlugin {
 				new HelpTask(pluginContext.logger(), pluginContext.taskRepository()),
 				HelpTaskOptions.class);
 	}
+	
+	@Override
+	public String getId() {
+		return "org.ravenbuild.help";
+	}
 }

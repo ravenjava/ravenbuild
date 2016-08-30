@@ -1,15 +1,21 @@
 package org.ravenbuild.plugins;
 
+import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.ravenbuild.config.BuildConfiguration;
 import org.ravenbuild.logging.Logger;
 import org.ravenbuild.tasks.TaskGraph;
 import org.ravenbuild.tasks.TaskRepository;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -23,9 +29,21 @@ public class PluginSystemTest {
 		final ClasspathScanner classpathScanner = mock(ClasspathScanner.class);
 		PluginSystem pluginSystem = new PluginSystem(taskgraph, mock(TaskRepository.class), classpathScanner, mock(Logger.class));
 		
-		pluginSystem.loadPlugins();
+		pluginSystem.loadPlugins(mock(BuildConfiguration.class));
 		
 		verify(classpathScanner).findAllClassesImplementing(eq(BuildPlugin.class));
+	}
+	
+	@Test
+	public void doesNotLoadPluginIfItIsNotSpecifiedInTheBuildConfiguration() {
+		BuildPluginMock.pluginInitializedWithContext = null;
+		ClasspathScanner classpathScanner = mock(ClasspathScanner.class);
+		PluginSystem pluginSystem = new PluginSystem(mock(TaskGraph.class), mock(TaskRepository.class), classpathScanner, mock(Logger.class));
+		
+		when(classpathScanner.findAllClassesImplementing(eq(BuildPlugin.class))).thenReturn(Arrays.asList(BuildPluginMock.class));
+		pluginSystem.loadPlugins(mock(BuildConfiguration.class));
+		
+		assertNull(BuildPluginMock.pluginInitializedWithContext);
 	}
 	
 	@Test
@@ -36,7 +54,9 @@ public class PluginSystemTest {
 		when(classpathScanner.findAllClassesImplementing(eq(BuildPlugin.class))).thenReturn(Arrays.asList(BuildPluginMock.class));
 		PluginSystem pluginSystem = new PluginSystem(taskgraph, mock(TaskRepository.class), classpathScanner, mock(Logger.class));
 		
-		pluginSystem.loadPlugins();
+		BuildConfiguration buildConfiguration = mock(BuildConfiguration.class);
+		when(buildConfiguration.getConfigurationFor("plugins", List.class)).thenReturn(Arrays.asList("org.ravenbuild.MockPlugin"));
+		pluginSystem.loadPlugins(buildConfiguration);
 		
 		assertNotNull(BuildPluginMock.pluginInitializedWithContext);
 	}
@@ -49,9 +69,17 @@ public class PluginSystemTest {
 		when(classpathScanner.findAllClassesImplementing(eq(BuildPlugin.class))).thenReturn(Arrays.asList(BuildPluginMock.class));
 		PluginSystem pluginSystem = new PluginSystem(taskgraph, mock(TaskRepository.class), classpathScanner, mock(Logger.class));
 		
-		pluginSystem.loadPlugins();
+		BuildConfiguration buildConfiguration = mock(BuildConfiguration.class);
+		when(buildConfiguration.getConfigurationFor("plugins", List.class)).thenReturn(Arrays.asList("org.ravenbuild.MockPlugin"));
+		pluginSystem.loadPlugins(buildConfiguration);
 		
 		assertThat(pluginSystem.allPlugins(), contains(instanceOf(BuildPluginMock.class)));
+	}
+	
+	@Test
+	@Ignore("FIXME: Should print an error if the \"plugins\" config contains a non-known plugin id!")
+	public void printsAnErrorIfPluginsConfigContainsUnknowId() {
+		Assert.fail("Implement me!");
 	}
 	
 	public static class BuildPluginMock implements BuildPlugin {
@@ -60,6 +88,11 @@ public class PluginSystemTest {
 		@Override
 		public void initialize(final PluginContext pluginContext) {
 			pluginInitializedWithContext = pluginContext;
+		}
+		
+		@Override
+		public String getId() {
+			return "org.ravenbuild.MockPlugin";
 		}
 	}
 }
