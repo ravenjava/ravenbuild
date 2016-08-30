@@ -3,6 +3,7 @@ package org.ravenbuild.plugins;
 import net.davidtanzer.jdefensive.Args;
 import org.ravenbuild.logging.Logger;
 import org.ravenbuild.tasks.TaskGraph;
+import org.ravenbuild.tasks.TaskRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,14 +12,17 @@ public class PluginSystem {
 	private final TaskGraph taskgraph;
 	private final ClasspathScanner classpathScanner;
 	private final Logger logger;
+	private final TaskRepository taskRepository;
 	private List<BuildPlugin> allPlugins = new ArrayList<>();
 	
-	public PluginSystem(final TaskGraph taskgraph, final ClasspathScanner classpathScanner, final Logger logger) {
+	public PluginSystem(final TaskGraph taskgraph, final TaskRepository taskRepository, final ClasspathScanner classpathScanner, final Logger logger) {
 		Args.notNull(taskgraph, "taskgraph");
+		Args.notNull(taskRepository, "taskRepository");
 		Args.notNull(classpathScanner, "classpathScanner");
 		Args.notNull(logger, "logger");
 		
 		this.taskgraph = taskgraph;
+		this.taskRepository = taskRepository;
 		this.classpathScanner = classpathScanner;
 		this.logger = logger;
 	}
@@ -30,7 +34,7 @@ public class PluginSystem {
 			try {
 				final BuildPlugin plugin = pluginClass.newInstance();
 				
-				final PluginContext pluginContext = new DefaultPluginContext(this, taskgraph, logger);
+				final PluginContext pluginContext = new DefaultPluginContext(this, taskgraph, taskRepository, logger);
 				plugin.initialize(pluginContext);
 				
 				allPlugins.add(plugin);

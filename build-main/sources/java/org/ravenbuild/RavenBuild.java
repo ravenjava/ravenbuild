@@ -1,6 +1,7 @@
 package org.ravenbuild;
 
 import org.ravenbuild.classpath.FastClasspathClasspathScanner;
+import org.ravenbuild.config.BuildConfiguration;
 import org.ravenbuild.logging.Logger;
 import org.ravenbuild.plugins.ClasspathScanner;
 import org.ravenbuild.plugins.PluginSystem;
@@ -23,10 +24,11 @@ public class RavenBuild {
 		final TaskRunner taskRunner = new TaskRunner();
 		taskgraph = new TaskGraph(taskRepository, taskRunner, logger);
 		classpathScanner = new FastClasspathClasspathScanner();
-		pluginSystem = new PluginSystem(taskgraph, classpathScanner, logger);
+		pluginSystem = new PluginSystem(taskgraph, taskRepository, classpathScanner, logger);
 	}
 	
 	public void run() {
+		BuildConfiguration buildConfiguration = new BuildConfiguration();
 		pluginSystem.loadPlugins();
 		
 		taskgraph.run(buildOptions.task(), buildOptions.taskOptions());

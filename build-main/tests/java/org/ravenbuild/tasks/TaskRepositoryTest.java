@@ -3,6 +3,11 @@ package org.ravenbuild.tasks;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.List;
+
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
@@ -25,6 +30,17 @@ public class TaskRepositoryTest {
 		final Task task = repository.findTask("taskName");
 		
 		assertSame(expected, task);
+	}
+	
+	@Test
+	public void findsAllRegisteredTaskGroups() {
+		final TaskRepository repository = new TaskRepository();
+		repository.add("generalTask", new TaskRepository.TaskInfo(mock(Task.class), null), "General");
+		repository.add("specialTask", new TaskRepository.TaskInfo(mock(Task.class), null), "Special");
+		
+		final List<TaskGroup> groups = repository.allTaskGroups();
+		
+		assertThat(groups, containsInAnyOrder(hasProperty("name", is("General")), hasProperty("name", is("Special"))));
 	}
 	
 	@Test

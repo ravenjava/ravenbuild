@@ -8,7 +8,7 @@ public class HelpPlugin implements BuildPlugin {
 	public void initialize(final PluginContext pluginContext) {
 		pluginContext.registerTask(
 				"help",
-				new HelpTask(pluginContext.logger(), pluginContext.taskGraph()),
+				new HelpTask(pluginContext.logger(), pluginContext.taskRepository()),
 				HelpTaskOptions.class);
 	}
 }
