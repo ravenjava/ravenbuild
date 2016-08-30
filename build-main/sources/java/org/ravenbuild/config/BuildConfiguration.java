@@ -21,6 +21,6 @@ public class BuildConfiguration {
 	}
 	
 	public <T> T getConfigurationFor(final String configurationSection, final Class<T> type) {
-		return null;
+		return (T) configurationMap.get(configurationSection);
 	}
 }
