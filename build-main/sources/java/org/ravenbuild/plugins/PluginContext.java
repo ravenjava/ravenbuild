@@ -11,4 +11,6 @@ public interface PluginContext {
 	Logger logger();
 	TaskGraph taskGraph();
 	TaskRepository taskRepository();
+	
+	<T extends BuildPlugin> T dependsOnPlugin(Class<T> dependency);
 }

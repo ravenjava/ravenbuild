@@ -17,6 +17,7 @@ public class PluginSystem {
 	private final Logger logger;
 	private final TaskRepository taskRepository;
 	private List<BuildPlugin> allPlugins = new ArrayList<>();
+	private HashSet activePluginIds = new HashSet<>();
 	
 	public PluginSystem(final TaskGraph taskgraph, final TaskRepository taskRepository, final ClasspathScanner classpathScanner, final Logger logger) {
 		Args.notNull(taskgraph, "taskgraph");
@@ -31,33 +32,51 @@ public class PluginSystem {
 	}
 	
 	public void loadPlugins(final BuildConfiguration buildConfiguration) {
+		populateActivePluginIds(buildConfiguration);
 		final List<Class<? extends BuildPlugin>> allPluginClasses = classpathScanner.findAllClassesImplementing(BuildPlugin.class);
-		Set<String> activePluginIds = new HashSet<>();
+		
+		for(Class<? extends BuildPlugin> pluginClass : allPluginClasses) {
+			loadAndInitialize(pluginClass, LoadAs.ACTIVE_PLUGIN);
+		}
+	}
+	
+	private void populateActivePluginIds(final BuildConfiguration buildConfiguration) {
 		List activePluginIdsList = buildConfiguration.getConfigurationFor("plugins", List.class);
 		if(activePluginIdsList != null) {
 			activePluginIds.addAll(activePluginIdsList);
 		}
 		activePluginIds.add("org.ravenbuild.help");
-		
-		for(Class<? extends BuildPlugin> pluginClass : allPluginClasses) {
-			try {
-				final BuildPlugin plugin = pluginClass.newInstance();
-				final String pluginId = plugin.getId();
-				if(activePluginIds.contains(pluginId)) {
-					activePluginIds.remove(pluginId);
-					
-					final PluginContext pluginContext = new DefaultPluginContext(this, taskgraph, taskRepository, logger);
-					plugin.initialize(pluginContext);
-					
-					allPlugins.add(plugin);
-				}
-			} catch (InstantiationException | IllegalAccessException e) {
-				throw new IllegalStateException("Could not instantiate build plugin \""+pluginClass.getName()+"\"", e);
+	}
+	
+	<T extends BuildPlugin> T loadAndInitialize(final Class<T> pluginClass, final LoadAs loadAs) {
+		try {
+			final T plugin = pluginClass.newInstance();
+			final String pluginId = plugin.getId();
+			boolean activePlugin = false;
+			
+			if(activePluginIds.contains(pluginId)) {
+				activePluginIds.remove(pluginId);
+				activePlugin = true;
 			}
+			
+			if(activePlugin || loadAs == LoadAs.DEPENDENCY) {
+				final PluginContext pluginContext = new DefaultPluginContext(this, taskgraph, taskRepository, logger);
+				plugin.initialize(pluginContext);
+				
+				allPlugins.add(plugin);
+				return plugin;
+			}
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new IllegalStateException("Could not instantiate build plugin \""+pluginClass.getName()+"\"", e);
 		}
+		return null;
 	}
 	
 	public List<BuildPlugin> allPlugins() {
 		return allPlugins;
+	}
+	
+	static enum LoadAs {
+		ACTIVE_PLUGIN, DEPENDENCY;
 	}
 }

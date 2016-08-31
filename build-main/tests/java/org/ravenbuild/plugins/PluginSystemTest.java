@@ -14,9 +14,8 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.contains;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
+import static org.junit.Assume.assumeNotNull;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -77,9 +76,33 @@ public class PluginSystemTest {
 	}
 	
 	@Test
+	public void loadsAndInitializesPluginDependencies() {
+		BuildPluginMock.pluginInitializedWithContext = null;
+		BuildPluginMock2.pluginInitializedWithContext = null;
+		final TaskGraph taskgraph = mock(TaskGraph.class);
+		final ClasspathScanner classpathScanner = mock(ClasspathScanner.class);
+		when(classpathScanner.findAllClassesImplementing(eq(BuildPlugin.class)))
+				.thenReturn(Arrays.asList(BuildPluginMock.class, BuildPluginMock2.class));
+		PluginSystem pluginSystem = new PluginSystem(taskgraph, mock(TaskRepository.class), classpathScanner, mock(Logger.class));
+		
+		BuildConfiguration buildConfiguration = mock(BuildConfiguration.class);
+		when(buildConfiguration.getConfigurationFor("plugins", List.class)).thenReturn(Arrays.asList("org.ravenbuild.MockPlugin2"));
+		pluginSystem.loadPlugins(buildConfiguration);
+		
+		assumeNotNull(BuildPluginMock2.pluginInitializedWithContext);
+		assertNotNull(BuildPluginMock.pluginInitializedWithContext);
+	}
+	
+	@Test
+	@Ignore("FIXME: Should detect cycles in plugin dependencies!")
+	public void printsErrorIfCyclicPluginDependenciesAreDetected() {
+		fail("Implement me!");
+	}
+	
+	@Test
 	@Ignore("FIXME: Should print an error if the \"plugins\" config contains a non-known plugin id!")
 	public void printsAnErrorIfPluginsConfigContainsUnknowId() {
-		Assert.fail("Implement me!");
+		fail("Implement me!");
 	}
 	
 	public static class BuildPluginMock implements BuildPlugin {
@@ -93,6 +116,21 @@ public class PluginSystemTest {
 		@Override
 		public String getId() {
 			return "org.ravenbuild.MockPlugin";
+		}
+	}
+	
+	public static class BuildPluginMock2 implements BuildPlugin {
+		private static PluginContext pluginInitializedWithContext;
+		
+		@Override
+		public void initialize(final PluginContext pluginContext) {
+			pluginContext.dependsOnPlugin(BuildPluginMock.class);
+			pluginInitializedWithContext = pluginContext;
+		}
+		
+		@Override
+		public String getId() {
+			return "org.ravenbuild.MockPlugin2";
 		}
 	}
 }

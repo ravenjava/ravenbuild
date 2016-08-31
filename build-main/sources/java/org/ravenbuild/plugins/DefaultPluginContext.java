@@ -34,6 +34,11 @@ class DefaultPluginContext implements PluginContext {
 	}
 	
 	@Override
+	public <T extends BuildPlugin> T dependsOnPlugin(final Class<T> dependency) {
+		return pluginSystem.loadAndInitialize(dependency, PluginSystem.LoadAs.DEPENDENCY);
+	}
+	
+	@Override
 	public void registerTask(final String name, final Task task, final Class<?> taskOptionsType) {
 		taskGraph.registerTask(name, task, taskOptionsType);
 	}
