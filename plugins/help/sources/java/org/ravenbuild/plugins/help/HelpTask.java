@@ -11,11 +11,11 @@ import java.util.List;
 
 @ShortDescription("Prints a general help message, help for a task or the task list. Run \"raven help task=help\" for more info.")
 @LongDescription({
-	"Use the help task to find out how to use \"raven\" in general, how to ",
-	"use a specific taks or to find out which tasks exist in your current ",
-	"build.",
-	"",
-	"Call \"raven help\" with no extra parameters to get a general help message."
+		"Use the help task to find out how to use \"raven\" in general, how to ",
+		"use a specific taks or to find out which tasks exist in your current ",
+		"build.",
+		"",
+		"Call \"raven help\" with no extra parameters to get a general help message."
 })
 @TaskOptions(HelpTaskOptions.class)
 public class HelpTask implements Task<HelpTaskOptions> {
@@ -97,6 +97,8 @@ public class HelpTask implements Task<HelpTaskOptions> {
 				final String shortDescription = getShortDescription(task.task());
 				logger.log(LogLevel.DEFAULT, task.taskName(), shortDescription);
 			}
+			
+			logger.logNewLine(LogLevel.DEFAULT);
 		}
 	}
 	

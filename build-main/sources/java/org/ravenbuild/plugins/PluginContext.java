@@ -7,6 +7,7 @@ import org.ravenbuild.tasks.TaskRepository;
 
 public interface PluginContext {
 	void registerTask(String name, Task task, Class<?> taskOptionsType);
+	void registerTask(String name, Task task, Class<?> taskOptionsType, String taskGroupName);
 	
 	Logger logger();
 	TaskGraph taskGraph();

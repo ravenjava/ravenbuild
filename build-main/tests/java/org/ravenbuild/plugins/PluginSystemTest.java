@@ -94,6 +94,13 @@ public class PluginSystemTest {
 	}
 	
 	@Test
+	@Ignore("FIXME: Should not initialize a plugin twice when loaded as a dependency of other plugins.")
+	public void initializesDependencyOfMultiplePluginsOnlyOnce() {
+		fail("Implement me!");
+	}
+	
+	
+	@Test
 	@Ignore("FIXME: Should detect cycles in plugin dependencies!")
 	public void printsErrorIfCyclicPluginDependenciesAreDetected() {
 		fail("Implement me!");

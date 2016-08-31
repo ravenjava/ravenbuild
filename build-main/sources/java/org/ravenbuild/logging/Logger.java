@@ -47,4 +47,11 @@ public class Logger {
 		}
 		printedCharacters++;
 	}
+	
+	public void logNewLine(final LogLevel logLevel) {
+		if(logLevel.ordinal() <= this.logLevel.ordinal()) {
+			printFormattedLogLevel(logLevel);
+			outputStream.println();
+		}
+	}
 }

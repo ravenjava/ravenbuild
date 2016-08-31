@@ -42,4 +42,9 @@ class DefaultPluginContext implements PluginContext {
 	public void registerTask(final String name, final Task task, final Class<?> taskOptionsType) {
 		taskGraph.registerTask(name, task, taskOptionsType);
 	}
+	
+	@Override
+	public void registerTask(final String name, final Task task, final Class<?> taskOptionsType, final String taskGroupName) {
+		taskGraph.registerTask(name, task, taskOptionsType, taskGroupName);
+	}
 }
