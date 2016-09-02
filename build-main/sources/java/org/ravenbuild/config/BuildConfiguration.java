@@ -20,6 +20,12 @@ public class BuildConfiguration {
 		}
 	}
 	
+	void loadFromJson(final String json) {
+		Gson gson = new Gson();
+		
+		configurationMap = gson.fromJson(json, Map.class);
+	}
+	
 	public <T> T getConfigurationFor(final String configurationSection, final Class<T> type) {
 		return (T) configurationMap.get(configurationSection);
 	}

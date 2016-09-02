@@ -25,26 +25,26 @@ public class BuildOptionsTest {
 	
 	@Test
 	public void recognizesSimpleStringTaskOption() {
-		BuildOptions buildOptions = BuildOptions.parseFrom(new String[] { "taskName", "foo=bar" });
+		BuildOptions buildOptions = BuildOptions.parseFrom(new String[] { "taskName", "strValue=bar" });
 		
 		assumeThat(buildOptions.task(), is("taskName"));
-		assertThat(buildOptions.taskOptions(), hasEntry("foo", "bar"));
+		assertThat(buildOptions.taskOptions(), hasEntry("strValue", "bar"));
 	}
 	
 	@Test
 	public void recognizesSimpleBooleanTaskOption() {
-		BuildOptions buildOptions = BuildOptions.parseFrom(new String[] { "taskName", "foo" });
+		BuildOptions buildOptions = BuildOptions.parseFrom(new String[] { "taskName", "strValue" });
 		
 		assumeThat(buildOptions.task(), is("taskName"));
-		assertThat(buildOptions.taskOptions(), hasEntry("foo", "true"));
+		assertThat(buildOptions.taskOptions(), hasEntry("strValue", "true"));
 	}
 	
 	@Test
 	public void recognizesMultipleTaskOptions() {
-		BuildOptions buildOptions = BuildOptions.parseFrom(new String[] { "taskName", "foo", "bar=baz" });
+		BuildOptions buildOptions = BuildOptions.parseFrom(new String[] { "taskName", "strValue", "bar=baz" });
 		
 		assumeThat(buildOptions.task(), is("taskName"));
-		assertThat(buildOptions.taskOptions(), hasEntry("foo", "true"));
+		assertThat(buildOptions.taskOptions(), hasEntry("strValue", "true"));
 		assertThat(buildOptions.taskOptions(), hasEntry("bar", "baz"));
 	}
 }
