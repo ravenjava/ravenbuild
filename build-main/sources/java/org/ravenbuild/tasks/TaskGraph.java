@@ -37,6 +37,7 @@ public class TaskGraph {
 					"found the task, this is an error: For every task we find in the task repository, we also have to " +
 					"find task options.");
 		}
+		logger.log(LogLevel.VERBOSE, "Running task", taskName+" with options: "+taskOptionsMap);
 		taskRunner.run(task, taskOptionsType, taskOptionsMap);
 	}
 	

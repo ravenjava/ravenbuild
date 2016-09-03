@@ -2,12 +2,12 @@ package org.ravenbuild.plugins.build;
 
 import org.ravenbuild.plugins.BuildPlugin;
 import org.ravenbuild.plugins.PluginContext;
+import org.ravenbuild.tasks.EmptyTaskOptions;
 
-//DOKU
 public class BuildProjectPlugin implements BuildPlugin {
 	@Override
 	public void initialize(final PluginContext pluginContext) {
-		pluginContext.registerTask("build", new BuildTask(), BuildTaskOptions.class, "Build");
+		pluginContext.registerTask("build", new BuildTask(), EmptyTaskOptions.class, "Build");
 	}
 	
 	@Override

@@ -2,6 +2,7 @@ package org.ravenbuild.plugins.build;
 
 import org.junit.Test;
 import org.ravenbuild.plugins.PluginContext;
+import org.ravenbuild.tasks.EmptyTaskOptions;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -16,6 +17,6 @@ public class BuildProjectPluginTest {
 		
 		buildPlugin.initialize(pluginContext);
 		
-		verify(pluginContext).registerTask(eq("build"), any(BuildTask.class), eq(BuildTaskOptions.class), eq("Build"));
+		verify(pluginContext).registerTask(eq("build"), any(BuildTask.class), eq(EmptyTaskOptions.class), eq("Build"));
 	}
 }

@@ -8,6 +8,8 @@ import java.util.Map;
 public class TaskRunner {
 	public <T> void run(final Task<T> task, final Class<T> taskOptionsType, final Map<String, String> taskOptionsMap) {
 		Args.notNull(task, "task");
+		Args.notNull(taskOptionsType, "taskOptionsType");
+		Args.notNull(taskOptionsMap, "taskOptionsMap");
 		
 		final T taskOptions = buildTaskOptions(taskOptionsType, taskOptionsMap);
 		task.run(taskOptions);
