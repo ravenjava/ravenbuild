@@ -19,7 +19,7 @@ public class RavenBuild {
 	public RavenBuild(final BuildOptions buildOptions) {
 		this.buildOptions = buildOptions;
 		
-		logger = new Logger(LogLevel.DEFAULT);
+		logger = new Logger(buildOptions.logLevel());
 		final TaskRepository taskRepository = new TaskRepository();
 		final TaskRunner taskRunner = new TaskRunner();
 		taskgraph = new TaskGraph(taskRepository, taskRunner, logger);

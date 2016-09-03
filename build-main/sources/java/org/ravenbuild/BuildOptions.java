@@ -44,15 +44,30 @@ public class BuildOptions {
 	public static BuildOptions parseFrom(final String[] args) {
 		String task = "build";
 		String buildConfigFile = "raven.json";
+		LogLevel logLevel = LogLevel.DEFAULT;
+		HashMap<String, String> taskOptions = new HashMap<>();
 		
 		if(args.length > 0) {
-			task = args[0];
+			int taskStart = 0;
+			for (int i = 0; i < args.length; i++) {
+				if (!args[i].startsWith("-")) {
+					break;
+				}
+				
+				if (args[i].equals("-v")) {
+					logLevel = LogLevel.VERBOSE;
+				} else if (args[i].equals("-vv")) {
+					logLevel = LogLevel.VERY_VERBOSE;
+				} else if (args[i].equals("-D")) {
+					logLevel = LogLevel.DEBUG;
+				}
+				taskStart++;
+			}
+			
+			task = args[taskStart];
+			
+			parseTaskOptions(args, taskOptions, taskStart + 1);
 		}
-		
-		HashMap<String, String> taskOptions = new HashMap<>();
-		parseTaskOptions(args, taskOptions, 1);
-
-		LogLevel logLevel = LogLevel.DEFAULT;
 		
 		return new BuildOptions(task, taskOptions, logLevel, buildConfigFile);
 	}
