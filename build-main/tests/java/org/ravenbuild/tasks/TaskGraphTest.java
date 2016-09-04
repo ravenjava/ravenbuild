@@ -2,6 +2,7 @@ package org.ravenbuild.tasks;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.ravenbuild.LogLevel;
 import org.ravenbuild.logging.Logger;
 
@@ -151,19 +152,24 @@ public class TaskGraphTest {
 	}
 	
 	@Test
-	@Ignore("FIXME: Finish test impl")
 	public void runsPrerequesitsOfCurrentTaskBeforeRunningTheTask() {
 		final TaskRepository taskRepository = mock(TaskRepository.class);
 		TaskRunner taskRunner = mock(TaskRunner.class);
 		TaskGraph taskGraph = new TaskGraph(taskRepository, taskRunner, mock(Logger.class));
 		
-		final DependencyFakeTask dependencyFakeTask = spy(new DependencyFakeTask());
-		final FakeTask task = new FakeTask();
+		TaskRepository.TaskInfo taskInfo = new TaskRepository.TaskInfo(new FakeTask(), EmptyTaskOptions.class);
+		when(taskRepository.findTask("task")).thenReturn(taskInfo);
+		TaskRepository.TaskInfo dependencyInfo = new TaskRepository.TaskInfo(new DependencyFakeTask(), EmptyTaskOptions.class);
+		when(taskRepository.findTask("dependency")).thenReturn(dependencyInfo);
+		when(taskRepository.allTasks()).thenReturn(Arrays.asList(
+				taskInfo,
+				dependencyInfo));
 		
-		when(taskRepository.findTask("task")).thenReturn(new TaskRepository.TaskInfo(task, EmptyTaskOptions.class));
-		when(taskRepository.findTask("task")).thenReturn(new TaskRepository.TaskInfo(task, EmptyTaskOptions.class));
+		taskGraph.run("task", Collections.emptyMap());
 		
-		fail("Finish impl");
+		final InOrder inOrder = inOrder(taskRunner);
+		inOrder.verify(taskRunner).run(eq(dependencyInfo.getTask()), any(), any());
+		inOrder.verify(taskRunner).run(eq(taskInfo.getTask()), any(), any());
 	}
 	
 	private class FakeTask implements Task {

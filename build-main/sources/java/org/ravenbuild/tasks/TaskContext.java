@@ -15,6 +15,8 @@ public class TaskContext {
 	}
 	
 	public <T> T dependsOn(final String taskId, final Class<T> dependencyType) {
-		return (T) taskRepository.findTask(taskId).getTask();
+		TaskRepository.TaskInfo dependencyInfo = taskRepository.findTask(taskId);
+		taskInfo.addDependency(dependencyInfo);
+		return (T) dependencyInfo.getTask();
 	}
 }

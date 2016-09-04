@@ -3,10 +3,7 @@ package org.ravenbuild.tasks;
 import net.davidtanzer.jdefensive.Args;
 import net.davidtanzer.jdefensive.Assert;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TaskRepository {
 	private final Map<String, TaskInfo> tasks = new HashMap<>();
@@ -23,6 +20,7 @@ public class TaskRepository {
 	}
 	
 	public void add(final String taskName, final TaskInfo taskInfo, final String taskGroupName) {
+		taskInfo.setTaskName(taskName);
 		tasks.put(taskName, taskInfo);
 		
 		final TaskGroup group = findOrAddTaskGroup(taskGroupName);
@@ -34,12 +32,14 @@ public class TaskRepository {
 	}
 	
 	public List<TaskInfo> allTasks() {
-		return null;
+		return Collections.unmodifiableList(new ArrayList<>(tasks.values()));
 	}
 	
 	public static class TaskInfo {
 		private final Task task;
 		private final Class<?> taskOptionsType;
+		private List<TaskInfo> dependencies = new ArrayList<>();
+		private String taskName;
 		
 		public TaskInfo(final Task task, final Class<?> taskOptionsType) {
 			Args.notNull(task, "task");
@@ -55,6 +55,22 @@ public class TaskRepository {
 		
 		public Class<?> getTaskOptionsType() {
 			return taskOptionsType;
+		}
+		
+		public List<TaskInfo> getDependencies() {
+			return Collections.unmodifiableList(dependencies);
+		}
+		
+		public void addDependency(final TaskInfo dependencyInfo) {
+			dependencies.add(dependencyInfo);
+		}
+		
+		public String getTaskName() {
+			return taskName;
+		}
+		
+		private void setTaskName(final String taskName) {
+			this.taskName = taskName;
 		}
 	}
 	

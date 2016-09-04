@@ -44,6 +44,21 @@ public class TaskRepositoryTest {
 	}
 	
 	@Test
+	public void returnsAllRegisteredTasks() {
+		final TaskRepository repository = new TaskRepository();
+
+		TaskRepository.TaskInfo taskInfo1 = new TaskRepository.TaskInfo(mock(Task.class), EmptyTaskOptions.class);
+		TaskRepository.TaskInfo taskInfo2 = new TaskRepository.TaskInfo(mock(Task.class), EmptyTaskOptions.class);
+
+		repository.add("generalTask", taskInfo1, "General");
+		repository.add("specialTask", taskInfo2, "Special");
+		
+		final List<TaskRepository.TaskInfo> allTasks = repository.allTasks();
+		
+		assertThat(allTasks, containsInAnyOrder(taskInfo1, taskInfo2));
+	}
+	
+	@Test
 	@Ignore("FIXME: Check if task name already exists when adding a new task")
 	public void addReportsAnErrorWhenTaskNameAlreadyExists() {
 		fail("Implement me");
