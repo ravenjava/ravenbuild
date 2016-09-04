@@ -33,6 +33,10 @@ public class TaskRepository {
 		return allTaskGroups;
 	}
 	
+	public List<TaskInfo> allTasks() {
+		return null;
+	}
+	
 	public static class TaskInfo {
 		private final Task task;
 		private final Class<?> taskOptionsType;

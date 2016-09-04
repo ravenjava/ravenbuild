@@ -5,11 +5,14 @@ import org.junit.Test;
 import org.ravenbuild.LogLevel;
 import org.ravenbuild.logging.Logger;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasProperty;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -114,10 +117,37 @@ public class TaskGraphTest {
 	}
 	
 	@Test
-	@Ignore("FIXME: Finish test impl")
 	public void resolvesDependenciesOfAllRegisteredTasksBeforeRunningFirstTask() {
 		final TaskRepository taskRepository = mock(TaskRepository.class);
-		fail("Finish implementation");
+		
+		final FakeTask task = spy(new FakeTask());
+		final DependencyFakeTask dependency = spy(new DependencyFakeTask());
+		
+		when(taskRepository.findTask("task")).thenReturn(new TaskRepository.TaskInfo(task, EmptyTaskOptions.class));
+		when(taskRepository.findTask("dependency")).thenReturn(new TaskRepository.TaskInfo(dependency, EmptyTaskOptions.class));
+		when(taskRepository.allTasks()).thenReturn(Arrays.asList(
+				new TaskRepository.TaskInfo(task, EmptyTaskOptions.class),
+				new TaskRepository.TaskInfo(dependency, EmptyTaskOptions.class)));
+		
+		TaskGraph taskGraph = new TaskGraph(taskRepository, mock(TaskRunner.class), mock(Logger.class));
+		
+		taskGraph.run("dependency", Collections.emptyMap());
+		
+		verify(task).initialize(any(TaskContext.class));
+		verify(dependency).initialize(any(TaskContext.class));
+		assertThat(task.dependency, is(dependency));
+	}
+	
+	@Test
+	@Ignore("FIXME: Should report a meaningful error message when a dependency could not be resolved.")
+	public void reportsErrorIfDependencyCouldNotBeResolved() {
+		fail("Implement me!");
+	}
+	
+	@Test
+	@Ignore("FIXME: Should report a meaningful error message when a dependency resolves to a different class than expected.")
+	public void reportsErrorIfDependencyResolvesToDifferentClassThanExpected() {
+		fail("Implement me!");
 	}
 	
 	@Test
@@ -137,6 +167,13 @@ public class TaskGraphTest {
 	}
 	
 	private class FakeTask implements Task {
+		public DependencyFakeTask dependency;
+		
+		@Override
+		public void initialize(final TaskContext taskContext) {
+			dependency = taskContext.dependsOn("dependency", DependencyFakeTask.class);
+		}
+		
 		@Override
 		public void run(final Object taskOptions) {
 			
@@ -144,6 +181,11 @@ public class TaskGraphTest {
 	}
 	
 	private class DependencyFakeTask implements Task {
+		@Override
+		public void initialize(final TaskContext taskContext) {
+			
+		}
+		
 		@Override
 		public void run(final Object taskOptions) {
 			

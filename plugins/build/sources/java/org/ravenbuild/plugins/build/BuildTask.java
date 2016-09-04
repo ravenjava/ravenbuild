@@ -4,6 +4,7 @@ import org.ravenbuild.plugins.help.LongDescription;
 import org.ravenbuild.plugins.help.ShortDescription;
 import org.ravenbuild.tasks.EmptyTaskOptions;
 import org.ravenbuild.tasks.Task;
+import org.ravenbuild.tasks.TaskContext;
 
 @ShortDescription("Builds the project. Includes the tasks \"dependencies\", \"compile\", \"check\", \"unitTest\" and \"functionalTest\".")
 @LongDescription({
@@ -15,6 +16,11 @@ import org.ravenbuild.tasks.Task;
 		"   * \"functionalTest\" Runs all functional tests of the project"
 })
 public class BuildTask implements Task<EmptyTaskOptions> {
+	@Override
+	public void initialize(final TaskContext taskContext) {
+		
+	}
+	
 	@Override
 	public void run(final EmptyTaskOptions taskOptions) {
 	}

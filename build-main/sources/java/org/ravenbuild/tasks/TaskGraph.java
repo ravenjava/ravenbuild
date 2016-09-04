@@ -22,6 +22,8 @@ public class TaskGraph {
 	}
 	
 	public void run(final String taskName, final Map<String, String> taskOptionsMap) {
+		initializeAllTasks();
+		
 		final TaskRepository.TaskInfo taskInfo = taskRepository.findTask(taskName);
 		
 		if(taskInfo == null) {
@@ -37,6 +39,16 @@ public class TaskGraph {
 		
 		logger.log(LogLevel.VERBOSE, "Running task", taskName+" with options: "+taskOptionsMap);
 		taskRunner.run(task, taskOptionsType, taskOptionsMap);
+	}
+	
+	private void initializeAllTasks() {
+		final List<TaskRepository.TaskInfo> allTasks = taskRepository.allTasks();
+		assert allTasks != null : "All tasks from task repository never returns null";
+		
+		for(TaskRepository.TaskInfo taskInfo : allTasks) {
+			final TaskContext taskContext = new TaskContext(taskInfo, taskRepository);
+			taskInfo.getTask().initialize(taskContext);
+		}
 	}
 	
 	private void informAbout(final TaskGraphEvent event, final String taskName, final Task task) {

@@ -3,6 +3,7 @@ package org.ravenbuild.plugins.help;
 import org.ravenbuild.LogLevel;
 import org.ravenbuild.logging.Logger;
 import org.ravenbuild.tasks.Task;
+import org.ravenbuild.tasks.TaskContext;
 import org.ravenbuild.tasks.TaskGroup;
 import org.ravenbuild.tasks.TaskRepository;
 
@@ -24,6 +25,11 @@ public class HelpTask implements Task<HelpTaskOptions> {
 	public HelpTask(final Logger logger, final TaskRepository taskRepository) {
 		this.logger = logger;
 		this.taskRepository = taskRepository;
+	}
+	
+	@Override
+	public void initialize(final TaskContext taskContext) {
+		
 	}
 	
 	@Override

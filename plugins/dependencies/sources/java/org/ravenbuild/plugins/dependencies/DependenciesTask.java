@@ -3,6 +3,7 @@ package org.ravenbuild.plugins.dependencies;
 import org.ravenbuild.plugins.help.LongDescription;
 import org.ravenbuild.plugins.help.ShortDescription;
 import org.ravenbuild.tasks.Task;
+import org.ravenbuild.tasks.TaskContext;
 
 @ShortDescription("Lists, initializes and updates dependencies of the current project and shows information about available dependency updates.")
 @LongDescription({
@@ -23,6 +24,11 @@ import org.ravenbuild.tasks.Task;
 		"below."
 })
 public class DependenciesTask implements Task<DependenciesTaskOptions> {
+	@Override
+	public void initialize(final TaskContext taskContext) {
+		
+	}
+	
 	@Override
 	public void run(final DependenciesTaskOptions taskOptions) {
 		
