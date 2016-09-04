@@ -7,7 +7,9 @@ import org.ravenbuild.tasks.EmptyTaskOptions;
 public class BuildProjectPlugin implements BuildPlugin {
 	@Override
 	public void initialize(final PluginContext pluginContext) {
-		pluginContext.registerTask("build", new BuildTask(), EmptyTaskOptions.class, "Build");
+		BuildSubtasksTask buildSubtasksTask = new BuildSubtasksTask();
+		pluginContext.registerTask("buildSubtasks", buildSubtasksTask, EmptyTaskOptions.class, "Internal");
+		pluginContext.registerTask("build", new BuildTask(buildSubtasksTask), EmptyTaskOptions.class, "Build");
 	}
 	
 	@Override

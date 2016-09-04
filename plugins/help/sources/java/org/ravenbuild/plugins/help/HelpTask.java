@@ -94,6 +94,10 @@ public class HelpTask implements Task<HelpTaskOptions> {
 		
 		final List<TaskGroup> taskGroups = taskRepository.allTaskGroups();
 		for(TaskGroup taskGroup : taskGroups) {
+			if(taskGroup.getName().equals("Internal")) {
+				continue;
+			}
+			
 			logger.log(LogLevel.DEFAULT, "----------------------------------------------", padMessage(taskGroup.getName() + " tasks"));
 			
 			for(TaskGroup.NamedTask task : taskGroup.tasksInGroup()) {
