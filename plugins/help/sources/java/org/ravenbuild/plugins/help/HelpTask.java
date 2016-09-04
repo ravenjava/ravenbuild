@@ -17,7 +17,6 @@ import java.util.List;
 		"",
 		"Call \"raven help\" with no extra parameters to get a general help message."
 })
-@TaskOptions(HelpTaskOptions.class)
 public class HelpTask implements Task<HelpTaskOptions> {
 	private final Logger logger;
 	private final TaskRepository taskRepository;
@@ -39,11 +38,11 @@ public class HelpTask implements Task<HelpTaskOptions> {
 	}
 	
 	private void printTaskHelp(final String taskName) {
-		final Task task = taskRepository.findTask(taskName);
+		final TaskRepository.TaskInfo taskInfo = taskRepository.findTask(taskName);
 		//FIXME add null check - and add lots of tests
 		
-		final String shortDescription = getShortDescription(task);
-		final String[] longDescription = getLongDescription(task);
+		final String shortDescription = getShortDescription(taskInfo.getTask());
+		final String[] longDescription = getLongDescription(taskInfo.getTask());
 		logger.log(LogLevel.DEFAULT, taskName, shortDescription);
 		logger.log(LogLevel.DEFAULT, "===============================================",
 				"==================================================");
@@ -53,12 +52,10 @@ public class HelpTask implements Task<HelpTaskOptions> {
 		}
 		
 		logger.log(LogLevel.DEFAULT, "--------------------------------------", padMessage("Parameters"));
-		printTaskOptionsHelpFor(taskName, task);
+		printTaskOptionsHelpFor(taskName, taskInfo.getTaskOptionsType());
 	}
 	
-	private void printTaskOptionsHelpFor(final String taskName, final Task task) {
-		final Class taskOptionsClass = task.getClass().getAnnotation(TaskOptions.class).value();
-		
+	private void printTaskOptionsHelpFor(final String taskName, final Class<?> taskOptionsClass) {
 		final Field[] fields = taskOptionsClass.getDeclaredFields();
 		for(Field field : fields) {
 			final String fieldName = field.getName();
@@ -126,7 +123,10 @@ public class HelpTask implements Task<HelpTaskOptions> {
 	
 	private void printGeneralHelp() {
 		logger.log(LogLevel.DEFAULT, "Usage", "raven [raven options] taksName [task options]");
-		logger.log(LogLevel.DEFAULT, "Raven Options", "There are no raven options yet.");
+		logger.log(LogLevel.DEFAULT, "Raven Options", "-[option]");
+		logger.log(LogLevel.DEFAULT, "-v", "Verbose - Prints more output. Use this to debug your build.");
+		logger.log(LogLevel.DEFAULT, "-vv", "Very Verbose - Prints even more output than verbose. Use this to debug your build.");
+		logger.log(LogLevel.DEFAULT, "-D", "Debug - Prints even more output that will be only interesting to the raven developers or plugin developers.");
 		logger.log(LogLevel.DEFAULT, "Task Options", "[option name]=[option value]");
 		logger.log(LogLevel.DEFAULT, "", "If the taks option is a boolean option, you can omit the value (setting the option to true).");
 		logger.log(LogLevel.DEFAULT, "", "e.g.: \"raven help listTasks\" is equivalent to \"raven help listTasks=true\".");

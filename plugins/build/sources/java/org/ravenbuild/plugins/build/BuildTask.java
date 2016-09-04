@@ -2,7 +2,6 @@ package org.ravenbuild.plugins.build;
 
 import org.ravenbuild.plugins.help.LongDescription;
 import org.ravenbuild.plugins.help.ShortDescription;
-import org.ravenbuild.plugins.help.TaskOptions;
 import org.ravenbuild.tasks.EmptyTaskOptions;
 import org.ravenbuild.tasks.Task;
 
@@ -15,7 +14,6 @@ import org.ravenbuild.tasks.Task;
 		"   * \"unitTest\"       Runs all unit tests in the current project.",
 		"   * \"functionalTest\" Runs all functional tests of the project"
 })
-@TaskOptions(EmptyTaskOptions.class)
 public class BuildTask implements Task<EmptyTaskOptions> {
 	@Override
 	public void run(final EmptyTaskOptions taskOptions) {

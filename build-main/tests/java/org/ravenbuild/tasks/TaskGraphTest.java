@@ -1,5 +1,6 @@
 package org.ravenbuild.tasks;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.ravenbuild.LogLevel;
 import org.ravenbuild.logging.Logger;
@@ -9,10 +10,9 @@ import java.util.Map;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasProperty;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class TaskGraphTest {
 	@Test
@@ -54,8 +54,7 @@ public class TaskGraphTest {
 		TaskGraph taskGraph = new TaskGraph(taskRepository, taskRunner, mock(Logger.class));
 		
 		Task task = mock(Task.class);
-		when(taskRepository.findTask("existingTask")).thenReturn(task);
-		when(taskRepository.getTaskOptionsType("existingTask")).thenReturn(TaskGraphTest.class);
+		when(taskRepository.findTask("existingTask")).thenReturn(new TaskRepository.TaskInfo(task, EmptyTaskOptions.class));
 
 		taskGraph.run("existingTask", mock(Map.class));
 		
@@ -69,13 +68,12 @@ public class TaskGraphTest {
 		TaskGraph taskGraph = new TaskGraph(taskRepository, taskRunner, mock(Logger.class));
 		
 		Task task = mock(Task.class);
-		when(taskRepository.findTask("existingTask")).thenReturn(task);
-		when(taskRepository.getTaskOptionsType("existingTask")).thenReturn(TaskGraphTest.class);
+		when(taskRepository.findTask("existingTask")).thenReturn(new TaskRepository.TaskInfo(task, EmptyTaskOptions.class));
 		
 		Map taskOptionsMap = mock(Map.class);
 		taskGraph.run("existingTask", taskOptionsMap);
 		
-		verify(taskRunner).run(any(), eq(TaskGraphTest.class), any());
+		verify(taskRunner).run(any(), eq(EmptyTaskOptions.class), any());
 	}
 	
 	@Test
@@ -85,8 +83,7 @@ public class TaskGraphTest {
 		TaskGraph taskGraph = new TaskGraph(taskRepository, taskRunner, mock(Logger.class));
 		
 		Task task = mock(Task.class);
-		when(taskRepository.findTask("existingTask")).thenReturn(task);
-		when(taskRepository.getTaskOptionsType("existingTask")).thenReturn(TaskGraphTest.class);
+		when(taskRepository.findTask("existingTask")).thenReturn(new TaskRepository.TaskInfo(task, EmptyTaskOptions.class));
 		
 		Map taskOptionsMap = mock(Map.class);
 		taskGraph.run("existingTask", taskOptionsMap);
@@ -114,5 +111,42 @@ public class TaskGraphTest {
 		taskGraph.registerTask("taskName", task, TaskGraphTest.class);
 		
 		verify(taskRepository).add(eq("taskName"), argThat(hasProperty("taskOptionsType", is((Object) TaskGraphTest.class))), anyString());
+	}
+	
+	@Test
+	@Ignore("FIXME: Finish test impl")
+	public void resolvesDependenciesOfAllRegisteredTasksBeforeRunningFirstTask() {
+		final TaskRepository taskRepository = mock(TaskRepository.class);
+		fail("Finish implementation");
+	}
+	
+	@Test
+	@Ignore("FIXME: Finish test impl")
+	public void runsPrerequesitsOfCurrentTaskBeforeRunningTheTask() {
+		final TaskRepository taskRepository = mock(TaskRepository.class);
+		TaskRunner taskRunner = mock(TaskRunner.class);
+		TaskGraph taskGraph = new TaskGraph(taskRepository, taskRunner, mock(Logger.class));
+		
+		final DependencyFakeTask dependencyFakeTask = spy(new DependencyFakeTask());
+		final FakeTask task = new FakeTask();
+		
+		when(taskRepository.findTask("task")).thenReturn(new TaskRepository.TaskInfo(task, EmptyTaskOptions.class));
+		when(taskRepository.findTask("task")).thenReturn(new TaskRepository.TaskInfo(task, EmptyTaskOptions.class));
+		
+		fail("Finish impl");
+	}
+	
+	private class FakeTask implements Task {
+		@Override
+		public void run(final Object taskOptions) {
+			
+		}
+	}
+	
+	private class DependencyFakeTask implements Task {
+		@Override
+		public void run(final Object taskOptions) {
+			
+		}
 	}
 }

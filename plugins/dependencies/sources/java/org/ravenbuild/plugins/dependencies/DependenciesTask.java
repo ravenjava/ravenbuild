@@ -2,7 +2,6 @@ package org.ravenbuild.plugins.dependencies;
 
 import org.ravenbuild.plugins.help.LongDescription;
 import org.ravenbuild.plugins.help.ShortDescription;
-import org.ravenbuild.plugins.help.TaskOptions;
 import org.ravenbuild.tasks.Task;
 
 @ShortDescription("Lists, initializes and updates dependencies of the current project and shows information about available dependency updates.")
@@ -23,7 +22,6 @@ import org.ravenbuild.tasks.Task;
 		"information, refer to the task options \"find-updates\" and \"update\"",
 		"below."
 })
-@TaskOptions(DependenciesTaskOptions.class)
 public class DependenciesTask implements Task<DependenciesTaskOptions> {
 	@Override
 	public void run(final DependenciesTaskOptions taskOptions) {

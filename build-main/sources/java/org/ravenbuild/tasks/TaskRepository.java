@@ -1,5 +1,8 @@
 package org.ravenbuild.tasks;
 
+import net.davidtanzer.jdefensive.Args;
+import net.davidtanzer.jdefensive.Assert;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,18 +14,11 @@ public class TaskRepository {
 	private final List<TaskGroup> allTaskGroups = new ArrayList<>();
 	private final Map<String, TaskGroup> taskGroupsByName = new HashMap<>();
 	
-	public Task findTask(final String taskName) {
+	public TaskInfo findTask(final String taskName) {
 		if (tasks.containsKey(taskName)) {
-			return tasks.get(taskName).task;
+			return tasks.get(taskName);
 		}
 	
-		return null;
-	}
-	
-	public Class getTaskOptionsType(final String taskName) {
-		if (tasks.containsKey(taskName)) {
-			return tasks.get(taskName).taskOptionsType;
-		}
 		return null;
 	}
 	
@@ -42,6 +38,9 @@ public class TaskRepository {
 		private final Class<?> taskOptionsType;
 		
 		public TaskInfo(final Task task, final Class<?> taskOptionsType) {
+			Args.notNull(task, "task");
+			Args.notNull(taskOptionsType, "taskOptionsType");
+			
 			this.task = task;
 			this.taskOptionsType = taskOptionsType;
 		}

@@ -22,21 +22,19 @@ public class TaskGraph {
 	}
 	
 	public void run(final String taskName, final Map<String, String> taskOptionsMap) {
-		final Task task = taskRepository.findTask(taskName);
+		final TaskRepository.TaskInfo taskInfo = taskRepository.findTask(taskName);
 		
-		if(task == null) {
+		if(taskInfo == null) {
 			informAbout(TaskGraphEvent.TASK_NOT_FOUND, taskName, null);
 			logger.log(LogLevel.ERROR, "Task not found", "The task \""+taskName+"\" does not exist.");
 			return;
 		}
 		
-		//TODO Maybe refactor so that task repository returns it's TaskInfo Object? Could make the code more simple here...
-		final Class taskOptionsType = taskRepository.getTaskOptionsType(taskName);
-		if(taskOptionsType == null) {
-			throw new RuntimeException("Task options not found for task \""+taskName+"\". At this point, where we have already " +
-					"found the task, this is an error: For every task we find in the task repository, we also have to " +
-					"find task options.");
-		}
+		final Task task = taskInfo.getTask();
+		assert task != null : "Task repository does not even let us save a null-task.";
+		final Class taskOptionsType = taskInfo.getTaskOptionsType();
+		assert taskOptionsType != null : "Task repository does not even let us save a task without task options.";
+		
 		logger.log(LogLevel.VERBOSE, "Running task", taskName+" with options: "+taskOptionsMap);
 		taskRunner.run(task, taskOptionsType, taskOptionsMap);
 	}

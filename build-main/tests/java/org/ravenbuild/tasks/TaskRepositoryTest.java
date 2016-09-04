@@ -16,7 +16,7 @@ public class TaskRepositoryTest {
 	public void findReturnsNullWhenTaskIsNotRegistered() {
 		final TaskRepository repository = new TaskRepository();
 		
-		final Task task = repository.findTask("taskName");
+		final TaskRepository.TaskInfo task = repository.findTask("taskName");
 		
 		assertNull(task);
 	}
@@ -24,10 +24,10 @@ public class TaskRepositoryTest {
 	@Test
 	public void findsRegisteredTask() {
 		final TaskRepository repository = new TaskRepository();
-		final Task expected = mock(Task.class);
-		repository.add("taskName", new TaskRepository.TaskInfo(expected, null), "General");
+		TaskRepository.TaskInfo expected = new TaskRepository.TaskInfo(mock(Task.class), EmptyTaskOptions.class);
+		repository.add("taskName", expected, "General");
 		
-		final Task task = repository.findTask("taskName");
+		final TaskRepository.TaskInfo task = repository.findTask("taskName");
 		
 		assertSame(expected, task);
 	}
@@ -35,8 +35,8 @@ public class TaskRepositoryTest {
 	@Test
 	public void findsAllRegisteredTaskGroups() {
 		final TaskRepository repository = new TaskRepository();
-		repository.add("generalTask", new TaskRepository.TaskInfo(mock(Task.class), null), "General");
-		repository.add("specialTask", new TaskRepository.TaskInfo(mock(Task.class), null), "Special");
+		repository.add("generalTask", new TaskRepository.TaskInfo(mock(Task.class), EmptyTaskOptions.class), "General");
+		repository.add("specialTask", new TaskRepository.TaskInfo(mock(Task.class), EmptyTaskOptions.class), "Special");
 		
 		final List<TaskGroup> groups = repository.allTaskGroups();
 		
