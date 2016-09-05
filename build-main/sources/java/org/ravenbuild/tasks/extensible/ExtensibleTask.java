@@ -11,4 +11,8 @@ public abstract class ExtensibleTask<T> implements Task<T> {
 		
 		this.subtasksTask = subtasksTask;
 	}
+	
+	public void addDependency(final String dependencyName, final Class<? extends Task> dependencyType) {
+		subtasksTask.addDependency(dependencyName, dependencyType);
+	}
 }
