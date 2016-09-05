@@ -1,10 +1,10 @@
 package org.ravenbuild.tasks.extensible;
 
 import org.junit.Test;
+import org.ravenbuild.tasks.EmptyTaskOptions;
 import org.ravenbuild.tasks.Task;
 import org.ravenbuild.tasks.TaskContext;
 
-import static org.junit.Assert.*;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -12,12 +12,8 @@ import static org.mockito.Mockito.verify;
 public class ExtensibleTaskTest {
 	@Test
 	public void addsDependencyToSubtask() {
-		ExtensibleTaskSubtasks subtasks = new ExtensibleTaskSubtasks() {
-			@Override
-			public void run(final Object taskOptions) {
-			}
-		};
-		ExtensibleTestTask task = new ExtensibleTestTask(subtasks);
+		ExtensibleTaskSubtasks subtasks = new ExtensibleTaskSubtasks();
+		ExtensibleTestTask task = new ExtensibleTestTask(subtasks, "someId");
 		
 		TaskContext taskContext = mock(TaskContext.class);
 		TaskContext subtasksContext = mock(TaskContext.class);
@@ -31,8 +27,8 @@ public class ExtensibleTaskTest {
 	}
 	
 	private class ExtensibleTestTask extends ExtensibleTask {
-		public ExtensibleTestTask(final ExtensibleTaskSubtasks subtasksTask) {
-			super(subtasksTask);
+		public ExtensibleTestTask(final ExtensibleTaskSubtasks subtasksTask, final String subtasksId) {
+			super(subtasksTask, subtasksId);
 		}
 		
 		@Override
