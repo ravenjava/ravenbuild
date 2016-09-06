@@ -1,11 +1,11 @@
 {
 	"java": [
-		{ "group": "io.github.lukehutch", "name": "fast-classpath-scanner", "version": "2.0.1", "file": "fast-classpath-scanner-2.0.1.jar" },
-		{ "group": "com.google.code.gson", "name": "gson", "version": "2.7", "file": "gson-2.7.jar" },
-		{ "group": "org.hamcrest", "name": "hamcrest-all", "version": "1.3", "file": "hamcrest-all-1.3.jar" },
-		{ "group": "net.davidtanzer", "name": "jdefensive", "version": "0.3.0", "file": "jdefensive-0.3.0.jar" },
-		{ "group": "net.davidtanzer", "name": "jobjectformatter", "version": "0.2.1", "file": "jobjectformatter-0.2.1.jar" },
-		{ "group": "junit", "name": "junit", "version": "4.12", "file": "junit-4.12.jar" },
-		{ "group": "org.mockito", "name": "mockito-all", "version": "2.0.2-beta", "file": "mockito-all-2.0.2-beta.jar" }
+		{ "name": "io.github.lukehutch:fast-classpath-scanner", "version": "2.0.1", "file": "fast-classpath-scanner-2.0.1.jar" },
+		{ "name": "com.google.code.gson:gson", "version": "2.7", "file": "gson-2.7.jar" },
+		{ "name": "org.hamcrest:hamcrest-all", "version": "1.3", "file": "hamcrest-all-1.3.jar" },
+		{ "name": "net.davidtanzer:jdefensive", "version": "0.3.0", "file": "jdefensive-0.3.0.jar" },
+		{ "name": "net.davidtanzer:jobjectformatter", "version": "0.2.1", "file": "jobjectformatter-0.2.1.jar" },
+		{ "name": "junit:junit", "version": "4.12", "file": "junit-4.12.jar" },
+		{ "name": "org.mockito:mockito-all", "version": "2.0.2-beta", "file": "mockito-all-2.0.2-beta.jar" }
 	]
 }
