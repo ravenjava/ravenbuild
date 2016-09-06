@@ -1,7 +1,7 @@
 {
 	"plugins": [
 		"org.ravenbuild.java"
-	]
+	],
 
 	"dependencies": {
 		"java": [
