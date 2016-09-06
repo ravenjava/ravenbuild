@@ -55,7 +55,7 @@ public class TaskGraphTest {
 	public void usesTaskRunnerToRunFoundTask() {
 		TaskRunner taskRunner = mock(TaskRunner.class);
 		TaskRepository taskRepository = mock(TaskRepository.class);
-		TaskGraph taskGraph = new TaskGraph(taskRepository, taskRunner, mock(Logger.class));
+		TaskGraph taskGraph = new TaskGraph(taskRepository, taskRunner, mock(Logger.class, RETURNS_DEEP_STUBS));
 		
 		Task task = mock(Task.class);
 		when(taskRepository.findTask("existingTask")).thenReturn(new TaskRepository.TaskInfo(task, EmptyTaskOptions.class));
@@ -69,7 +69,7 @@ public class TaskGraphTest {
 	public void passesCorrectTaskOptionsTypeWhenRuningFoundTask() {
 		TaskRunner taskRunner = mock(TaskRunner.class);
 		TaskRepository taskRepository = mock(TaskRepository.class);
-		TaskGraph taskGraph = new TaskGraph(taskRepository, taskRunner, mock(Logger.class));
+		TaskGraph taskGraph = new TaskGraph(taskRepository, taskRunner, mock(Logger.class, RETURNS_DEEP_STUBS));
 		
 		Task task = mock(Task.class);
 		when(taskRepository.findTask("existingTask")).thenReturn(new TaskRepository.TaskInfo(task, EmptyTaskOptions.class));
@@ -84,7 +84,7 @@ public class TaskGraphTest {
 	public void passesCorrectTaskOptionsWhenRuningFoundTask() {
 		TaskRunner taskRunner = mock(TaskRunner.class);
 		TaskRepository taskRepository = mock(TaskRepository.class);
-		TaskGraph taskGraph = new TaskGraph(taskRepository, taskRunner, mock(Logger.class));
+		TaskGraph taskGraph = new TaskGraph(taskRepository, taskRunner, mock(Logger.class, RETURNS_DEEP_STUBS));
 		
 		Task task = mock(Task.class);
 		when(taskRepository.findTask("existingTask")).thenReturn(new TaskRepository.TaskInfo(task, EmptyTaskOptions.class));
@@ -130,7 +130,7 @@ public class TaskGraphTest {
 				new TaskRepository.TaskInfo(task, EmptyTaskOptions.class),
 				new TaskRepository.TaskInfo(dependency, EmptyTaskOptions.class)));
 		
-		TaskGraph taskGraph = new TaskGraph(taskRepository, mock(TaskRunner.class), mock(Logger.class));
+		TaskGraph taskGraph = new TaskGraph(taskRepository, mock(TaskRunner.class), mock(Logger.class, RETURNS_DEEP_STUBS));
 		
 		taskGraph.run("dependency", Collections.emptyMap());
 		
@@ -155,9 +155,10 @@ public class TaskGraphTest {
 	public void runsPrerequesitsOfCurrentTaskBeforeRunningTheTask() {
 		final TaskRepository taskRepository = mock(TaskRepository.class);
 		TaskRunner taskRunner = mock(TaskRunner.class);
-		TaskGraph taskGraph = new TaskGraph(taskRepository, taskRunner, mock(Logger.class));
+		TaskGraph taskGraph = new TaskGraph(taskRepository, taskRunner, mock(Logger.class, RETURNS_DEEP_STUBS));
 		
-		TaskRepository.TaskInfo taskInfo = new TaskRepository.TaskInfo(new FakeTask(), EmptyTaskOptions.class);
+		TaskRepository.TaskInfo taskInfo = spy(new TaskRepository.TaskInfo(new FakeTask(), EmptyTaskOptions.class));
+		when(taskInfo.getTaskName()).thenReturn("task");
 		when(taskRepository.findTask("task")).thenReturn(taskInfo);
 		TaskRepository.TaskInfo dependencyInfo = new TaskRepository.TaskInfo(new DependencyFakeTask(), EmptyTaskOptions.class);
 		when(taskRepository.findTask("dependency")).thenReturn(dependencyInfo);
