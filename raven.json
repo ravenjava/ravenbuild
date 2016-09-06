@@ -2,4 +2,16 @@
 	"plugins": [
 		"org.ravenbuild.java"
 	]
+
+	"dependencies": {
+		"java": [
+			{ "group": "io.github.lukehutch", "name": "fast-classpath-scanner" },
+			{ "group": "com.google.code.gson", "name": "gson" },
+			{ "group": "org.hamcrest", "name": "hamcrest-all" },
+			{ "group": "net.davidtanzer", "name": "jdefensive" },
+			{ "group": "net.davidtanzer", "name": "jobjectformatter" },
+			{ "group": "junit", "name": "junit" },
+			{ "group": "org.mockito", "name": "mockito-all" }
+		]
+	}
 }
