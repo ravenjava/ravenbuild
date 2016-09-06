@@ -32,28 +32,39 @@ public class TaskGraph {
 			return;
 		}
 		
-		runPrerequisitesFor(taskInfo, taskOptionsMap);
-		runSingle(taskInfo, taskOptionsMap);
+		runSingle(taskInfo, taskOptionsMap, "");
 	}
 	
-	private void runPrerequisitesFor(final TaskRepository.TaskInfo taskInfo, final Map<String, String> taskOptionsMap) {
+	private void runPrerequisitesFor(final TaskRepository.TaskInfo taskInfo, final Map<String, String> taskOptionsMap, final String taskGraphChain) {
 		final List<TaskRepository.TaskInfo> prerequisites = taskInfo.getDependencies();
 		
 		for(TaskRepository.TaskInfo prerequesite : prerequisites) {
-			runSingle(prerequesite, taskOptionsMap);
+			runSingle(prerequesite, taskOptionsMap, taskGraphChain);
 		}
 	}
 	
-	private void runSingle(final TaskRepository.TaskInfo taskInfo, final Map<String, String> taskOptionsMap) {
+	private void runSingle(final TaskRepository.TaskInfo taskInfo, final Map<String, String> taskOptionsMap, final String taskGraphChain) {
 		assert taskInfo != null : "This internal method must not be called with a null-taskInfo";
 		assert taskOptionsMap != null : "This internal method must not be called with a null-taskOptionsMap";
+		
+		String newTaskGraphChain;
+		if(taskGraphChain.isEmpty()) {
+			newTaskGraphChain = taskInfo.getTaskName();
+		} else {
+			newTaskGraphChain = taskGraphChain + "->" + taskInfo.getTaskName();
+		}
+		runPrerequisitesFor(taskInfo, taskOptionsMap, newTaskGraphChain);
 		
 		final Task task = taskInfo.getTask();
 		assert task != null : "Task repository does not even let us save a null-task.";
 		final Class taskOptionsType = taskInfo.getTaskOptionsType();
 		assert taskOptionsType != null : "Task repository does not even let us save a task without task options.";
 		
-		logger.log(LogLevel.VERBOSE, "Running task", taskInfo.getTaskName()+" with options: "+taskOptionsMap);
+		String taskGraphChainInfo = "";
+		if(!taskGraphChain.isEmpty()) {
+			taskGraphChainInfo = "("+taskGraphChain+"->"+taskInfo.getTaskName()+")";
+		}
+		logger.log(LogLevel.VERBOSE, "Running task", taskInfo.getTaskName()+" "+taskGraphChainInfo+" with options: "+taskOptionsMap);
 		taskRunner.run(task, taskOptionsType, taskOptionsMap);
 	}
 	
