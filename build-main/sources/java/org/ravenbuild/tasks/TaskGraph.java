@@ -62,9 +62,13 @@ public class TaskGraph {
 		
 		String taskGraphChainInfo = "";
 		if(!taskGraphChain.isEmpty()) {
-			taskGraphChainInfo = "("+taskGraphChain+"->"+taskInfo.getTaskName()+")";
+			taskGraphChainInfo = "("+taskGraphChain+"->"+taskInfo.getTaskName()+") ";
 		}
-		logger.log(LogLevel.VERBOSE, "Running task", taskInfo.getTaskName()+" "+taskGraphChainInfo+" with options: "+taskOptionsMap);
+		logger.or()
+				.defaultLevel("Running task", taskInfo.getTaskName())
+				.verbose("Running task", taskInfo.getTaskName()+" "+taskGraphChainInfo)
+				.veryVerbose("Running task", taskInfo.getTaskName()+" "+taskGraphChainInfo+"with options: "+taskOptionsMap);
+
 		taskRunner.run(task, taskOptionsType, taskOptionsMap);
 	}
 	

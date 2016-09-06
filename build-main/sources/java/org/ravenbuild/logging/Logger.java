@@ -7,6 +7,7 @@ import java.io.PrintStream;
 public class Logger {
 	private final LogLevel logLevel;
 	private final PrintStream outputStream;
+	private LoggerChooser loggerChooser = new LoggerChooser(this);
 	
 	public Logger(final LogLevel logLevel) {
 		this(logLevel, System.out);
@@ -23,6 +24,14 @@ public class Logger {
 			printFormattedPrefix(prefix);
 			outputStream.println(message);
 		}
+	}
+	
+	public LoggerChooser or() {
+		return loggerChooser;
+	}
+	
+	LogLevel getLogLevel() {
+		return logLevel;
 	}
 	
 	private void printFormattedLogLevel(final LogLevel logLevel) {
