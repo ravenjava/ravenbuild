@@ -26,7 +26,7 @@ public class FunctionalTestTask extends ExtensibleTask<EmptyTaskOptions> {
 	
 	@Override
 	public void initialize(final TaskContext taskContext) {
-		unitTest = taskContext.dependsOn("unitTest", UnitTestTask.class);
+		unitTest = taskContext.dependsOn("unitTest");
 		super.initialize(taskContext);
 	}
 }

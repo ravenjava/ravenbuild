@@ -178,7 +178,7 @@ public class TaskGraphTest {
 		
 		@Override
 		public void initialize(final TaskContext taskContext) {
-			dependency = taskContext.dependsOn("dependency", DependencyFakeTask.class);
+			dependency = taskContext.dependsOn("dependency");
 		}
 		
 		@Override

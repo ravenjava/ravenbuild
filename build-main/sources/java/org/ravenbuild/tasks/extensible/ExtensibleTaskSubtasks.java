@@ -23,8 +23,8 @@ public class ExtensibleTaskSubtasks implements Task<EmptyTaskOptions> {
 	public void run(final EmptyTaskOptions taskOptions) {
 	}
 	
-	void addDependency(final String dependencyName, final Class<? extends Task> dependencyType) {
-		Task dependency = taskContext.dependsOn(dependencyName, dependencyType);
+	void addDependency(final String dependencyName) {
+		Task dependency = taskContext.dependsOn(dependencyName);
 		dependencies.add(dependency);
 	}
 }

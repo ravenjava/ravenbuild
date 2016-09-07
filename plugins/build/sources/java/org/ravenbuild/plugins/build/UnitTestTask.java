@@ -26,7 +26,7 @@ public class UnitTestTask  extends ExtensibleTask<EmptyTaskOptions> {
 	
 	@Override
 	public void initialize(final TaskContext taskContext) {
-		check = taskContext.dependsOn("check", CheckTask.class);
+		check = taskContext.dependsOn("check");
 		super.initialize(taskContext);
 	}
 }

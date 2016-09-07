@@ -16,12 +16,12 @@ public abstract class ExtensibleTask<T> implements Task<T> {
 		this.subtasksId = subtasksId;
 	}
 	
-	public void addDependency(final String dependencyName, final Class<? extends Task> dependencyType) {
-		subtasksTask.addDependency(dependencyName, dependencyType);
+	public void addDependency(final String dependencyName) {
+		subtasksTask.addDependency(dependencyName);
 	}
 	
 	public void initialize(final TaskContext taskContext) {
-		taskContext.dependsOn(subtasksId, subtasksTask.getClass());
+		taskContext.dependsOn(subtasksId);
 	}
 	
 	@Override

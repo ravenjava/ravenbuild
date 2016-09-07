@@ -27,7 +27,7 @@ public class CompileTask extends ExtensibleTask<EmptyTaskOptions> {
 	
 	@Override
 	public void initialize(final TaskContext taskContext) {
-		dependencies = taskContext.dependsOn("dependencies", DependenciesTask.class);
+		dependencies = taskContext.dependsOn("dependencies");
 		super.initialize(taskContext);
 	}
 	

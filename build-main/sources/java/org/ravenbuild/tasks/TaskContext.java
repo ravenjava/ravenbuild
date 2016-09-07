@@ -14,7 +14,11 @@ public class TaskContext {
 		this.taskRepository = taskRepository;
 	}
 	
-	public <T> T dependsOn(final String taskId, final Class<T> dependencyType) {
+	public <T> T dependsOn(final String taskId) {
+		return dependsOn(taskId, DependencyScope.MANDATORY);
+	}
+	
+	public <T> T dependsOn(final String taskId, final DependencyScope dependencyScope) {
 		TaskRepository.TaskInfo dependencyInfo = taskRepository.findTask(taskId);
 		taskInfo.addDependency(dependencyInfo);
 		return (T) dependencyInfo.getTask();

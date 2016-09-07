@@ -26,7 +26,7 @@ public class CheckTask extends ExtensibleTask<EmptyTaskOptions> {
 	
 	@Override
 	public void initialize(final TaskContext taskContext) {
-		resources = taskContext.dependsOn("resources", ResourcesTask.class);
+		resources = taskContext.dependsOn("resources");
 		super.initialize(taskContext);
 	}
 }

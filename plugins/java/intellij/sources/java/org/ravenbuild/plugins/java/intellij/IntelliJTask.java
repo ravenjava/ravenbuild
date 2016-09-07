@@ -1,9 +1,11 @@
 package org.ravenbuild.plugins.java.intellij;
 
 import net.davidtanzer.jdefensive.Args;
+import org.ravenbuild.plugins.dependencies.DependenciesTask;
 import org.ravenbuild.plugins.help.LongDescription;
 import org.ravenbuild.plugins.help.ShortDescription;
 import org.ravenbuild.plugins.projectstructure.ProjectStructurePlugin;
+import org.ravenbuild.tasks.DependencyScope;
 import org.ravenbuild.tasks.EmptyTaskOptions;
 import org.ravenbuild.tasks.Task;
 import org.ravenbuild.tasks.TaskContext;
@@ -16,6 +18,7 @@ import org.ravenbuild.tasks.TaskContext;
 })
 public class IntelliJTask implements Task<EmptyTaskOptions> {
 	private final ProjectStructurePlugin projectStructure;
+	private DependenciesTask dependenciesTask;
 	
 	public IntelliJTask(final ProjectStructurePlugin projectStructure) {
 		Args.notNull(projectStructure, "projectStructure");
@@ -25,7 +28,7 @@ public class IntelliJTask implements Task<EmptyTaskOptions> {
 	
 	@Override
 	public void initialize(final TaskContext taskContext) {
-		
+		dependenciesTask = taskContext.dependsOn("dependencies");
 	}
 	
 	@Override

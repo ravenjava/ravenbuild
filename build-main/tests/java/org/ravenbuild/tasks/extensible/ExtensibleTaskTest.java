@@ -21,9 +21,9 @@ public class ExtensibleTaskTest {
 		task.initialize(taskContext);
 		subtasks.initialize(subtasksContext);
 		
-		task.addDependency("dependency", TestDependency.class);
+		task.addDependency("dependency");
 		
-		verify(subtasksContext).dependsOn(eq("dependency"), eq(TestDependency.class));
+		verify(subtasksContext).dependsOn(eq("dependency"));
 	}
 	
 	private class ExtensibleTestTask extends ExtensibleTask {
