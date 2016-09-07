@@ -4,15 +4,34 @@
 		"org.ravenbuild.java.intellij"
 	],
 
+	"subprojects": {
+		"list": [
+			"build-main",
+			"plugins/build", "plugins/dependencies", "plugins/help", "plugins/project-structure",
+			"plugins/java/intellij", "plugins/java/java-dependencies", "plugins/java/java-main"
+		],
+
+		"plugins": [
+			"org.ravenbuild.java",
+			"org.ravenbuild.java.intellij"
+		],
+
+		"dependencies": {
+			"java": [
+				"org.hamcrest:hamcrest-all",
+				"net.davidtanzer:jdefensive",
+				"net.davidtanzer:jobjectformatter",
+				"junit:junit",
+				"org.mockito:mockito-all"
+			]
+		}
+	},
+
 	"dependencies": {
 		"java": [
-			"io.github.lukehutch:fast-classpath-scanner",
-			"com.google.code.gson:gson",
-			"org.hamcrest:hamcrest-all",
-			"net.davidtanzer:jdefensive",
-			"net.davidtanzer:jobjectformatter",
-			"junit:junit",
-			"org.mockito:mockito-all"
+			"ravenbuild:build-main",
+			"ravenbuild:build-plugin", "ravenbuild:dependencies-plugin", "ravenbuild:help-plugin", "ravenbuild:project-structure-plugin",
+			"ravenbuild:java-intellij-plugin", "ravenbuild:java-dependencies-plugin", "ravenbuild:java-main-plugin"
 		]
 	}
 }
