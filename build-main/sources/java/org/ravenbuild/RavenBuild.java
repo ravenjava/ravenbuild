@@ -16,37 +16,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RavenBuild {
-	private final PluginSystem pluginSystem;
-	private final TaskGraph taskgraph;
-	private final ClasspathScanner classpathScanner;
 	private final BuildOptions buildOptions;
 	private final Logger logger;
+	private final SubProjectBuilderFactory subProjectBuilderFactory;
 	
 	public RavenBuild(final BuildOptions buildOptions) {
 		this.buildOptions = buildOptions;
 		
 		logger = new Logger(buildOptions.logLevel());
-		final TaskRepository taskRepository = new TaskRepository();
-		final TaskRunner taskRunner = new TaskRunner();
-		taskgraph = new TaskGraph(taskRepository, taskRunner, logger);
-		classpathScanner = new FastClasspathClasspathScanner();
-		pluginSystem = new PluginSystem(taskgraph, taskRepository, classpathScanner, logger);
+		subProjectBuilderFactory = new SubProjectBuilderFactory(logger, buildOptions);
 	}
 	
 	public void run() {
-		//BuildConfiguration buildConfiguration = new BuildConfiguration();
-		//buildConfiguration.load(buildOptions.buildConfigFile());
-		
-		//pluginSystem.loadPlugins(buildConfiguration);
-		
-		SubProjectBuilderFactory subProjectBuilderFactory = new SubProjectBuilderFactory();
 		SubProjects subProjects = new SubProjects(subProjectBuilderFactory, logger);
 		subProjects.load(new HashMap<String, Object>() {{
 			put("list", Arrays.asList("."));
 		}});
 		subProjects.runInAll(buildOptions.task(), buildOptions.taskOptions());
-
-		//taskgraph.run(buildOptions.task(), buildOptions.taskOptions());
 	}
 	
 	public static void main(final String[] args) {
