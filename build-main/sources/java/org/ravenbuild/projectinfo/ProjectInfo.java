@@ -1,4 +1,4 @@
-package org.ravenbuild.plugins.projectstructure;
+package org.ravenbuild.projectinfo;
 
 public class ProjectInfo {
 	private String projectName;

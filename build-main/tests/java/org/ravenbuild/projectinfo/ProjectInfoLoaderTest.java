@@ -1,4 +1,4 @@
-package org.ravenbuild.plugins.projectstructure;
+package org.ravenbuild.projectinfo;
 
 import org.junit.Test;
 
@@ -7,22 +7,23 @@ import java.io.File;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
-public class ProjectStructurePluginTest {
+public class ProjectInfoLoaderTest {
 	@Test
 	public void defaultProjectNameIsNameOfCurrentDirectory() {
 		String expectedName = new File("").getAbsoluteFile().getName();
 		
-		ProjectStructurePlugin plugin = new ProjectStructurePlugin();
+		ProjectInfoLoader projectInfoLoader = new ProjectInfoLoader();
 		
-		assertThat(plugin.projectInfo().getProjectName(), is(expectedName));
+		assertThat(projectInfoLoader.projectInfo().getProjectName(), is(expectedName));
 	}
 	
 	@Test
 	public void defaultProjectGroupIsSameAsProjectName() {
 		String expectedName = new File("").getAbsoluteFile().getName();
 		
-		ProjectStructurePlugin plugin = new ProjectStructurePlugin();
+		ProjectInfoLoader projectInfoLoader = new ProjectInfoLoader();
 		
-		assertThat(plugin.projectInfo().getProjectGroup(), is(plugin.projectInfo().getProjectName()));
+		assertThat(projectInfoLoader.projectInfo().getProjectGroup(), is(projectInfoLoader.projectInfo().getProjectName()));
 	}
+	
 }
