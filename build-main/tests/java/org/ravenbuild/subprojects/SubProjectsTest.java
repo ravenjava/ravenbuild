@@ -25,7 +25,7 @@ public class SubProjectsTest {
 		HashMap<String, Object> config = new HashMap<String, Object>() {{
 			put("list", Arrays.asList("subproject1", "subproject2"));
 		}};
-		SubProjectBuilderFactory subProjectBuilderFactory = mock(SubProjectBuilderFactory.class);
+		SubProjectsFactory subProjectBuilderFactory = mock(SubProjectsFactory.class);
 		Logger logger = mock(Logger.class);
 		SubProjects subProjects = new SubProjects(subProjectBuilderFactory, logger);
 		
@@ -40,7 +40,7 @@ public class SubProjectsTest {
 		HashMap<String, Object> config = new HashMap<String, Object>() {{
 			put("list", Arrays.asList("subproject1", "subproject2"));
 		}};
-		SubProjectBuilderFactory subProjectBuilderFactory = mock(SubProjectBuilderFactory.class);
+		SubProjectsFactory subProjectBuilderFactory = mock(SubProjectsFactory.class);
 		SubProjectBuilder subProjectBuilder1 = mock(SubProjectBuilder.class);
 		SubProjectBuilder subProjectBuilder2 = mock(SubProjectBuilder.class);
 		when(subProjectBuilderFactory.getSubProjectBuilder(any()))

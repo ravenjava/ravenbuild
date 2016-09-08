@@ -10,11 +10,11 @@ import org.ravenbuild.tasks.TaskGraph;
 import org.ravenbuild.tasks.TaskRepository;
 import org.ravenbuild.tasks.TaskRunner;
 
-public class SubProjectBuilderFactory {
+public class SubProjectsFactory {
 	private final Logger logger;
 	private final BuildOptions buildOptions;
 	
-	public SubProjectBuilderFactory(final Logger logger, final BuildOptions buildOptions) {
+	public SubProjectsFactory(final Logger logger, final BuildOptions buildOptions) {
 		Args.notNull(logger, "logger");
 		Args.notNull(buildOptions, "buildOptions");
 		
@@ -30,8 +30,12 @@ public class SubProjectBuilderFactory {
 		PluginSystem pluginSystem = new PluginSystem(taskgraph, taskRepository, classpathScanner, logger);
 		
 		BuildConfiguration buildConfiguration = new BuildConfiguration();
-		buildConfiguration.load(buildOptions.buildConfigFile());
+		buildConfiguration.load(subProject.getPath()+"/"+buildOptions.buildConfigFile());
 		
-		return new SubProjectBuilder(buildOptions, buildConfiguration, taskgraph, classpathScanner, pluginSystem);
+		return new SubProjectBuilder(buildOptions, buildConfiguration, taskgraph, classpathScanner, pluginSystem, this);
+	}
+	
+	public SubProjects createSubProjects() {
+		return new SubProjects(this, logger);
 	}
 }

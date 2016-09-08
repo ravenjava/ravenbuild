@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +18,7 @@ public class BuildConfiguration {
 		try {
 			configurationMap = gson.fromJson(new FileReader(buildConfigFile), Map.class);
 		} catch (FileNotFoundException e) {
-			throw new IllegalStateException("FIXME: Add better error. Could not load config file.", e);
+			configurationMap = Collections.emptyMap();
 		}
 	}
 	

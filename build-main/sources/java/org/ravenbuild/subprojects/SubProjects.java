@@ -5,15 +5,16 @@ import org.ravenbuild.LogLevel;
 import org.ravenbuild.logging.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 public class SubProjects {
-	private final SubProjectBuilderFactory subProjectBuilderFactory;
+	private final SubProjectsFactory subProjectBuilderFactory;
 	private final Logger logger;
 	private List<SubProjectBuilder> subProjectBuilders = new ArrayList<>();
 	
-	public SubProjects(final SubProjectBuilderFactory subProjectBuilderFactory, final Logger logger) {
+	public SubProjects(final SubProjectsFactory subProjectBuilderFactory, final Logger logger) {
 		Args.notNull(subProjectBuilderFactory, "subProjectBuilderFactory");
 		Args.notNull(logger, "logger");
 		
@@ -22,10 +23,16 @@ public class SubProjects {
 	}
 	
 	public void load(final Map<String, Object> configuration) {
-		initializeSubProjects((List<String>) configuration.get("list"));
+		List<String> subProjectPaths = (List<String>) configuration.get("list");
+		if(subProjectPaths == null) {
+			subProjectPaths = Collections.emptyList();
+		}
+		initializeSubProjects(subProjectPaths);
 	}
 	
 	private void initializeSubProjects(final List<String> subProjectPaths) {
+		assert subProjectPaths != null;
+		
 		for(String path : subProjectPaths) {
 			logger.log(LogLevel.DEBUG, "Subprojects", "Initializing sub project builder for path \""+path+"\".");
 			SubProject subProject = new SubProject(path);
