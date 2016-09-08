@@ -13,6 +13,11 @@ public class ProjectInfoLoader {
 		projectInfo.setProjectVersion("UNKNOWN_VERSION");
 	}
 	
+	public ProjectInfoLoader(final ProjectInfo parent) {
+		this();
+		projectInfo.setProjectGroup(parent.getProjectGroup());
+	}
+	
 	public ProjectInfo projectInfo() {
 		return projectInfo;
 	}

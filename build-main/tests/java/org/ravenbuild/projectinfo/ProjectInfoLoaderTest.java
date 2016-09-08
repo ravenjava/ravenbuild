@@ -18,12 +18,18 @@ public class ProjectInfoLoaderTest {
 	}
 	
 	@Test
-	public void defaultProjectGroupIsSameAsProjectName() {
-		String expectedName = new File("").getAbsoluteFile().getName();
-		
+	public void defaultProjectGroupIsSameAsProjectNameIfThereIsNoParent() {
 		ProjectInfoLoader projectInfoLoader = new ProjectInfoLoader();
 		
 		assertThat(projectInfoLoader.projectInfo().getProjectGroup(), is(projectInfoLoader.projectInfo().getProjectName()));
 	}
 	
+	@Test
+	public void defaultProjectGroupIsSameAsParentGroupIfThereIsAParent() {
+		ProjectInfo parent = new ProjectInfo();
+		parent.setProjectGroup("parentGroup");
+		ProjectInfoLoader projectInfoLoader = new ProjectInfoLoader(parent);
+		
+		assertThat(projectInfoLoader.projectInfo().getProjectGroup(), is(parent.getProjectGroup()));
+	}
 }
