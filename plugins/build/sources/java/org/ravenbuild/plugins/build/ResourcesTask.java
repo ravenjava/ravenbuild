@@ -15,7 +15,7 @@ import org.ravenbuild.tasks.extensible.ExtensibleTaskSubtasks;
 		"",
 		"i.e. any plugin can hook a task to process resources into this task. So if ",
 		"you use that plugin, the resources task of the plugin will be executed ",
-		"every time you run this resources task."
+		"every time you runInAll this resources task."
 })
 public class ResourcesTask extends ExtensibleTask<EmptyTaskOptions> {
 	private CompileTask compile;

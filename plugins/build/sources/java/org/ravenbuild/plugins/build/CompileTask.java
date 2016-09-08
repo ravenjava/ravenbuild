@@ -16,7 +16,7 @@ import org.ravenbuild.tasks.extensible.ExtensibleTaskSubtasks;
 		"",
 		"i.e. the Java plugin will hook a javac compile task into this task. So if ",
 		"you use the Java plugin, the javac task will be executed every time you ",
-		"run this compile task."
+		"runInAll this compile task."
 })
 public class CompileTask extends ExtensibleTask<EmptyTaskOptions> {
 	private DependenciesTask dependencies;

@@ -13,9 +13,9 @@ import org.ravenbuild.tasks.extensible.ExtensibleTaskSubtasks;
 		"it's own, it does not do anything, but other plugins can hook different ",
 		"functional test tasks into this task.",
 		"",
-		"i.e. the FitNesse plugin can hook a task to run tests into this task. So if ",
+		"i.e. the FitNesse plugin can hook a task to runInAll tests into this task. So if ",
 		"you use the FitNesse plugin, the test task of the plugin will be executed ",
-		"every time you run this functionalTest task."
+		"every time you runInAll this functionalTest task."
 })
 public class FunctionalTestTask extends ExtensibleTask<EmptyTaskOptions> {
 	private UnitTestTask unitTest;

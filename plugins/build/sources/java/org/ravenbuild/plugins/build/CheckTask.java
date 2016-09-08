@@ -13,9 +13,9 @@ import org.ravenbuild.tasks.extensible.ExtensibleTaskSubtasks;
 		"it's own, it does not do anything, but other plugins can hook different ",
 		"check / analysis tasks into this task.",
 		"",
-		"i.e. the sonar plugin can hook a task to run sonar analysis into this task. So if ",
+		"i.e. the sonar plugin can hook a task to runInAll sonar analysis into this task. So if ",
 		"you use the sonar plugin, the analysis task of the plugin will be executed ",
-		"every time you run this check task."
+		"every time you runInAll this check task."
 })
 public class CheckTask extends ExtensibleTask<EmptyTaskOptions> {
 	private ResourcesTask resources;
