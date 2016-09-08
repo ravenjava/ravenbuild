@@ -30,6 +30,9 @@ public class BuildConfiguration {
 		configurationListeners.put(sectionName, new ConfigurationListenerInfo(configType, configurationListener));
 	}
 	
+	/**
+	 * @Deprecated Use only internally in build-main.
+	 */
 	@Deprecated
 	public <T> T getConfigurationFor(final String configurationSection, final Class<T> type) {
 		return (T) configurationMap.get(configurationSection);

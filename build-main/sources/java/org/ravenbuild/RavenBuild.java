@@ -5,6 +5,7 @@ import org.ravenbuild.config.BuildConfiguration;
 import org.ravenbuild.logging.Logger;
 import org.ravenbuild.plugins.ClasspathScanner;
 import org.ravenbuild.plugins.PluginSystem;
+import org.ravenbuild.subprojects.SubProjects;
 import org.ravenbuild.tasks.TaskGraph;
 import org.ravenbuild.tasks.TaskRepository;
 import org.ravenbuild.tasks.TaskRunner;
@@ -33,6 +34,10 @@ public class RavenBuild {
 		
 		pluginSystem.loadPlugins(buildConfiguration);
 		
+		SubProjects subProjects = new SubProjects();
+		subProjects.load(buildConfiguration);
+		subProjects.run(buildOptions.task(), buildOptions.taskOptions());
+
 		taskgraph.run(buildOptions.task(), buildOptions.taskOptions());
 	}
 	

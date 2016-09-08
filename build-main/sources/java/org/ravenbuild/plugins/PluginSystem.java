@@ -1,6 +1,7 @@
 package org.ravenbuild.plugins;
 
 import net.davidtanzer.jdefensive.Args;
+import org.ravenbuild.LogLevel;
 import org.ravenbuild.config.BuildConfiguration;
 import org.ravenbuild.logging.Logger;
 import org.ravenbuild.tasks.TaskGraph;
@@ -46,12 +47,17 @@ public class PluginSystem {
 			activePluginIds.addAll(activePluginIdsList);
 		}
 		activePluginIds.add("org.ravenbuild.help");
+		activePluginIds.add("org.ravenbuild.project-structure");
 	}
 	
 	<T extends BuildPlugin> T loadAndInitialize(final Class<T> pluginClass, final LoadAs loadAs) {
 		try {
 			final T plugin = pluginClass.newInstance();
 			final String pluginId = plugin.getId();
+			if(pluginId==null || pluginId.isEmpty()) {
+				logger.log(LogLevel.ERROR, "Plugin System", "Plugin id is \"null\" for plugin "+pluginClass);
+				throw new IllegalStateException("Plugin id is \"null\" for plugin "+pluginClass);
+			}
 			boolean activePlugin = false;
 			
 			if(activePluginIds.contains(pluginId)) {
@@ -60,6 +66,7 @@ public class PluginSystem {
 			}
 			
 			if(activePlugin || loadAs == LoadAs.DEPENDENCY) {
+				logger.log(LogLevel.VERY_VERBOSE, "Loading Plugin", pluginId+", isActive="+activePlugin+", loading as: "+loadAs);
 				final PluginContext pluginContext = new DefaultPluginContext(this, taskgraph, taskRepository, logger);
 				plugin.initialize(pluginContext);
 				

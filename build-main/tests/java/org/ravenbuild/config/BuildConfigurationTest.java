@@ -69,7 +69,7 @@ public class BuildConfigurationTest {
 	}
 	
 	@Test
-	@Ignore("FIXME: Should report a sensible error message the config type for a section does not contain a field for a json property")
+	@Ignore("FIXME: Should report a meaningful error message the config type for a section does not contain a field for a json property")
 	public void reportsAnErrorIfThereIsNoConfigFieldForJsonProperty() {
 		fail("Implement me!");
 	}

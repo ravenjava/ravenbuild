@@ -35,6 +35,6 @@ public class BuildProjectPlugin implements BuildPlugin {
 	
 	@Override
 	public String getId() {
-		return null;
+		return "org.ravenbuild.build";
 	}
 }
