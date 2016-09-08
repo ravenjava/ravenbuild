@@ -13,13 +13,16 @@ public class SubProjects {
 	private final SubProjectsFactory subProjectBuilderFactory;
 	private final Logger logger;
 	private List<SubProjectBuilder> subProjectBuilders = new ArrayList<>();
+	private final ProjectType projectType;
 	
-	public SubProjects(final SubProjectsFactory subProjectBuilderFactory, final Logger logger) {
+	public SubProjects(final SubProjectsFactory subProjectBuilderFactory, final Logger logger, final ProjectType projectType) {
 		Args.notNull(subProjectBuilderFactory, "subProjectBuilderFactory");
 		Args.notNull(logger, "logger");
+		Args.notNull(projectType, "projectType");
 		
 		this.subProjectBuilderFactory = subProjectBuilderFactory;
 		this.logger = logger;
+		this.projectType = projectType;
 	}
 	
 	public void load(final Map<String, Object> configuration) {
@@ -43,7 +46,7 @@ public class SubProjects {
 	public void runInAll(final String task, final Map<String, String> taskOptions) {
 		logger.log(LogLevel.DEBUG, "Subprojects", "Running task in all sub projects: \""+task+"\".");
 		for(SubProjectBuilder builder : subProjectBuilders) {
-			builder.run(task, taskOptions);
+			builder.run(task, taskOptions, projectType);
 		}
 	}
 }

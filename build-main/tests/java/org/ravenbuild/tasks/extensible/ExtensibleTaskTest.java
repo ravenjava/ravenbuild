@@ -40,6 +40,11 @@ public class ExtensibleTaskTest {
 		public void run(final Object taskOptions) {
 			
 		}
+		
+		@Override
+		public boolean shouldRunInSubProjects() {
+			return true;
+		}
 	}
 	
 	private abstract class TestDependency implements Task {

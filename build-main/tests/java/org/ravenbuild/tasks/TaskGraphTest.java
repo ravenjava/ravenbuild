@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.InOrder;
 import org.ravenbuild.LogLevel;
 import org.ravenbuild.logging.Logger;
+import org.ravenbuild.subprojects.ProjectType;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,7 +27,7 @@ public class TaskGraphTest {
 		final TaskGraphListener listener = mock(TaskGraphListener.class);
 		taskGraph.addTaskGraphListener(TaskGraphEvent.TASK_NOT_FOUND, listener);
 		
-		taskGraph.run("nonExistentTask", mock(Map.class));
+		taskGraph.run("nonExistentTask", mock(Map.class), ProjectType.SUB_PROJECT);
 		
 		verify(listener).onTaskGraphEvent(eq(TaskGraphEvent.TASK_NOT_FOUND), eq("nonExistentTask"), eq(null));
 	}
@@ -36,7 +37,7 @@ public class TaskGraphTest {
 		Logger logger = mock(Logger.class);
 		TaskGraph taskGraph = new TaskGraph(mock(TaskRepository.class), mock(TaskRunner.class), logger);
 		
-		taskGraph.run("nonExistentTask", mock(Map.class));
+		taskGraph.run("nonExistentTask", mock(Map.class), ProjectType.SUB_PROJECT);
 		
 		verify(logger).log(eq(LogLevel.ERROR), argThat(containsString("Task not found")), argThat(containsString("nonExistentTask")));
 	}
@@ -46,7 +47,7 @@ public class TaskGraphTest {
 		final TaskRepository taskRepository = mock(TaskRepository.class);
 		TaskGraph taskGraph = new TaskGraph(taskRepository, mock(TaskRunner.class), mock(Logger.class));
 		
-		taskGraph.run("existingTask", mock(Map.class));
+		taskGraph.run("existingTask", mock(Map.class), ProjectType.SUB_PROJECT);
 		
 		verify(taskRepository).findTask("existingTask");
 	}
@@ -58,9 +59,10 @@ public class TaskGraphTest {
 		TaskGraph taskGraph = new TaskGraph(taskRepository, taskRunner, mock(Logger.class, RETURNS_DEEP_STUBS));
 		
 		Task task = mock(Task.class);
+		when(task.shouldRunInSubProjects()).thenReturn(true);
 		when(taskRepository.findTask("existingTask")).thenReturn(new TaskRepository.TaskInfo(task, EmptyTaskOptions.class));
 
-		taskGraph.run("existingTask", mock(Map.class));
+		taskGraph.run("existingTask", mock(Map.class), ProjectType.SUB_PROJECT);
 		
 		verify(taskRunner).run(eq(task), any(), any());
 	}
@@ -72,10 +74,11 @@ public class TaskGraphTest {
 		TaskGraph taskGraph = new TaskGraph(taskRepository, taskRunner, mock(Logger.class, RETURNS_DEEP_STUBS));
 		
 		Task task = mock(Task.class);
+		when(task.shouldRunInSubProjects()).thenReturn(true);
 		when(taskRepository.findTask("existingTask")).thenReturn(new TaskRepository.TaskInfo(task, EmptyTaskOptions.class));
 		
 		Map taskOptionsMap = mock(Map.class);
-		taskGraph.run("existingTask", taskOptionsMap);
+		taskGraph.run("existingTask", taskOptionsMap, ProjectType.SUB_PROJECT);
 		
 		verify(taskRunner).run(any(), eq(EmptyTaskOptions.class), any());
 	}
@@ -87,10 +90,11 @@ public class TaskGraphTest {
 		TaskGraph taskGraph = new TaskGraph(taskRepository, taskRunner, mock(Logger.class, RETURNS_DEEP_STUBS));
 		
 		Task task = mock(Task.class);
+		when(task.shouldRunInSubProjects()).thenReturn(true);
 		when(taskRepository.findTask("existingTask")).thenReturn(new TaskRepository.TaskInfo(task, EmptyTaskOptions.class));
 		
 		Map taskOptionsMap = mock(Map.class);
-		taskGraph.run("existingTask", taskOptionsMap);
+		taskGraph.run("existingTask", taskOptionsMap, ProjectType.SUB_PROJECT);
 		
 		verify(taskRunner).run(any(), any(), eq(taskOptionsMap));
 	}
@@ -132,7 +136,7 @@ public class TaskGraphTest {
 		
 		TaskGraph taskGraph = new TaskGraph(taskRepository, mock(TaskRunner.class), mock(Logger.class, RETURNS_DEEP_STUBS));
 		
-		taskGraph.run("dependency", Collections.emptyMap());
+		taskGraph.run("dependency", Collections.emptyMap(), ProjectType.SUB_PROJECT);
 		
 		verify(task).initialize(any(TaskContext.class));
 		verify(dependency).initialize(any(TaskContext.class));
@@ -166,11 +170,26 @@ public class TaskGraphTest {
 				taskInfo,
 				dependencyInfo));
 		
-		taskGraph.run("task", Collections.emptyMap());
+		taskGraph.run("task", Collections.emptyMap(), ProjectType.SUB_PROJECT);
 		
 		final InOrder inOrder = inOrder(taskRunner);
 		inOrder.verify(taskRunner).run(eq(dependencyInfo.getTask()), any(), any());
 		inOrder.verify(taskRunner).run(eq(taskInfo.getTask()), any(), any());
+	}
+	
+	@Test
+	public void doesNotRunTaskInSubProjectIfTaskIsConfiguredToRunOnlyInMainProject() {
+		TaskRunner taskRunner = mock(TaskRunner.class);
+		TaskRepository taskRepository = mock(TaskRepository.class);
+		TaskGraph taskGraph = new TaskGraph(taskRepository, taskRunner, mock(Logger.class, RETURNS_DEEP_STUBS));
+		
+		Task task = mock(Task.class);
+		when(task.shouldRunInSubProjects()).thenReturn(false);
+		when(taskRepository.findTask("existingTask")).thenReturn(new TaskRepository.TaskInfo(task, EmptyTaskOptions.class));
+		
+		taskGraph.run("existingTask", mock(Map.class), ProjectType.SUB_PROJECT);
+		
+		verify(taskRunner, never()).run(eq(task), any(), any());
 	}
 	
 	private class FakeTask implements Task {

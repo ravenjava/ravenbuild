@@ -27,7 +27,7 @@ public class SubProjectsTest {
 		}};
 		SubProjectsFactory subProjectBuilderFactory = mock(SubProjectsFactory.class);
 		Logger logger = mock(Logger.class);
-		SubProjects subProjects = new SubProjects(subProjectBuilderFactory, logger);
+		SubProjects subProjects = new SubProjects(subProjectBuilderFactory, logger, ProjectType.SUB_PROJECT);
 		
 		subProjects.load(config);
 		
@@ -47,13 +47,13 @@ public class SubProjectsTest {
 				.thenReturn(subProjectBuilder1)
 				.thenReturn(subProjectBuilder2);
 		Logger logger = mock(Logger.class);
-		SubProjects subProjects = new SubProjects(subProjectBuilderFactory, logger);
+		SubProjects subProjects = new SubProjects(subProjectBuilderFactory, logger, ProjectType.MAIN_PROJECT);
 		
 		subProjects.load(config);
 		subProjects.runInAll("task", mock(Map.class));
 		
-		verify(subProjectBuilder1).run(eq("task"), any(Map.class));
-		verify(subProjectBuilder2).run(eq("task"), any(Map.class));
+		verify(subProjectBuilder1).run(eq("task"), any(Map.class), any());
+		verify(subProjectBuilder2).run(eq("task"), any(Map.class), any());
 	}
 	
 	@Test

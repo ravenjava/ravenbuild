@@ -35,7 +35,7 @@ public class SubProjectsFactory {
 		return new SubProjectBuilder(buildOptions, buildConfiguration, taskgraph, classpathScanner, pluginSystem, this);
 	}
 	
-	public SubProjects createSubProjects() {
-		return new SubProjects(this, logger);
+	public SubProjects createSubProjects(final ProjectType projectType) {
+		return new SubProjects(this, logger, projectType);
 	}
 }

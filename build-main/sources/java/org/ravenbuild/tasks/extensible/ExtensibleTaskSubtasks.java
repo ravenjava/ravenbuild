@@ -23,6 +23,11 @@ public class ExtensibleTaskSubtasks implements Task<EmptyTaskOptions> {
 	public void run(final EmptyTaskOptions taskOptions) {
 	}
 	
+	@Override
+	public boolean shouldRunInSubProjects() {
+		return true;
+	}
+	
 	void addDependency(final String dependencyName) {
 		Task dependency = taskContext.dependsOn(dependencyName);
 		dependencies.add(dependency);

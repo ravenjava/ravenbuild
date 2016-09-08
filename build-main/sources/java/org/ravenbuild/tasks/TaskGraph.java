@@ -2,6 +2,7 @@ package org.ravenbuild.tasks;
 
 import org.ravenbuild.LogLevel;
 import org.ravenbuild.logging.Logger;
+import org.ravenbuild.subprojects.ProjectType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class TaskGraph {
 		this.logger = logger;
 	}
 	
-	public void run(final String taskName, final Map<String, String> taskOptionsMap) {
+	public void run(final String taskName, final Map<String, String> taskOptionsMap, final ProjectType projectType) {
 		initializeAllTasks();
 		
 		final TaskRepository.TaskInfo taskInfo = taskRepository.findTask(taskName);
@@ -32,7 +33,9 @@ public class TaskGraph {
 			return;
 		}
 		
-		runSingle(taskInfo, taskOptionsMap, "");
+		if(taskInfo.getTask().shouldRunInSubProjects() || projectType == ProjectType.MAIN_PROJECT) {
+			runSingle(taskInfo, taskOptionsMap, "");
+		}
 	}
 	
 	private void runPrerequisitesFor(final TaskRepository.TaskInfo taskInfo, final Map<String, String> taskOptionsMap, final String taskGraphChain) {

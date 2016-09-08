@@ -1,6 +1,7 @@
 package org.ravenbuild;
 
 import org.ravenbuild.logging.Logger;
+import org.ravenbuild.subprojects.ProjectType;
 import org.ravenbuild.subprojects.SubProjectsFactory;
 import org.ravenbuild.subprojects.SubProjects;
 
@@ -20,7 +21,7 @@ public class RavenBuild {
 	}
 	
 	public void run() {
-		SubProjects subProjects = subProjectsFactory.createSubProjects();
+		SubProjects subProjects = subProjectsFactory.createSubProjects(ProjectType.MAIN_PROJECT);
 		subProjects.load(new HashMap<String, Object>() {{
 			put("list", Arrays.asList("."));
 		}});

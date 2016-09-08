@@ -36,10 +36,10 @@ public class SubProjectBuilder {
 		this.subProjectsFactory = subProjectsFactory;
 	}
 	
-	public void run(final String taskName, final Map<String, String> taskOptions) {
+	public void run(final String taskName, final Map<String, String> taskOptions, final ProjectType projectType) {
 		pluginSystem.loadPlugins(buildConfiguration);
 		
-		SubProjects subProjects = subProjectsFactory.createSubProjects();
+		SubProjects subProjects = subProjectsFactory.createSubProjects(ProjectType.SUB_PROJECT);
 		Map subprojectsConfiguration = buildConfiguration.getConfigurationFor("subprojects", Map.class);
 		if(subprojectsConfiguration == null) {
 			subprojectsConfiguration = Collections.emptyMap();
@@ -47,6 +47,6 @@ public class SubProjectBuilder {
 		subProjects.load(subprojectsConfiguration);
 		subProjects.runInAll(taskName, taskOptions);
 		
-		taskgraph.run(taskName, taskOptions);
+		taskgraph.run(taskName, taskOptions, projectType);
 	}
 }

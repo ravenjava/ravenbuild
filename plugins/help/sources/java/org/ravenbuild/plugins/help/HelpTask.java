@@ -143,4 +143,9 @@ public class HelpTask implements Task<HelpTaskOptions> {
 		logger.log(LogLevel.DEFAULT, "Help about Tasks", "\"raven help list-tasks\" lists all tasks.");
 		logger.log(LogLevel.DEFAULT, "", "\"raven help task=[task name]\" shows the help for a specific task.");
 	}
+	
+	@Override
+	public boolean shouldRunInSubProjects() {
+		return false;
+	}
 }
