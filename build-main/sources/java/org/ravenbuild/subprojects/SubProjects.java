@@ -4,10 +4,7 @@ import net.davidtanzer.jdefensive.Args;
 import org.ravenbuild.LogLevel;
 import org.ravenbuild.logging.Logger;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SubProjects {
 	private final SubProjectsFactory subProjectBuilderFactory;
@@ -30,16 +27,19 @@ public class SubProjects {
 		if(subProjectPaths == null) {
 			subProjectPaths = Collections.emptyList();
 		}
-		initializeSubProjects(subProjectPaths);
+		
+		Map<String, Object> parentConfiguration = new HashMap<>(configuration);
+		parentConfiguration.remove("list");
+		initializeSubProjects(subProjectPaths, parentConfiguration);
 	}
 	
-	private void initializeSubProjects(final List<String> subProjectPaths) {
+	private void initializeSubProjects(final List<String> subProjectPaths, final Map<String, Object> parentConfiguration) {
 		assert subProjectPaths != null;
 		
 		for(String path : subProjectPaths) {
 			logger.log(LogLevel.DEBUG, "Subprojects", "Initializing sub project builder for path \""+path+"\".");
 			SubProject subProject = new SubProject(path);
-			subProjectBuilders.add(subProjectBuilderFactory.getSubProjectBuilder(subProject));
+			subProjectBuilders.add(subProjectBuilderFactory.getSubProjectBuilder(subProject, parentConfiguration));
 		}
 	}
 	

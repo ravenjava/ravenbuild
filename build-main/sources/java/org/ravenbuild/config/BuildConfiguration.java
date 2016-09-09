@@ -4,27 +4,35 @@ import com.google.gson.Gson;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class BuildConfiguration {
-	private Map<String, Object> configurationMap;
-	private Map<String, ConfigurationListenerInfo> configurationListeners = new HashMap<>();
+	private final Map<String, Object> configurationMap;
+	private final Map<String, ConfigurationListenerInfo> configurationListeners = new HashMap<>();
+	
+	public BuildConfiguration() {
+		configurationMap = new HashMap<>();
+	}
+	
+	public BuildConfiguration(final Map<String, Object> parentConfiguration) {
+		this();
+		configurationMap.putAll(parentConfiguration);
+	}
 	
 	public void load(final String buildConfigFile) {
 		Gson gson = new Gson();
 		
 		try {
-			configurationMap = gson.fromJson(new FileReader(buildConfigFile), Map.class);
+			configurationMap.putAll(gson.fromJson(new FileReader(buildConfigFile), Map.class));
 		} catch (FileNotFoundException e) {
-			configurationMap = Collections.emptyMap();
+			//Nothing to do here (except maybe log a verbose message that the file was not loaded?)
 		}
 	}
 	
 	void loadFromString(final String json) {
 		Gson gson = new Gson();
-		configurationMap = gson.fromJson(json, Map.class);
+		configurationMap.putAll(gson.fromJson(json, Map.class));
 	}
 	
 	public <T> void registerConfigurationListener(final String sectionName, final Class<T> configType, final ConfigurationListener<T> configurationListener) {

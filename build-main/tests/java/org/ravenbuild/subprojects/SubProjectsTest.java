@@ -2,6 +2,7 @@ package org.ravenbuild.subprojects;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.ravenbuild.logging.Logger;
 
 import java.util.Arrays;
@@ -10,11 +11,10 @@ import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -31,8 +31,8 @@ public class SubProjectsTest {
 		
 		subProjects.load(config);
 		
-		verify(subProjectBuilderFactory).getSubProjectBuilder(argThat(hasProperty("path", is("subproject1"))));
-		verify(subProjectBuilderFactory).getSubProjectBuilder(argThat(hasProperty("path", is("subproject2"))));
+		verify(subProjectBuilderFactory).getSubProjectBuilder(argThat(hasProperty("path", is("subproject1"))), anyMap());
+		verify(subProjectBuilderFactory).getSubProjectBuilder(argThat(hasProperty("path", is("subproject2"))), anyMap());
 	}
 	
 	@Test
@@ -43,7 +43,7 @@ public class SubProjectsTest {
 		SubProjectsFactory subProjectBuilderFactory = mock(SubProjectsFactory.class);
 		SubProjectBuilder subProjectBuilder1 = mock(SubProjectBuilder.class);
 		SubProjectBuilder subProjectBuilder2 = mock(SubProjectBuilder.class);
-		when(subProjectBuilderFactory.getSubProjectBuilder(any()))
+		when(subProjectBuilderFactory.getSubProjectBuilder(any(), anyMap()))
 				.thenReturn(subProjectBuilder1)
 				.thenReturn(subProjectBuilder2);
 		Logger logger = mock(Logger.class);
@@ -54,6 +54,25 @@ public class SubProjectsTest {
 		
 		verify(subProjectBuilder1).run(eq("task"), any(Map.class), any());
 		verify(subProjectBuilder2).run(eq("task"), any(Map.class), any());
+	}
+	
+	@Test
+	public void initializesSubProjectBuilderWithParentConfiguration() {
+		HashMap<String, Object> config = new HashMap<String, Object>() {{
+			put("list", Arrays.asList("subproject1"));
+			put("foo", "bar");
+		}};
+		SubProjectsFactory subProjectBuilderFactory = mock(SubProjectsFactory.class);
+		Logger logger = mock(Logger.class);
+		SubProjects subProjects = new SubProjects(subProjectBuilderFactory, logger, ProjectType.SUB_PROJECT);
+		
+		subProjects.load(config);
+		
+		ArgumentCaptor<Map> captor = ArgumentCaptor.forClass(Map.class);
+		verify(subProjectBuilderFactory).getSubProjectBuilder(any(), captor.capture());
+		
+		Map<String, Object> parentConfig = captor.getValue();
+		assertThat(parentConfig, hasEntry("foo", "bar"));
 	}
 	
 	@Test
