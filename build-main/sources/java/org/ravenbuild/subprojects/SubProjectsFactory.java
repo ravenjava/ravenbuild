@@ -34,7 +34,7 @@ public class SubProjectsFactory {
 		BuildConfiguration buildConfiguration = new BuildConfiguration(parentConfiguration);
 		buildConfiguration.load(subProject.getPath()+"/"+buildOptions.buildConfigFile());
 		
-		return new SubProjectBuilder(buildOptions, buildConfiguration, taskgraph, classpathScanner, pluginSystem, this);
+		return new SubProjectBuilder(subProject, buildOptions, buildConfiguration, taskgraph, classpathScanner, pluginSystem, this);
 	}
 	
 	public SubProjects createSubProjects(final ProjectType projectType) {

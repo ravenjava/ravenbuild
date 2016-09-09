@@ -15,9 +15,7 @@ import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class SubProjectsTest {
 	@Test
@@ -25,11 +23,11 @@ public class SubProjectsTest {
 		HashMap<String, Object> config = new HashMap<String, Object>() {{
 			put("list", Arrays.asList("subproject1", "subproject2"));
 		}};
-		SubProjectsFactory subProjectBuilderFactory = mock(SubProjectsFactory.class);
+		SubProjectsFactory subProjectBuilderFactory = mock(SubProjectsFactory.class, RETURNS_DEEP_STUBS);
 		Logger logger = mock(Logger.class);
 		SubProjects subProjects = new SubProjects(subProjectBuilderFactory, logger, ProjectType.SUB_PROJECT);
 		
-		subProjects.load(config);
+		subProjects.load(config, null);
 		
 		verify(subProjectBuilderFactory).getSubProjectBuilder(argThat(hasProperty("path", is("subproject1"))), anyMap());
 		verify(subProjectBuilderFactory).getSubProjectBuilder(argThat(hasProperty("path", is("subproject2"))), anyMap());
@@ -49,7 +47,7 @@ public class SubProjectsTest {
 		Logger logger = mock(Logger.class);
 		SubProjects subProjects = new SubProjects(subProjectBuilderFactory, logger, ProjectType.MAIN_PROJECT);
 		
-		subProjects.load(config);
+		subProjects.load(config, null);
 		subProjects.runInAll("task", mock(Map.class));
 		
 		verify(subProjectBuilder1).run(eq("task"), any(Map.class), any());
@@ -62,11 +60,11 @@ public class SubProjectsTest {
 			put("list", Arrays.asList("subproject1"));
 			put("foo", "bar");
 		}};
-		SubProjectsFactory subProjectBuilderFactory = mock(SubProjectsFactory.class);
+		SubProjectsFactory subProjectBuilderFactory = mock(SubProjectsFactory.class, RETURNS_DEEP_STUBS);
 		Logger logger = mock(Logger.class);
 		SubProjects subProjects = new SubProjects(subProjectBuilderFactory, logger, ProjectType.SUB_PROJECT);
 		
-		subProjects.load(config);
+		subProjects.load(config, null);
 		
 		ArgumentCaptor<Map> captor = ArgumentCaptor.forClass(Map.class);
 		verify(subProjectBuilderFactory).getSubProjectBuilder(any(), captor.capture());

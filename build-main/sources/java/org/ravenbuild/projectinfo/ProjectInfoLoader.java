@@ -21,4 +21,8 @@ public class ProjectInfoLoader {
 	public ProjectInfo projectInfo() {
 		return projectInfo;
 	}
+	
+	public void loadProjectInfo(final String basePath) {
+		
+	}
 }

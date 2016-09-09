@@ -5,6 +5,8 @@ import org.ravenbuild.BuildOptions;
 import org.ravenbuild.classpath.FastClasspathClasspathScanner;
 import org.ravenbuild.config.BuildConfiguration;
 import org.ravenbuild.plugins.PluginSystem;
+import org.ravenbuild.projectinfo.ProjectInfo;
+import org.ravenbuild.projectinfo.ProjectInfoLoader;
 import org.ravenbuild.tasks.TaskGraph;
 
 import java.util.Collections;
@@ -17,10 +19,13 @@ public class SubProjectBuilder {
 	private final BuildOptions buildOptions;
 	private final BuildConfiguration buildConfiguration;
 	private final SubProjectsFactory subProjectsFactory;
+	private final SubProject subProject;
+	private ProjectInfoLoader projectInfoLoader;
 	
-	public SubProjectBuilder(final BuildOptions buildOptions, final BuildConfiguration buildConfiguration,
+	public SubProjectBuilder(final SubProject subProject, final BuildOptions buildOptions, final BuildConfiguration buildConfiguration,
 			final TaskGraph taskgraph, final FastClasspathClasspathScanner classpathScanner,
 			final PluginSystem pluginSystem, final SubProjectsFactory subProjectsFactory) {
+		Args.notNull(subProject, "subProject");
 		Args.notNull(buildOptions, "buildOptions");
 		Args.notNull(buildConfiguration, "buildConfiguration");
 		Args.notNull(taskgraph, "taskgraph");
@@ -28,12 +33,23 @@ public class SubProjectBuilder {
 		Args.notNull(pluginSystem, "pluginSystem");
 		Args.notNull(subProjectsFactory, "subProjectsFactory");
 		
+		this.subProject = subProject;
 		this.buildOptions = buildOptions;
 		this.buildConfiguration = buildConfiguration;
 		this.taskgraph = taskgraph;
 		this.classpathScanner = classpathScanner;
 		this.pluginSystem = pluginSystem;
 		this.subProjectsFactory = subProjectsFactory;
+		
+		this.projectInfoLoader = new ProjectInfoLoader();
+	}
+	
+	public void loadProjectInfo(final ProjectInfo parentProjectInfo) {
+		if(parentProjectInfo != null) {
+			projectInfoLoader = new ProjectInfoLoader(parentProjectInfo);
+		}
+		
+		projectInfoLoader.loadProjectInfo(subProject.getPath());
 	}
 	
 	public void run(final String taskName, final Map<String, String> taskOptions, final ProjectType projectType) {
@@ -44,7 +60,7 @@ public class SubProjectBuilder {
 		if(subprojectsConfiguration == null) {
 			subprojectsConfiguration = Collections.emptyMap();
 		}
-		subProjects.load(subprojectsConfiguration);
+		subProjects.load(subprojectsConfiguration, projectInfoLoader.projectInfo());
 		subProjects.runInAll(taskName, taskOptions);
 		
 		taskgraph.run(taskName, taskOptions, projectType);

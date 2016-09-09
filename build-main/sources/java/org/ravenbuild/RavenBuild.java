@@ -24,7 +24,7 @@ public class RavenBuild {
 		SubProjects subProjects = subProjectsFactory.createSubProjects(ProjectType.MAIN_PROJECT);
 		subProjects.load(new HashMap<String, Object>() {{
 			put("list", Arrays.asList("."));
-		}});
+		}}, null);
 		subProjects.runInAll(buildOptions.task(), buildOptions.taskOptions());
 	}
 	

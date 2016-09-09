@@ -18,7 +18,7 @@ public class SubProjectBuilderTest {
 	@Test
 	public void loadsPluginsBeforeRunningTask() {
 		PluginSystem pluginSystem = mock(PluginSystem.class);
-		SubProjectBuilder builder = new SubProjectBuilder(mock(BuildOptions.class), mock(BuildConfiguration.class), mock(TaskGraph.class), mock(FastClasspathClasspathScanner.class), pluginSystem, mock(SubProjectsFactory.class, RETURNS_DEEP_STUBS));
+		SubProjectBuilder builder = new SubProjectBuilder(mock(SubProject.class), mock(BuildOptions.class), mock(BuildConfiguration.class), mock(TaskGraph.class), mock(FastClasspathClasspathScanner.class), pluginSystem, mock(SubProjectsFactory.class, RETURNS_DEEP_STUBS));
 		
 		builder.run("task", Collections.emptyMap(), ProjectType.MAIN_PROJECT);
 		
@@ -28,7 +28,7 @@ public class SubProjectBuilderTest {
 	@Test
 	public void runsTaskInTaskGraph() {
 		TaskGraph taskGraph = mock(TaskGraph.class);
-		SubProjectBuilder builder = new SubProjectBuilder(mock(BuildOptions.class), mock(BuildConfiguration.class), taskGraph, mock(FastClasspathClasspathScanner.class), mock(PluginSystem.class), mock(SubProjectsFactory.class, RETURNS_DEEP_STUBS));
+		SubProjectBuilder builder = new SubProjectBuilder(mock(SubProject.class), mock(BuildOptions.class), mock(BuildConfiguration.class), taskGraph, mock(FastClasspathClasspathScanner.class), mock(PluginSystem.class), mock(SubProjectsFactory.class, RETURNS_DEEP_STUBS));
 		
 		builder.run("task", Collections.emptyMap(), ProjectType.MAIN_PROJECT);
 		
@@ -43,11 +43,11 @@ public class SubProjectBuilderTest {
 		SubProjectsFactory subProjectsFactory = mock(SubProjectsFactory.class);
 		SubProjects subProjects = mock(SubProjects.class);
 		when(subProjectsFactory.createSubProjects(ProjectType.SUB_PROJECT)).thenReturn(subProjects);
-		SubProjectBuilder builder = new SubProjectBuilder(mock(BuildOptions.class), buildConfiguration, mock(TaskGraph.class), mock(FastClasspathClasspathScanner.class), mock(PluginSystem.class), subProjectsFactory);
+		SubProjectBuilder builder = new SubProjectBuilder(mock(SubProject.class), mock(BuildOptions.class), buildConfiguration, mock(TaskGraph.class), mock(FastClasspathClasspathScanner.class), mock(PluginSystem.class), subProjectsFactory);
 		
 		builder.run("task", Collections.emptyMap(), ProjectType.MAIN_PROJECT);
 		
-		verify(subProjects).load(subProjectsConfig);
+		verify(subProjects).load(eq(subProjectsConfig), any());
 	}
 	
 	@Test
@@ -58,7 +58,7 @@ public class SubProjectBuilderTest {
 		SubProjectsFactory subProjectsFactory = mock(SubProjectsFactory.class);
 		SubProjects subProjects = mock(SubProjects.class);
 		when(subProjectsFactory.createSubProjects(ProjectType.SUB_PROJECT)).thenReturn(subProjects);
-		SubProjectBuilder builder = new SubProjectBuilder(mock(BuildOptions.class), buildConfiguration, mock(TaskGraph.class), mock(FastClasspathClasspathScanner.class), mock(PluginSystem.class), subProjectsFactory);
+		SubProjectBuilder builder = new SubProjectBuilder(mock(SubProject.class), mock(BuildOptions.class), buildConfiguration, mock(TaskGraph.class), mock(FastClasspathClasspathScanner.class), mock(PluginSystem.class), subProjectsFactory);
 		
 		builder.run("task", Collections.emptyMap(), ProjectType.MAIN_PROJECT);
 		
