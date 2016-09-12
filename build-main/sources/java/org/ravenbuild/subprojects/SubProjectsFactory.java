@@ -25,14 +25,14 @@ public class SubProjectsFactory {
 	}
 	
 	public SubProjectBuilder getSubProjectBuilder(final SubProject subProject, final Map<String, Object> parentConfiguration) {
-		TaskRepository taskRepository = new TaskRepository();
-		TaskRunner taskRunner = new TaskRunner();
-		TaskGraph taskgraph = new TaskGraph(taskRepository, taskRunner, logger);
-		FastClasspathClasspathScanner classpathScanner = new FastClasspathClasspathScanner();
-		PluginSystem pluginSystem = new PluginSystem(taskgraph, taskRepository, classpathScanner, logger);
-		
 		BuildConfiguration buildConfiguration = new BuildConfiguration(parentConfiguration);
 		buildConfiguration.load(subProject.getPath()+"/"+buildOptions.buildConfigFile());
+		
+		TaskRepository taskRepository = new TaskRepository();
+		TaskRunner taskRunner = new TaskRunner();
+		TaskGraph taskgraph = new TaskGraph(taskRepository, taskRunner, buildConfiguration, logger);
+		FastClasspathClasspathScanner classpathScanner = new FastClasspathClasspathScanner();
+		PluginSystem pluginSystem = new PluginSystem(taskgraph, taskRepository, classpathScanner, logger);
 		
 		return new SubProjectBuilder(subProject, buildOptions, buildConfiguration, taskgraph, classpathScanner, pluginSystem, this);
 	}

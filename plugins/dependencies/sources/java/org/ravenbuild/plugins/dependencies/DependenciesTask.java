@@ -43,6 +43,8 @@ public class DependenciesTask implements Task<DependenciesTaskOptions> {
 	
 	@Override
 	public void run(final DependenciesTaskOptions taskOptions) {
-		
+		if(taskOptions.isInitialize()) {
+			dependenciesTaskRunner.initializeDependencies();
+		}
 	}
 }

@@ -1,6 +1,8 @@
 package org.ravenbuild.tasks;
 
+import net.davidtanzer.jdefensive.Args;
 import org.ravenbuild.LogLevel;
+import org.ravenbuild.config.BuildConfiguration;
 import org.ravenbuild.logging.Logger;
 import org.ravenbuild.subprojects.ProjectType;
 
@@ -12,13 +14,20 @@ import java.util.Map;
 public class TaskGraph {
 	private final TaskRepository taskRepository;
 	private final TaskRunner taskRunner;
+	private final BuildConfiguration configuration;
 	private final Logger logger;
 	
 	private final Map<TaskGraphEvent, List<TaskGraphListener>> listeners = new HashMap<>();
 	
-	public TaskGraph(final TaskRepository taskRepository, final TaskRunner taskRunner, final Logger logger) {
+	public TaskGraph(final TaskRepository taskRepository, final TaskRunner taskRunner, final BuildConfiguration configuration, final Logger logger) {
+		Args.notNull(taskRepository, "taskRepository");
+		Args.notNull(taskRunner, "taskRunner");
+		Args.notNull(configuration, "configuration");
+		Args.notNull(logger, "logger");
+		
 		this.taskRepository = taskRepository;
 		this.taskRunner = taskRunner;
+		this.configuration = configuration;
 		this.logger = logger;
 	}
 	
@@ -81,7 +90,7 @@ public class TaskGraph {
 		assert allTasks != null : "All tasks from task repository never returns null";
 		
 		for(TaskRepository.TaskInfo taskInfo : allTasks) {
-			final TaskContext taskContext = new TaskContext(taskInfo, taskRepository);
+			final TaskContext taskContext = new TaskContext(taskInfo, taskRepository, configuration);
 			taskInfo.getTask().initialize(taskContext);
 		}
 	}
