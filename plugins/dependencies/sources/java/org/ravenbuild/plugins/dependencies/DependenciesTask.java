@@ -1,5 +1,6 @@
 package org.ravenbuild.plugins.dependencies;
 
+import net.davidtanzer.jdefensive.Args;
 import org.ravenbuild.plugins.help.LongDescription;
 import org.ravenbuild.plugins.help.ShortDescription;
 import org.ravenbuild.tasks.Task;
@@ -24,6 +25,17 @@ import org.ravenbuild.tasks.TaskContext;
 		"below."
 })
 public class DependenciesTask implements Task<DependenciesTaskOptions> {
+	private final DependenciesTaskRunner dependenciesTaskRunner;
+	
+	public DependenciesTask() {
+		this(new DependenciesTaskRunner());
+	}
+	
+	DependenciesTask(final DependenciesTaskRunner dependenciesTaskRunner) {
+		Args.notNull(dependenciesTaskRunner, "dependenciesTaskRunner");
+		this.dependenciesTaskRunner = dependenciesTaskRunner;
+	}
+	
 	@Override
 	public void initialize(final TaskContext taskContext) {
 		
