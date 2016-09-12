@@ -2,7 +2,7 @@
 	"dependencies": {
 		"java": [
 			"io.github.lukehutch:fast-classpath-scanner",
-			"com.google.code.gson:gson",
+			"com.google.code.gson:gson"
 		]
 	}
 }

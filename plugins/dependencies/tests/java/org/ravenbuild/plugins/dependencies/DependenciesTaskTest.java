@@ -2,7 +2,6 @@ package org.ravenbuild.plugins.dependencies;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class DependenciesTaskTest {
@@ -20,7 +19,7 @@ public class DependenciesTaskTest {
 		
 		task.run(options);
 		
-		verify(taskRunner).initializeDependencies();
+		verify(taskRunner).initializeDependencies(any());
 		verifyNoMoreInteractions(taskRunner);
 	}
 }

@@ -90,7 +90,7 @@ public class TaskGraph {
 		assert allTasks != null : "All tasks from task repository never returns null";
 		
 		for(TaskRepository.TaskInfo taskInfo : allTasks) {
-			final TaskContext taskContext = new TaskContext(taskInfo, taskRepository, configuration);
+			final TaskContext taskContext = new TaskContext(taskInfo, taskRepository);
 			taskInfo.getTask().initialize(taskContext);
 		}
 	}

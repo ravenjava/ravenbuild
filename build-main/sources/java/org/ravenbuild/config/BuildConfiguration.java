@@ -51,7 +51,9 @@ public class BuildConfiguration {
 		for(String configurationSection : configurationMap.keySet()) {
 			ConfigurationListenerInfo configurationListenerInfo = configurationListeners.get(configurationSection);
 			
-			configurationListenerInfo.notifyListener(configurationMap.get(configurationSection));
+			if(configurationListenerInfo != null) {
+				configurationListenerInfo.notifyListener(configurationMap.get(configurationSection));
+			}
 		}
 	}
 	

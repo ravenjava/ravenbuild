@@ -6,16 +6,13 @@ import org.ravenbuild.config.BuildConfiguration;
 public class TaskContext {
 	private final TaskRepository.TaskInfo taskInfo;
 	private final TaskRepository taskRepository;
-	private final BuildConfiguration configuration;
 	
-	public TaskContext(final TaskRepository.TaskInfo taskInfo, final TaskRepository taskRepository, final BuildConfiguration configuration) {
+	public TaskContext(final TaskRepository.TaskInfo taskInfo, final TaskRepository taskRepository) {
 		Args.notNull(taskInfo, "taskInfo");
 		Args.notNull(taskRepository, "taskRepository");
-		Args.notNull(configuration, "configuration");
 		
 		this.taskInfo = taskInfo;
 		this.taskRepository = taskRepository;
-		this.configuration = configuration;
 	}
 	
 	public <T> T dependsOn(final String taskId) {
@@ -26,9 +23,5 @@ public class TaskContext {
 		TaskRepository.TaskInfo dependencyInfo = taskRepository.findTask(taskId);
 		taskInfo.addDependency(dependencyInfo);
 		return (T) dependencyInfo.getTask();
-	}
-	
-	public BuildConfiguration configuration() {
-		return configuration;
 	}
 }

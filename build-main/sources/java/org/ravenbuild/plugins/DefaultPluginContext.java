@@ -1,5 +1,7 @@
 package org.ravenbuild.plugins;
 
+import net.davidtanzer.jdefensive.Args;
+import org.ravenbuild.config.BuildConfiguration;
 import org.ravenbuild.logging.Logger;
 import org.ravenbuild.tasks.Task;
 import org.ravenbuild.tasks.TaskGraph;
@@ -9,12 +11,21 @@ class DefaultPluginContext implements PluginContext {
 	private final PluginSystem pluginSystem;
 	private final TaskGraph taskGraph;
 	private final TaskRepository taskRepository;
+	private final BuildConfiguration configuration;
 	private final Logger logger;
 	
-	public DefaultPluginContext(final PluginSystem pluginSystem, final TaskGraph taskGraph, final TaskRepository taskRepository, final Logger logger) {
+	public DefaultPluginContext(final PluginSystem pluginSystem, final TaskGraph taskGraph, final TaskRepository taskRepository,
+			final BuildConfiguration configuration, final Logger logger) {
+		Args.notNull(pluginSystem, "pluginSystem");
+		Args.notNull(taskGraph, "taskGraph");
+		Args.notNull(taskRepository, "taskRepository");
+		Args.notNull(configuration, "configuration");
+		Args.notNull(logger, "logger");
+		
 		this.pluginSystem = pluginSystem;
 		this.taskGraph = taskGraph;
 		this.taskRepository = taskRepository;
+		this.configuration = configuration;
 		this.logger = logger;
 	}
 	
@@ -31,6 +42,11 @@ class DefaultPluginContext implements PluginContext {
 	@Override
 	public TaskRepository taskRepository() {
 		return taskRepository;
+	}
+	
+	@Override
+	public BuildConfiguration configuration() {
+		return configuration;
 	}
 	
 	@Override

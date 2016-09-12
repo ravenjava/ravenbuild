@@ -6,16 +6,24 @@ import org.ravenbuild.plugins.BuildPlugin;
 import org.ravenbuild.plugins.PluginContext;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DependenciesPlugin implements BuildPlugin {
 	final Map<String, DependenciesType> dependenciesTypes = new HashMap<>();
 	private Logger logger;
+	private DependenciesTask dependenciesTask;
 	
 	@Override
 	public void initialize(final PluginContext pluginContext) {
 		this.logger = pluginContext.logger();
-		pluginContext.registerTask("dependencies", new DependenciesTask(), DependenciesTaskOptions.class);
+		pluginContext.configuration().registerConfigurationListener("dependencies", Map.class, this::configurationLoaded);
+		dependenciesTask = new DependenciesTask();
+		pluginContext.registerTask("dependencies", dependenciesTask, DependenciesTaskOptions.class);
+	}
+	
+	private void configurationLoaded(final Map<String, List<String>> configuration) {
+		dependenciesTask.configurationLoaded(configuration);
 	}
 	
 	@Override

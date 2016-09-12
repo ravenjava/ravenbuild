@@ -54,6 +54,7 @@ public class SubProjectBuilder {
 	
 	public void run(final String taskName, final Map<String, String> taskOptions, final ProjectType projectType) {
 		pluginSystem.loadPlugins(buildConfiguration);
+		buildConfiguration.processConfigurationForListeners();
 		
 		SubProjects subProjects = subProjectsFactory.createSubProjects(ProjectType.SUB_PROJECT);
 		Map subprojectsConfiguration = buildConfiguration.getConfigurationFor("subprojects", Map.class);

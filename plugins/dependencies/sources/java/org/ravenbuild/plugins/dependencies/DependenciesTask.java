@@ -6,6 +6,9 @@ import org.ravenbuild.plugins.help.ShortDescription;
 import org.ravenbuild.tasks.Task;
 import org.ravenbuild.tasks.TaskContext;
 
+import java.util.List;
+import java.util.Map;
+
 @ShortDescription("Lists, initializes and updates dependencies of the current project and shows information about available dependency updates.")
 @LongDescription({
 		"Use the dependencies task to manage the dependencies of your current",
@@ -26,6 +29,7 @@ import org.ravenbuild.tasks.TaskContext;
 })
 public class DependenciesTask implements Task<DependenciesTaskOptions> {
 	private final DependenciesTaskRunner dependenciesTaskRunner;
+	private Map<String, List<String>> configuration;
 	
 	public DependenciesTask() {
 		this(new DependenciesTaskRunner());
@@ -38,13 +42,17 @@ public class DependenciesTask implements Task<DependenciesTaskOptions> {
 	
 	@Override
 	public void initialize(final TaskContext taskContext) {
-		
+	}
+	
+	void configurationLoaded(final Map<String, List<String>> configuration) {
+		Args.notNull(configuration, "configuration");
+		this.configuration = configuration;
 	}
 	
 	@Override
 	public void run(final DependenciesTaskOptions taskOptions) {
 		if(taskOptions.isInitialize()) {
-			dependenciesTaskRunner.initializeDependencies();
+			dependenciesTaskRunner.initializeDependencies(configuration);
 		}
 	}
 }

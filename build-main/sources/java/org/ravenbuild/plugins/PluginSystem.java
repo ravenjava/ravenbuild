@@ -19,6 +19,7 @@ public class PluginSystem {
 	private final TaskRepository taskRepository;
 	private List<BuildPlugin> allPlugins = new ArrayList<>();
 	private HashSet activePluginIds = new HashSet<>();
+	private BuildConfiguration buildConfiguration;
 	
 	public PluginSystem(final TaskGraph taskgraph, final TaskRepository taskRepository, final ClasspathScanner classpathScanner, final Logger logger) {
 		Args.notNull(taskgraph, "taskgraph");
@@ -33,6 +34,9 @@ public class PluginSystem {
 	}
 	
 	public void loadPlugins(final BuildConfiguration buildConfiguration) {
+		Args.notNull(buildConfiguration, "buildConfiguration");
+		this.buildConfiguration = buildConfiguration;
+		
 		populateActivePluginIds(buildConfiguration);
 		final List<Class<? extends BuildPlugin>> allPluginClasses = classpathScanner.findAllClassesImplementing(BuildPlugin.class);
 		
@@ -67,7 +71,7 @@ public class PluginSystem {
 			
 			if(activePlugin || loadAs == LoadAs.DEPENDENCY) {
 				logger.log(LogLevel.VERY_VERBOSE, "Loading Plugin", pluginId+", isActive="+activePlugin+", loading as: "+loadAs);
-				final PluginContext pluginContext = new DefaultPluginContext(this, taskgraph, taskRepository, logger);
+				final PluginContext pluginContext = new DefaultPluginContext(this, taskgraph, taskRepository, buildConfiguration, logger);
 				plugin.initialize(pluginContext);
 				
 				allPlugins.add(plugin);
