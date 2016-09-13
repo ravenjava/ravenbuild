@@ -7,8 +7,8 @@ import static org.junit.Assert.*;
 
 public class DependenciesTaskRunnerTest {
 	@Test
-	@Ignore("TODO Finish task context first...")
-	public void loadsDependenciesConfigurationWhenInitializingDependencies() {
+	@Ignore("TODO Finish refactoring of task class before continuing here.")
+	public void checksIfAllDependenciesAreAvailableWhenInitializingDependencies() {
 		fail("Implement me!");
 	}
 }

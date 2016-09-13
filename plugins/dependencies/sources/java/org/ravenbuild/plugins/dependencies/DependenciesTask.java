@@ -31,10 +31,6 @@ public class DependenciesTask implements Task<DependenciesTaskOptions> {
 	private final DependenciesTaskRunner dependenciesTaskRunner;
 	private Map<String, List<String>> configuration;
 	
-	public DependenciesTask() {
-		this(new DependenciesTaskRunner());
-	}
-	
 	DependenciesTask(final DependenciesTaskRunner dependenciesTaskRunner) {
 		Args.notNull(dependenciesTaskRunner, "dependenciesTaskRunner");
 		this.dependenciesTaskRunner = dependenciesTaskRunner;
@@ -51,8 +47,9 @@ public class DependenciesTask implements Task<DependenciesTaskOptions> {
 	
 	@Override
 	public void run(final DependenciesTaskOptions taskOptions) {
+		dependenciesTaskRunner.initialize(configuration);
 		if(taskOptions.isInitialize()) {
-			dependenciesTaskRunner.initializeDependencies(configuration);
+			dependenciesTaskRunner.initializeDependencies();
 		}
 	}
 }
