@@ -2,6 +2,7 @@ package org.ravenbuild.plugins;
 
 import org.ravenbuild.config.BuildConfiguration;
 import org.ravenbuild.logging.Logger;
+import org.ravenbuild.projectinfo.AllProjects;
 import org.ravenbuild.tasks.Task;
 import org.ravenbuild.tasks.TaskGraph;
 import org.ravenbuild.tasks.TaskRepository;
@@ -16,4 +17,6 @@ public interface PluginContext {
 	BuildConfiguration configuration();
 	
 	<T extends BuildPlugin> T dependsOnPlugin(Class<T> dependency);
+	
+	AllProjects allProjects();
 }

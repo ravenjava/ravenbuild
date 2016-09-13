@@ -6,6 +6,7 @@ import org.ravenbuild.classpath.FastClasspathClasspathScanner;
 import org.ravenbuild.config.BuildConfiguration;
 import org.ravenbuild.logging.Logger;
 import org.ravenbuild.plugins.PluginSystem;
+import org.ravenbuild.projectinfo.AllProjects;
 import org.ravenbuild.tasks.TaskGraph;
 import org.ravenbuild.tasks.TaskRepository;
 import org.ravenbuild.tasks.TaskRunner;
@@ -15,13 +16,16 @@ import java.util.Map;
 public class SubProjectsFactory {
 	private final Logger logger;
 	private final BuildOptions buildOptions;
+	private final AllProjects allProjects;
 	
-	public SubProjectsFactory(final Logger logger, final BuildOptions buildOptions) {
+	public SubProjectsFactory(final Logger logger, final BuildOptions buildOptions, final AllProjects allProjects) {
 		Args.notNull(logger, "logger");
 		Args.notNull(buildOptions, "buildOptions");
+		Args.notNull(allProjects, "allProjects");
 		
 		this.logger = logger;
 		this.buildOptions = buildOptions;
+		this.allProjects = allProjects;
 	}
 	
 	public SubProjectBuilder getSubProjectBuilder(final SubProject subProject, final Map<String, Object> parentConfiguration) {
@@ -32,7 +36,7 @@ public class SubProjectsFactory {
 		TaskRunner taskRunner = new TaskRunner();
 		TaskGraph taskgraph = new TaskGraph(taskRepository, taskRunner, buildConfiguration, logger);
 		FastClasspathClasspathScanner classpathScanner = new FastClasspathClasspathScanner();
-		PluginSystem pluginSystem = new PluginSystem(taskgraph, taskRepository, classpathScanner, logger);
+		PluginSystem pluginSystem = new PluginSystem(taskgraph, taskRepository, classpathScanner, allProjects, logger);
 		
 		return new SubProjectBuilder(subProject, buildOptions, buildConfiguration, taskgraph, classpathScanner, pluginSystem, this);
 	}

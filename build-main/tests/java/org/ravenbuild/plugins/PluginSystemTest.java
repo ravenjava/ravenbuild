@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.ravenbuild.config.BuildConfiguration;
 import org.ravenbuild.logging.Logger;
+import org.ravenbuild.projectinfo.AllProjects;
 import org.ravenbuild.tasks.TaskGraph;
 import org.ravenbuild.tasks.TaskRepository;
 
@@ -26,7 +27,7 @@ public class PluginSystemTest {
 	public void loadsPluginsUsingClasspathScannerWhenLoadingAllPlugins() {
 		final TaskGraph taskgraph = mock(TaskGraph.class);
 		final ClasspathScanner classpathScanner = mock(ClasspathScanner.class);
-		PluginSystem pluginSystem = new PluginSystem(taskgraph, mock(TaskRepository.class), classpathScanner, mock(Logger.class));
+		PluginSystem pluginSystem = new PluginSystem(taskgraph, mock(TaskRepository.class), classpathScanner, mock(AllProjects.class), mock(Logger.class));
 		
 		pluginSystem.loadPlugins(mock(BuildConfiguration.class));
 		
@@ -37,7 +38,7 @@ public class PluginSystemTest {
 	public void doesNotLoadPluginIfItIsNotSpecifiedInTheBuildConfiguration() {
 		BuildPluginMock.pluginInitializedWithContext = null;
 		ClasspathScanner classpathScanner = mock(ClasspathScanner.class);
-		PluginSystem pluginSystem = new PluginSystem(mock(TaskGraph.class), mock(TaskRepository.class), classpathScanner, mock(Logger.class));
+		PluginSystem pluginSystem = new PluginSystem(mock(TaskGraph.class), mock(TaskRepository.class), classpathScanner, mock(AllProjects.class), mock(Logger.class));
 		
 		when(classpathScanner.findAllClassesImplementing(eq(BuildPlugin.class))).thenReturn(Arrays.asList(BuildPluginMock.class));
 		pluginSystem.loadPlugins(mock(BuildConfiguration.class));
@@ -51,7 +52,7 @@ public class PluginSystemTest {
 		final TaskGraph taskgraph = mock(TaskGraph.class);
 		final ClasspathScanner classpathScanner = mock(ClasspathScanner.class);
 		when(classpathScanner.findAllClassesImplementing(eq(BuildPlugin.class))).thenReturn(Arrays.asList(BuildPluginMock.class));
-		PluginSystem pluginSystem = new PluginSystem(taskgraph, mock(TaskRepository.class), classpathScanner, mock(Logger.class));
+		PluginSystem pluginSystem = new PluginSystem(taskgraph, mock(TaskRepository.class), classpathScanner, mock(AllProjects.class), mock(Logger.class));
 		
 		BuildConfiguration buildConfiguration = mock(BuildConfiguration.class);
 		when(buildConfiguration.getConfigurationFor("plugins", List.class)).thenReturn(Arrays.asList("org.ravenbuild.MockPlugin"));
@@ -66,7 +67,7 @@ public class PluginSystemTest {
 		final TaskGraph taskgraph = mock(TaskGraph.class);
 		final ClasspathScanner classpathScanner = mock(ClasspathScanner.class);
 		when(classpathScanner.findAllClassesImplementing(eq(BuildPlugin.class))).thenReturn(Arrays.asList(BuildPluginMock.class));
-		PluginSystem pluginSystem = new PluginSystem(taskgraph, mock(TaskRepository.class), classpathScanner, mock(Logger.class));
+		PluginSystem pluginSystem = new PluginSystem(taskgraph, mock(TaskRepository.class), classpathScanner, mock(AllProjects.class), mock(Logger.class));
 		
 		BuildConfiguration buildConfiguration = mock(BuildConfiguration.class);
 		when(buildConfiguration.getConfigurationFor("plugins", List.class)).thenReturn(Arrays.asList("org.ravenbuild.MockPlugin"));
@@ -83,7 +84,7 @@ public class PluginSystemTest {
 		final ClasspathScanner classpathScanner = mock(ClasspathScanner.class);
 		when(classpathScanner.findAllClassesImplementing(eq(BuildPlugin.class)))
 				.thenReturn(Arrays.asList(BuildPluginMock.class, BuildPluginMock2.class));
-		PluginSystem pluginSystem = new PluginSystem(taskgraph, mock(TaskRepository.class), classpathScanner, mock(Logger.class));
+		PluginSystem pluginSystem = new PluginSystem(taskgraph, mock(TaskRepository.class), classpathScanner, mock(AllProjects.class), mock(Logger.class));
 		
 		BuildConfiguration buildConfiguration = mock(BuildConfiguration.class);
 		when(buildConfiguration.getConfigurationFor("plugins", List.class)).thenReturn(Arrays.asList("org.ravenbuild.MockPlugin2"));

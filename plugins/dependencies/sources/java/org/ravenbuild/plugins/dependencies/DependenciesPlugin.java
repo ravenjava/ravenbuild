@@ -19,8 +19,10 @@ public class DependenciesPlugin implements BuildPlugin {
 		this.logger = pluginContext.logger();
 		pluginContext.configuration().registerConfigurationListener("dependencies", Map.class, this::configurationLoaded);
 		
-		DependenciesTaskRunner taskRunner = new DependenciesTaskRunner();
+		ExistingDependenciesInformation dependenciesInfo = new ExistingDependenciesInformation();
+		DependenciesTaskRunner taskRunner = new DependenciesTaskRunner(dependenciesInfo, pluginContext.allProjects());
 		dependenciesTask = new DependenciesTask(taskRunner);
+		
 		pluginContext.registerTask("dependencies", dependenciesTask, DependenciesTaskOptions.class);
 	}
 	
