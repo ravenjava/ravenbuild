@@ -1,9 +1,12 @@
 package org.ravenbuild.projectinfo;
 
+import java.io.File;
+
 public class ProjectInfo {
 	private String projectName;
 	private String projectGroup;
 	private String projectVersion;
+	private File locationOnDisk;
 	
 	public String getProjectName() {
 		return projectName;
@@ -27,5 +30,13 @@ public class ProjectInfo {
 	
 	void setProjectVersion(final String projectVersion) {
 		this.projectVersion = projectVersion;
+	}
+	
+	public File getLocationOnDisk() {
+		return locationOnDisk;
+	}
+	
+	void setLocationOnDisk(final File locationOnDisk) {
+		this.locationOnDisk = locationOnDisk;
 	}
 }

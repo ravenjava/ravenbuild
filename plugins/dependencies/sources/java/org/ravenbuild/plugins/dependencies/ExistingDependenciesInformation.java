@@ -4,4 +4,8 @@ class ExistingDependenciesInformation {
 	void load() {
 		
 	}
+	
+	public Dependency getDependency(final String artifactId) {
+		return null;
+	}
 }

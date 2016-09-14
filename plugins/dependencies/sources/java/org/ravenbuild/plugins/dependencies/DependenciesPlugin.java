@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DependenciesPlugin implements BuildPlugin {
+public class DependenciesPlugin implements BuildPlugin, DependenciesHolder {
 	final Map<String, DependenciesType> dependenciesTypes = new HashMap<>();
 	private Logger logger;
 	private DependenciesTask dependenciesTask;
@@ -20,7 +20,7 @@ public class DependenciesPlugin implements BuildPlugin {
 		pluginContext.configuration().registerConfigurationListener("dependencies", Map.class, this::configurationLoaded);
 		
 		ExistingDependenciesInformation dependenciesInfo = new ExistingDependenciesInformation();
-		DependenciesTaskRunner taskRunner = new DependenciesTaskRunner(dependenciesInfo, pluginContext.allProjects());
+		DependenciesTaskRunner taskRunner = new DependenciesTaskRunner(dependenciesInfo, pluginContext.allProjects(), this);
 		dependenciesTask = new DependenciesTask(taskRunner);
 		
 		pluginContext.registerTask("dependencies", dependenciesTask, DependenciesTaskOptions.class);
@@ -38,5 +38,15 @@ public class DependenciesPlugin implements BuildPlugin {
 	public void registerDependenciesType(final String name, final DependenciesType dependenciesType) {
 		logger.log(LogLevel.VERY_VERBOSE, "Dependencies", "Registering dependencies type for: \""+name+"\" dependencies.");
 		dependenciesTypes.put(name, dependenciesType);
+	}
+	
+	@Override
+	public void addDependency(final Dependency dependency) {
+		
+	}
+	
+	@Override
+	public List<Dependency> allDependencies() {
+		return null;
 	}
 }
