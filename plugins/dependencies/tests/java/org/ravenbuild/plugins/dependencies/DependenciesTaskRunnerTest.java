@@ -20,7 +20,7 @@ public class DependenciesTaskRunnerTest {
 	public void loadsExistingDependenciesInformationOnInitialize() {
 		ExistingDependenciesInformation dependenciesInfo = mock(ExistingDependenciesInformation.class);
 		AllProjects allProjects = mock(AllProjects.class);
-		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, mock(DependenciesHolder.class));
+		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, mock(Map.class));
 		
 		runner.initialize(Collections.emptyMap());
 		
@@ -31,7 +31,7 @@ public class DependenciesTaskRunnerTest {
 	public void checksProjectInfoIfDependencyIsAKnownSubProject() {
 		ExistingDependenciesInformation dependenciesInfo = mock(ExistingDependenciesInformation.class);
 		AllProjects allProjects = mock(AllProjects.class);
-		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, mock(DependenciesHolder.class));
+		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, mock(Map.class));
 		
 		HashMap<String, List<String>> configuration = new HashMap<String, List<String>>() {{
 			put("java", Arrays.asList("mygroup:subproject"));
@@ -48,7 +48,9 @@ public class DependenciesTaskRunnerTest {
 		AllProjects allProjects = mock(AllProjects.class);
 		ProjectInfo subProject = mock(ProjectInfo.class, RETURNS_DEEP_STUBS);
 		when(allProjects.findProject("mygroup:subproject")).thenReturn(subProject);
-		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, mock(DependenciesHolder.class));
+		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, new HashMap<String, DependenciesType>() {{
+			put("java", mock(DependenciesType.class));
+		}});
 		
 		HashMap<String, List<String>> configuration = new HashMap<String, List<String>>() {{
 			put("java", Arrays.asList("mygroup:subproject"));
@@ -65,7 +67,9 @@ public class DependenciesTaskRunnerTest {
 		AllProjects allProjects = mock(AllProjects.class);
 		ProjectInfo subProject = mock(ProjectInfo.class, RETURNS_DEEP_STUBS);
 		when(allProjects.findProject("somegroup:someid")).thenReturn(subProject);
-		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, mock(DependenciesHolder.class));
+		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, new HashMap<String, DependenciesType>() {{
+			put("java", mock(DependenciesType.class));
+		}});
 		
 		HashMap<String, List<String>> configuration = new HashMap<String, List<String>>() {{
 			put("java", Arrays.asList("somegroup:someid"));
@@ -80,7 +84,7 @@ public class DependenciesTaskRunnerTest {
 	public void checksExistingDependencyInfoIfTheDependencyExistsIfItsNoProjectDependency() {
 		ExistingDependenciesInformation dependenciesInfo = mock(ExistingDependenciesInformation.class);
 		AllProjects allProjects = mock(AllProjects.class);
-		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, mock(DependenciesHolder.class));
+		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, mock(Map.class));
 		
 		HashMap<String, List<String>> configuration = new HashMap<String, List<String>>() {{
 			put("java", Arrays.asList("somegroup:someid"));
@@ -92,15 +96,17 @@ public class DependenciesTaskRunnerTest {
 	}
 	
 	@Test
-	public void informsDependenciesHolderAboutExistingProjectDependency() {
+	public void informsDependenciesTypeAboutExistingProjectDependency() {
 		ExistingDependenciesInformation dependenciesInfo = mock(ExistingDependenciesInformation.class);
 		AllProjects allProjects = mock(AllProjects.class);
 		ProjectInfo subProject = mock(ProjectInfo.class);
 		File location = mock(File.class);
 		when(subProject.getLocationOnDisk()).thenReturn(location);
 		when(allProjects.findProject("mygroup:subproject")).thenReturn(subProject);
-		DependenciesHolder dependenciesHolder = mock(DependenciesHolder.class);
-		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, dependenciesHolder);
+		DependenciesType dependenciesType = mock(DependenciesType.class);
+		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, new HashMap<String, DependenciesType>() {{
+			put("java", dependenciesType);
+		}});
 		
 		HashMap<String, List<String>> configuration = new HashMap<String, List<String>>() {{
 			put("java", Arrays.asList("mygroup:subproject"));
@@ -109,7 +115,7 @@ public class DependenciesTaskRunnerTest {
 		runner.initializeDependencies();
 		
 		ArgumentCaptor<Dependency> captor = ArgumentCaptor.forClass(Dependency.class);
-		verify(dependenciesHolder).addDependency(captor.capture());
+		verify(dependenciesType).dependencyResolved(captor.capture());
 		
 		assertThat(captor.getValue().artifactId(), is("mygroup:subproject"));
 		assertThat(captor.getValue().locationOnDisk(), is(location));
@@ -124,8 +130,10 @@ public class DependenciesTaskRunnerTest {
 		when(dependenciesInfo.getDependency("somegroup:someid")).thenReturn(
 				new Dependency("somegroup:someid", location, Optional.of(new URL("http://example.com/artifact"))));
 		AllProjects allProjects = mock(AllProjects.class);
-		DependenciesHolder dependenciesHolder = mock(DependenciesHolder.class);
-		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, dependenciesHolder);
+		DependenciesType dependenciesType = mock(DependenciesType.class);
+		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, new HashMap<String, DependenciesType>() {{
+			put("java", dependenciesType);
+		}});
 		
 		HashMap<String, List<String>> configuration = new HashMap<String, List<String>>() {{
 			put("java", Arrays.asList("somegroup:someid"));
@@ -134,7 +142,7 @@ public class DependenciesTaskRunnerTest {
 		runner.initializeDependencies();
 		
 		ArgumentCaptor<Dependency> captor = ArgumentCaptor.forClass(Dependency.class);
-		verify(dependenciesHolder).addDependency(captor.capture());
+		verify(dependenciesType).dependencyResolved(captor.capture());
 		
 		assertThat(captor.getValue().artifactId(), is("somegroup:someid"));
 		assertThat(captor.getValue().locationOnDisk(), is(location));

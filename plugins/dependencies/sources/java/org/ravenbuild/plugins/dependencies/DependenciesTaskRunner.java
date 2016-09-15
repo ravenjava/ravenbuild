@@ -11,17 +11,17 @@ import java.util.Optional;
 class DependenciesTaskRunner {
 	private final ExistingDependenciesInformation dependenciesInfo;
 	private final AllProjects allProjects;
-	private final DependenciesHolder dependenciesHolder;
+	private final Map<String, DependenciesType> dependenciesTypes;
 	private Map<String, List<String>> configuration;
 	
-	DependenciesTaskRunner(final ExistingDependenciesInformation dependenciesInfo, final AllProjects allProjects, final DependenciesHolder dependenciesHolder) {
+	DependenciesTaskRunner(final ExistingDependenciesInformation dependenciesInfo, final AllProjects allProjects, final Map<String, DependenciesType> dependenciesTypes) {
 		Args.notNull(dependenciesInfo, "dependenciesInfo");
 		Args.notNull(allProjects, "allProjects");
-		Args.notNull(dependenciesHolder, "dependenciesHolder");
+		Args.notNull(dependenciesTypes, "dependenciesTypes");
 		
 		this.dependenciesInfo = dependenciesInfo;
 		this.allProjects = allProjects;
-		this.dependenciesHolder = dependenciesHolder;
+		this.dependenciesTypes = dependenciesTypes;
 	}
 	
 	void initialize(final Map<String, List<String>> configuration) {
@@ -34,15 +34,16 @@ class DependenciesTaskRunner {
 	void initializeDependencies() {
 		for(String configType : configuration.keySet()) {
 			List<String> dependencies = configuration.get(configType);
+			DependenciesType dependenciesType = dependenciesTypes.get(configType);
 			for(String artifactId : dependencies) {
 				ProjectInfo projectInfo = allProjects.findProject(artifactId);
 				if(projectInfo != null) {
 					allProjects.waitFor(projectInfo);
-					dependenciesHolder.addDependency(new Dependency(artifactId, projectInfo.getLocationOnDisk(), Optional.empty()));
+					dependenciesType.dependencyResolved(new Dependency(artifactId, projectInfo.getLocationOnDisk(), Optional.empty()));
 				} else {
 					Dependency dependency = dependenciesInfo.getDependency(artifactId);
 					if(dependency != null) {
-						dependenciesHolder.addDependency(dependency);
+						dependenciesType.dependencyResolved(dependency);
 					}
 				}
 			}
