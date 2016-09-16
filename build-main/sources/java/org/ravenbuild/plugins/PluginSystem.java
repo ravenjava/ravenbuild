@@ -3,6 +3,7 @@ package org.ravenbuild.plugins;
 import net.davidtanzer.jdefensive.Args;
 import org.ravenbuild.LogLevel;
 import org.ravenbuild.config.BuildConfiguration;
+import org.ravenbuild.environment.BuildEnvironment;
 import org.ravenbuild.logging.Logger;
 import org.ravenbuild.projectinfo.AllProjects;
 import org.ravenbuild.tasks.TaskGraph;
@@ -19,22 +20,25 @@ public class PluginSystem {
 	private final Logger logger;
 	private final TaskRepository taskRepository;
 	private final AllProjects allProjects;
+	private final BuildEnvironment buildEnvironment;
 	private List<BuildPlugin> allPlugins = new ArrayList<>();
 	private HashSet activePluginIds = new HashSet<>();
 	private BuildConfiguration buildConfiguration;
 	
 	public PluginSystem(final TaskGraph taskgraph, final TaskRepository taskRepository, final ClasspathScanner classpathScanner,
-			final AllProjects allProjects, final Logger logger) {
+			final AllProjects allProjects, final BuildEnvironment buildEnvironment, final Logger logger) {
 		Args.notNull(taskgraph, "taskgraph");
 		Args.notNull(taskRepository, "taskRepository");
 		Args.notNull(classpathScanner, "classpathScanner");
 		Args.notNull(allProjects, "allProjects");
+		Args.notNull(buildEnvironment, "buildEnvironment");
 		Args.notNull(logger, "logger");
 		
 		this.taskgraph = taskgraph;
 		this.taskRepository = taskRepository;
 		this.classpathScanner = classpathScanner;
 		this.allProjects = allProjects;
+		this.buildEnvironment = buildEnvironment;
 		this.logger = logger;
 	}
 	
@@ -76,7 +80,7 @@ public class PluginSystem {
 			
 			if(activePlugin || loadAs == LoadAs.DEPENDENCY) {
 				logger.log(LogLevel.VERY_VERBOSE, "Loading Plugin", pluginId+", isActive="+activePlugin+", loading as: "+loadAs);
-				final PluginContext pluginContext = new DefaultPluginContext(this, taskgraph, taskRepository, buildConfiguration, allProjects, logger);
+				final PluginContext pluginContext = new DefaultPluginContext(this, taskgraph, taskRepository, buildConfiguration, allProjects, buildEnvironment, logger);
 				plugin.initialize(pluginContext);
 				
 				allPlugins.add(plugin);

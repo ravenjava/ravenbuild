@@ -1,5 +1,6 @@
 package org.ravenbuild;
 
+import org.ravenbuild.environment.BuildEnvironment;
 import org.ravenbuild.logging.Logger;
 import org.ravenbuild.projectinfo.AllProjects;
 import org.ravenbuild.subprojects.ProjectType;
@@ -14,13 +15,16 @@ public class RavenBuild {
 	private final Logger logger;
 	private final SubProjectsFactory subProjectsFactory;
 	private final AllProjects allProjects;
+	private final BuildEnvironment buildEnvironment;
 	
 	public RavenBuild(final BuildOptions buildOptions) {
 		this.buildOptions = buildOptions;
 		
 		logger = new Logger(buildOptions.logLevel());
 		allProjects = new AllProjects();
-		subProjectsFactory = new SubProjectsFactory(logger, buildOptions, allProjects);
+		buildEnvironment = new BuildEnvironment(buildOptions.runMode());
+		
+		subProjectsFactory = new SubProjectsFactory(logger, buildOptions, buildEnvironment, allProjects);
 	}
 	
 	public void run() {

@@ -2,6 +2,7 @@ package org.ravenbuild.plugins;
 
 import org.junit.Test;
 import org.ravenbuild.config.BuildConfiguration;
+import org.ravenbuild.environment.BuildEnvironment;
 import org.ravenbuild.logging.Logger;
 import org.ravenbuild.projectinfo.AllProjects;
 import org.ravenbuild.tasks.Task;
@@ -18,7 +19,7 @@ public class DefaultPluginContextTest {
 		TaskGraph taskGraph = mock(TaskGraph.class);
 		final DefaultPluginContext pluginContext = new DefaultPluginContext(
 				mock(PluginSystem.class), taskGraph, mock(TaskRepository.class), mock(BuildConfiguration.class),
-				mock(AllProjects.class), mock(Logger.class));
+				mock(AllProjects.class), mock(BuildEnvironment.class), mock(Logger.class));
 		
 		final Task task = mock(Task.class);
 		pluginContext.registerTask("taskName", task, Class.class);

@@ -1,28 +1,32 @@
 package org.ravenbuild;
 
 import net.davidtanzer.jdefensive.Args;
+import org.ravenbuild.environment.RunMode;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class BuildOptions {
-	static final BuildOptions DEFAULT = new BuildOptions("build", new HashMap<>(), LogLevel.DEFAULT, "raven.json");
+	static final BuildOptions DEFAULT = new BuildOptions("build", new HashMap<>(), LogLevel.DEFAULT, "raven.json", RunMode.ALLOW_MODIFICATIONS);
 	
 	private final String task;
 	private final Map<String, String> taskOptions;
 	private final LogLevel logLevel;
 	private final String buildConfigFile;
+	private final RunMode runMode;
 	
-	private BuildOptions(final String task, final Map<String, String> taskOptions, final LogLevel logLevel, final String buildConfigFile) {
+	private BuildOptions(final String task, final Map<String, String> taskOptions, final LogLevel logLevel, final String buildConfigFile, final RunMode runMode) {
 		Args.notEmpty(task, "task");
 		Args.notNull(taskOptions, "taskOptions");
 		Args.notNull(logLevel, "logLevel");
 		Args.notEmpty(buildConfigFile, "buildConfigFile");
+		Args.notNull(runMode, "runMode");
 		
 		this.task = task;
 		this.taskOptions = taskOptions;
 		this.logLevel = logLevel;
 		this.buildConfigFile = buildConfigFile;
+		this.runMode = runMode;
 	}
 	
 	public String task() {
@@ -41,11 +45,16 @@ public class BuildOptions {
 		return buildConfigFile;
 	}
 	
+	public RunMode runMode() {
+		return runMode;
+	}
+	
 	public static BuildOptions parseFrom(final String[] args) {
 		String task = "build";
 		String buildConfigFile = "raven.json";
 		LogLevel logLevel = LogLevel.DEFAULT;
 		HashMap<String, String> taskOptions = new HashMap<>();
+		RunMode runMode = RunMode.ALLOW_MODIFICATIONS;
 		
 		if(args.length > 0) {
 			int taskStart = 0;
@@ -54,12 +63,14 @@ public class BuildOptions {
 					break;
 				}
 				
-				if (args[i].equals("-v")) {
+				if(args[i].equals("-v")) {
 					logLevel = LogLevel.VERBOSE;
-				} else if (args[i].equals("-vv")) {
+				} else if(args[i].equals("-vv")) {
 					logLevel = LogLevel.VERY_VERBOSE;
-				} else if (args[i].equals("-D")) {
+				} else if(args[i].equals("-D")) {
 					logLevel = LogLevel.DEBUG;
+				} else if(args[i].equals("-dry")) {
+					runMode = RunMode.DRY_RUN;
 				}
 				taskStart++;
 			}
@@ -69,7 +80,7 @@ public class BuildOptions {
 			parseTaskOptions(args, taskOptions, taskStart + 1);
 		}
 		
-		return new BuildOptions(task, taskOptions, logLevel, buildConfigFile);
+		return new BuildOptions(task, taskOptions, logLevel, buildConfigFile, runMode);
 	}
 	
 	private static void parseTaskOptions(final String[] args, final HashMap<String, String> taskOptions, final int startIndex) {

@@ -134,6 +134,7 @@ public class HelpTask implements Task<HelpTaskOptions> {
 	private void printGeneralHelp() {
 		logger.log(LogLevel.DEFAULT, "Usage", "raven [raven options] taksName [task options]");
 		logger.log(LogLevel.DEFAULT, "Raven Options", "-[option]");
+		logger.log(LogLevel.DEFAULT, "-dry", "Dry Run - Attempt to run the build in a way that it does not modify the project.");
 		logger.log(LogLevel.DEFAULT, "-v", "Verbose - Prints more output. Use this to debug your build.");
 		logger.log(LogLevel.DEFAULT, "-vv", "Very Verbose - Prints even more output than verbose. Use this to debug your build.");
 		logger.log(LogLevel.DEFAULT, "-D", "Debug - Prints even more output that will be only interesting to the raven developers or plugin developers.");

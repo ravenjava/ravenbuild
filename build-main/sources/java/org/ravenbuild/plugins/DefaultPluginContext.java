@@ -2,6 +2,7 @@ package org.ravenbuild.plugins;
 
 import net.davidtanzer.jdefensive.Args;
 import org.ravenbuild.config.BuildConfiguration;
+import org.ravenbuild.environment.BuildEnvironment;
 import org.ravenbuild.logging.Logger;
 import org.ravenbuild.projectinfo.AllProjects;
 import org.ravenbuild.tasks.Task;
@@ -15,14 +16,16 @@ class DefaultPluginContext implements PluginContext {
 	private final BuildConfiguration configuration;
 	private final AllProjects allProjects;
 	private final Logger logger;
+	private final BuildEnvironment buildEnvironment;
 	
 	public DefaultPluginContext(final PluginSystem pluginSystem, final TaskGraph taskGraph, final TaskRepository taskRepository,
-			final BuildConfiguration configuration, final AllProjects allProjects, final Logger logger) {
+			final BuildConfiguration configuration, final AllProjects allProjects, final BuildEnvironment buildEnvironment, final Logger logger) {
 		Args.notNull(pluginSystem, "pluginSystem");
 		Args.notNull(taskGraph, "taskGraph");
 		Args.notNull(taskRepository, "taskRepository");
 		Args.notNull(configuration, "configuration");
 		Args.notNull(allProjects, "allProjects");
+		Args.notNull(buildEnvironment, "buildEnvironment");
 		Args.notNull(logger, "logger");
 		
 		this.pluginSystem = pluginSystem;
@@ -30,6 +33,7 @@ class DefaultPluginContext implements PluginContext {
 		this.taskRepository = taskRepository;
 		this.configuration = configuration;
 		this.allProjects = allProjects;
+		this.buildEnvironment = buildEnvironment;
 		this.logger = logger;
 	}
 	
@@ -61,6 +65,11 @@ class DefaultPluginContext implements PluginContext {
 	@Override
 	public AllProjects allProjects() {
 		return allProjects;
+	}
+	
+	@Override
+	public BuildEnvironment buildEnvironment() {
+		return buildEnvironment;
 	}
 	
 	@Override
