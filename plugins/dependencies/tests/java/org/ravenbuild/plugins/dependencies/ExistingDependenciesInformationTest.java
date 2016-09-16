@@ -15,6 +15,6 @@ public class ExistingDependenciesInformationTest {
 		
 		existingDependenciesInformation.load();
 		
-		verify(buildEnvironment).readFile("/raven/libraries/dependency-versions.json");
+		verify(buildEnvironment).readFile("/.raven/libraries/dependency-versions.json");
 	}
 }

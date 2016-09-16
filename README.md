@@ -6,7 +6,7 @@ Raven is a simple build tool, written in Java.
 
 Start with:
 
-    ./raven.sh help
+    ./raven help
 
 ## Design Goals
 

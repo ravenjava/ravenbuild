@@ -15,7 +15,7 @@ class ExistingDependenciesInformation {
 	}
 	
 	void load() {
-		Reader existingDependenciesConfigReader = buildEnvironment.readFile("/raven/libraries/dependency-versions.json");
+		Reader existingDependenciesConfigReader = buildEnvironment.readFile("/.raven/libraries/dependency-versions.json");
 	}
 	
 	public Dependency getDependency(final String artifactId) {
