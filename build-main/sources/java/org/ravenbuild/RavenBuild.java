@@ -7,6 +7,7 @@ import org.ravenbuild.subprojects.ProjectType;
 import org.ravenbuild.subprojects.SubProjectsFactory;
 import org.ravenbuild.subprojects.SubProjects;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -22,7 +23,7 @@ public class RavenBuild {
 		
 		logger = new Logger(buildOptions.logLevel());
 		allProjects = new AllProjects();
-		buildEnvironment = new BuildEnvironment(buildOptions.runMode());
+		buildEnvironment = new BuildEnvironment(buildOptions.runMode(), new File("."), new File("."));
 		
 		subProjectsFactory = new SubProjectsFactory(logger, buildOptions, buildEnvironment, allProjects);
 	}
