@@ -2,6 +2,7 @@ package org.ravenbuild.environment;
 
 import net.davidtanzer.jdefensive.Args;
 
+import java.io.File;
 import java.io.Reader;
 
 public class BuildEnvironment {
@@ -13,6 +14,10 @@ public class BuildEnvironment {
 	}
 	
 	public Reader readFile(final String path) {
+		return null;
+	}
+	
+	public File getFile(final String path) {
 		return null;
 	}
 }
