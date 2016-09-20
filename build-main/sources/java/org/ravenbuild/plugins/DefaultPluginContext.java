@@ -9,6 +9,9 @@ import org.ravenbuild.tasks.Task;
 import org.ravenbuild.tasks.TaskGraph;
 import org.ravenbuild.tasks.TaskRepository;
 
+import javax.swing.text.html.Option;
+import java.util.Optional;
+
 class DefaultPluginContext implements PluginContext {
 	private final PluginSystem pluginSystem;
 	private final TaskGraph taskGraph;
@@ -60,6 +63,12 @@ class DefaultPluginContext implements PluginContext {
 	@Override
 	public <T extends BuildPlugin> T dependsOnPlugin(final Class<T> dependency) {
 		return pluginSystem.loadAndInitialize(dependency, PluginSystem.LoadAs.DEPENDENCY);
+	}
+	
+	@Override
+	public <T extends BuildPlugin> Optional<T> optionallyDependsOnPlugin(final Class<T> optionalDependency) {
+		//FIXME: Implement correctly! (Return an optional that gets the dependency from the loaded plugins)
+		return Optional.of(dependsOnPlugin(optionalDependency));
 	}
 	
 	@Override

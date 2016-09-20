@@ -8,6 +8,8 @@ import org.ravenbuild.tasks.Task;
 import org.ravenbuild.tasks.TaskGraph;
 import org.ravenbuild.tasks.TaskRepository;
 
+import java.util.Optional;
+
 public interface PluginContext {
 	void registerTask(String name, Task task, Class<?> taskOptionsType);
 	void registerTask(String name, Task task, Class<?> taskOptionsType, String taskGroupName);
@@ -18,6 +20,7 @@ public interface PluginContext {
 	BuildConfiguration configuration();
 	
 	<T extends BuildPlugin> T dependsOnPlugin(Class<T> dependency);
+	<T extends BuildPlugin> Optional<T> optionallyDependsOnPlugin(Class<T> optionalDependency);
 	
 	AllProjects allProjects();
 	

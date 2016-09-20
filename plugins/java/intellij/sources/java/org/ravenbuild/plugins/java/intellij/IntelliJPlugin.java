@@ -2,17 +2,19 @@ package org.ravenbuild.plugins.java.intellij;
 
 import org.ravenbuild.plugins.BuildPlugin;
 import org.ravenbuild.plugins.PluginContext;
-import org.ravenbuild.plugins.projectstructure.ProjectStructurePlugin;
+import org.ravenbuild.plugins.java.JavaPlugin;
 import org.ravenbuild.tasks.EmptyTaskOptions;
 
+import java.util.Optional;
+
 public class IntelliJPlugin implements BuildPlugin {
-	private ProjectStructurePlugin projectStructure;
+	private Optional<JavaPlugin> javaPlugin;
 	
 	@Override
 	public void initialize(final PluginContext pluginContext) {
-		projectStructure = pluginContext.dependsOnPlugin(ProjectStructurePlugin.class);
+		javaPlugin = pluginContext.optionallyDependsOnPlugin(JavaPlugin.class);
 		
-		pluginContext.registerTask("intellij", new IntelliJTask(projectStructure), EmptyTaskOptions.class, "Java");
+		pluginContext.registerTask("intellij", new IntelliJTask(), EmptyTaskOptions.class, "IDEs");
 	}
 	
 	@Override
