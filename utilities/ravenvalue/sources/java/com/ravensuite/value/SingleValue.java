@@ -5,7 +5,7 @@ import net.davidtanzer.jdefensive.Args;
 public abstract class SingleValue<T> {
 	private final T value;
 	
-	public SingleValue(T value) {
+	protected SingleValue(T value) {
 		Args.notNull(value, "value");
 		this.value = value;
 	}
