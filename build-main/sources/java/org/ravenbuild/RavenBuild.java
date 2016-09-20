@@ -1,6 +1,7 @@
 package org.ravenbuild;
 
 import org.ravenbuild.environment.BuildEnvironment;
+import org.ravenbuild.environment.RunMode;
 import org.ravenbuild.logging.Logger;
 import org.ravenbuild.projectinfo.AllProjects;
 import org.ravenbuild.subprojects.ProjectType;
@@ -29,6 +30,10 @@ public class RavenBuild {
 	}
 	
 	public void run() {
+		if(buildOptions.runMode() == RunMode.DRY_RUN) {
+			logger.log(LogLevel.DEFAULT, "DRY RUN", "Build running in \"dry run\" mode - Trying not to change anything.");
+		}
+		
 		SubProjects subProjects = subProjectsFactory.createSubProjects(ProjectType.MAIN_PROJECT);
 		subProjects.load(new HashMap<String, Object>() {{
 			put("list", Arrays.asList("."));

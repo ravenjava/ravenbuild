@@ -8,6 +8,7 @@ import org.ravenbuild.environment.BuildEnvironment;
 import org.ravenbuild.logging.Logger;
 import org.ravenbuild.plugins.PluginSystem;
 import org.ravenbuild.projectinfo.AllProjects;
+import org.ravenbuild.projectinfo.ProjectInfo;
 import org.ravenbuild.tasks.TaskGraph;
 import org.ravenbuild.tasks.TaskRepository;
 import org.ravenbuild.tasks.TaskRunner;

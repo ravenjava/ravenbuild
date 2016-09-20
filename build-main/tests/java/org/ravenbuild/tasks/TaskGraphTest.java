@@ -6,6 +6,7 @@ import org.mockito.InOrder;
 import org.ravenbuild.LogLevel;
 import org.ravenbuild.config.BuildConfiguration;
 import org.ravenbuild.logging.Logger;
+import org.ravenbuild.projectinfo.ProjectInfo;
 import org.ravenbuild.subprojects.ProjectType;
 
 import java.util.Arrays;
@@ -136,6 +137,7 @@ public class TaskGraphTest {
 				new TaskRepository.TaskInfo(dependency, EmptyTaskOptions.class)));
 		
 		TaskGraph taskGraph = new TaskGraph(taskRepository, mock(TaskRunner.class), mock(BuildConfiguration.class), mock(Logger.class, RETURNS_DEEP_STUBS));
+		taskGraph.setProjectInfo(mock(ProjectInfo.class));
 		
 		taskGraph.run("dependency", Collections.emptyMap(), ProjectType.SUB_PROJECT);
 		
@@ -171,6 +173,7 @@ public class TaskGraphTest {
 				taskInfo,
 				dependencyInfo));
 		
+		taskGraph.setProjectInfo(mock(ProjectInfo.class));
 		taskGraph.run("task", Collections.emptyMap(), ProjectType.SUB_PROJECT);
 		
 		final InOrder inOrder = inOrder(taskRunner);

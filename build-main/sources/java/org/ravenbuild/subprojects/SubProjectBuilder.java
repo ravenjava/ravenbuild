@@ -50,6 +50,7 @@ public class SubProjectBuilder {
 		}
 		
 		projectInfoLoader.loadProjectInfo(subProject.getPath());
+		taskgraph.setProjectInfo(projectInfoLoader.projectInfo());
 	}
 	
 	public void run(final String taskName, final Map<String, String> taskOptions, final ProjectType projectType) {

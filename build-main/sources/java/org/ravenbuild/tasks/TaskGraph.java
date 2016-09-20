@@ -4,6 +4,7 @@ import net.davidtanzer.jdefensive.Args;
 import org.ravenbuild.LogLevel;
 import org.ravenbuild.config.BuildConfiguration;
 import org.ravenbuild.logging.Logger;
+import org.ravenbuild.projectinfo.ProjectInfo;
 import org.ravenbuild.subprojects.ProjectType;
 
 import java.util.ArrayList;
@@ -15,11 +16,13 @@ public class TaskGraph {
 	private final TaskRepository taskRepository;
 	private final TaskRunner taskRunner;
 	private final BuildConfiguration configuration;
+	private ProjectInfo projectInfo;
 	private final Logger logger;
 	
 	private final Map<TaskGraphEvent, List<TaskGraphListener>> listeners = new HashMap<>();
 	
-	public TaskGraph(final TaskRepository taskRepository, final TaskRunner taskRunner, final BuildConfiguration configuration, final Logger logger) {
+	public TaskGraph(final TaskRepository taskRepository, final TaskRunner taskRunner, final BuildConfiguration configuration,
+			final Logger logger) {
 		Args.notNull(taskRepository, "taskRepository");
 		Args.notNull(taskRunner, "taskRunner");
 		Args.notNull(configuration, "configuration");
@@ -45,6 +48,13 @@ public class TaskGraph {
 		if(taskInfo.getTask().shouldRunInSubProjects() || projectType == ProjectType.MAIN_PROJECT) {
 			runSingle(taskInfo, taskOptionsMap, "");
 		}
+	}
+	
+	public void setProjectInfo(final ProjectInfo projectInfo) {
+		Args.notNull(projectInfo, "projectInfo");
+		assert this.projectInfo == null : "This method should be called only once!";
+		
+		this.projectInfo = projectInfo;
 	}
 	
 	private void runPrerequisitesFor(final TaskRepository.TaskInfo taskInfo, final Map<String, String> taskOptionsMap, final String taskGraphChain) {
@@ -90,7 +100,7 @@ public class TaskGraph {
 		assert allTasks != null : "All tasks from task repository never returns null";
 		
 		for(TaskRepository.TaskInfo taskInfo : allTasks) {
-			final TaskContext taskContext = new TaskContext(taskInfo, taskRepository);
+			final TaskContext taskContext = new TaskContext(taskInfo, taskRepository, projectInfo);
 			taskInfo.getTask().initialize(taskContext);
 		}
 	}
