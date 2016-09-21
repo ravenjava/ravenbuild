@@ -1,5 +1,7 @@
 package org.ravenbuild.projectinfo;
 
+import net.davidtanzer.jdefensive.Args;
+
 import java.io.File;
 
 public class ProjectInfoLoader {
@@ -15,6 +17,9 @@ public class ProjectInfoLoader {
 	
 	public ProjectInfoLoader(final ProjectInfo parent) {
 		this();
+		Args.notNull(parent, "parent");
+		
+		projectInfo.setParent(parent);
 		projectInfo.setProjectGroup(parent.getProjectGroup());
 	}
 	
