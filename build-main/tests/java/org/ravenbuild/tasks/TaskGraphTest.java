@@ -63,7 +63,8 @@ public class TaskGraphTest {
 		Task task = mock(Task.class);
 		when(task.shouldRunInSubProjects()).thenReturn(true);
 		when(taskRepository.findTask("existingTask")).thenReturn(new TaskRepository.TaskInfo(task, EmptyTaskOptions.class));
-
+		
+		taskGraph.setProjectInfo(mock(ProjectInfo.class));
 		taskGraph.run("existingTask", mock(Map.class), ProjectType.SUB_PROJECT);
 		
 		verify(taskRunner).run(eq(task), any(), any());
@@ -80,6 +81,7 @@ public class TaskGraphTest {
 		when(taskRepository.findTask("existingTask")).thenReturn(new TaskRepository.TaskInfo(task, EmptyTaskOptions.class));
 		
 		Map taskOptionsMap = mock(Map.class);
+		taskGraph.setProjectInfo(mock(ProjectInfo.class));
 		taskGraph.run("existingTask", taskOptionsMap, ProjectType.SUB_PROJECT);
 		
 		verify(taskRunner).run(any(), eq(EmptyTaskOptions.class), any());
@@ -96,6 +98,7 @@ public class TaskGraphTest {
 		when(taskRepository.findTask("existingTask")).thenReturn(new TaskRepository.TaskInfo(task, EmptyTaskOptions.class));
 		
 		Map taskOptionsMap = mock(Map.class);
+		taskGraph.setProjectInfo(mock(ProjectInfo.class));
 		taskGraph.run("existingTask", taskOptionsMap, ProjectType.SUB_PROJECT);
 		
 		verify(taskRunner).run(any(), any(), eq(taskOptionsMap));

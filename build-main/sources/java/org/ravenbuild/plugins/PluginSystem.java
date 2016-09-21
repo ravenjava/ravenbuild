@@ -9,10 +9,8 @@ import org.ravenbuild.projectinfo.AllProjects;
 import org.ravenbuild.tasks.TaskGraph;
 import org.ravenbuild.tasks.TaskRepository;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class PluginSystem {
 	private final TaskGraph taskgraph;
@@ -21,7 +19,8 @@ public class PluginSystem {
 	private final TaskRepository taskRepository;
 	private final AllProjects allProjects;
 	private final BuildEnvironment buildEnvironment;
-	private List<BuildPlugin> allPlugins = new ArrayList<>();
+	
+	private Map<String, BuildPluginInfo> allPlugins = new HashMap<>();
 	private HashSet activePluginIds = new HashSet<>();
 	private BuildConfiguration buildConfiguration;
 	
@@ -71,6 +70,10 @@ public class PluginSystem {
 				logger.log(LogLevel.ERROR, "Plugin System", "Plugin id is \"null\" for plugin "+pluginClass);
 				throw new IllegalStateException("Plugin id is \"null\" for plugin "+pluginClass);
 			}
+			if(allPlugins.containsKey(pluginId)) {
+				return (T) allPlugins.get(pluginId).plugin;
+			}
+
 			boolean activePlugin = false;
 			
 			if(activePluginIds.contains(pluginId)) {
@@ -83,7 +86,7 @@ public class PluginSystem {
 				final PluginContext pluginContext = new DefaultPluginContext(this, taskgraph, taskRepository, buildConfiguration, allProjects, buildEnvironment, logger);
 				plugin.initialize(pluginContext);
 				
-				allPlugins.add(plugin);
+				allPlugins.put(pluginId, new BuildPluginInfo(pluginId, plugin, pluginContext));
 				return plugin;
 			}
 		} catch (InstantiationException | IllegalAccessException e) {
@@ -93,10 +96,22 @@ public class PluginSystem {
 	}
 	
 	public List<BuildPlugin> allPlugins() {
-		return allPlugins;
+		return allPlugins.values().stream().map((pluginInfo) -> pluginInfo.plugin).collect(Collectors.toList());
 	}
 	
-	static enum LoadAs {
+	enum LoadAs {
 		ACTIVE_PLUGIN, DEPENDENCY;
+	}
+	
+	private class BuildPluginInfo {
+		private final String pluginId;
+		private final BuildPlugin plugin;
+		private final PluginContext pluginContext;
+		
+		public BuildPluginInfo(final String pluginId, final BuildPlugin plugin, final PluginContext pluginContext) {
+			this.pluginId = pluginId;
+			this.plugin = plugin;
+			this.pluginContext = pluginContext;
+		}
 	}
 }
