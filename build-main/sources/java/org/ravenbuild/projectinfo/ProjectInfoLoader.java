@@ -28,6 +28,11 @@ public class ProjectInfoLoader {
 	}
 	
 	public void loadProjectInfo(final String basePath) {
+		Args.notNull(basePath, "basePath");
 		
+		if(basePath.length() > 0 && !basePath.equals(".")) {
+			String defaultName = new File(basePath).getAbsoluteFile().getName();
+			projectInfo.setProjectName(defaultName);
+		}
 	}
 }

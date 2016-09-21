@@ -32,4 +32,17 @@ public class ProjectInfoLoaderTest {
 		
 		assertThat(projectInfoLoader.projectInfo().getProjectGroup(), is(parent.getProjectGroup()));
 	}
+	
+	@Test
+	public void defaultProjectNameIsNameOfCurrentDirectoryEvenIfItsASubdirectory() {
+		String relativePath = "somedir/subdir";
+		String expectedName = new File(relativePath).getAbsoluteFile().getName();
+		
+		ProjectInfo parent = new ProjectInfo();
+		parent.setProjectGroup("parentGroup");
+		ProjectInfoLoader projectInfoLoader = new ProjectInfoLoader(parent);
+		projectInfoLoader.loadProjectInfo(relativePath);
+		
+		assertThat(projectInfoLoader.projectInfo().getProjectName(), is(expectedName));
+	}
 }
