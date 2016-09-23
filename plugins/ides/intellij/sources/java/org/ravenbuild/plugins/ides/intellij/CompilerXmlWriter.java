@@ -1,10 +1,10 @@
-package org.ravenbuild.plugins.java.intellij;
+package org.ravenbuild.plugins.ides.intellij;
 
 import org.ravenbuild.environment.FileWriterHandler;
 
 import java.io.FileWriter;
 
-public class ModulesXmlWriter implements FileWriterHandler {
+public class CompilerXmlWriter implements FileWriterHandler {
 	@Override
 	public void write(final FileWriter fileWriter) {
 		

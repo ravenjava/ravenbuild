@@ -1,11 +1,10 @@
-package org.ravenbuild.plugins.java.intellij;
+package org.ravenbuild.plugins.ides.intellij;
 
 import net.davidtanzer.jdefensive.Args;
 import org.ravenbuild.environment.BuildEnvironment;
 import org.ravenbuild.plugins.dependencies.DependenciesTask;
 import org.ravenbuild.plugins.help.LongDescription;
 import org.ravenbuild.plugins.help.ShortDescription;
-import org.ravenbuild.plugins.java.JavaPlugin;
 import org.ravenbuild.projectinfo.ProjectInfo;
 import org.ravenbuild.tasks.EmptyTaskOptions;
 import org.ravenbuild.tasks.Task;

@@ -1,9 +1,8 @@
-package org.ravenbuild.plugins.java.intellij;
+package org.ravenbuild.plugins.ides.intellij;
 
 import org.junit.Test;
 import org.ravenbuild.environment.BuildEnvironment;
 import org.ravenbuild.environment.FileWriterHandler;
-import org.ravenbuild.plugins.java.JavaPlugin;
 import org.ravenbuild.projectinfo.ProjectInfo;
 import org.ravenbuild.tasks.EmptyTaskOptions;
 import org.ravenbuild.tasks.TaskContext;
