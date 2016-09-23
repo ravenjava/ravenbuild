@@ -14,7 +14,8 @@ public class IntelliJPlugin implements BuildPlugin {
 	public void initialize(final PluginContext pluginContext) {
 		javaPlugin = pluginContext.optionallyDependsOnPlugin(JavaPlugin.class);
 		
-		pluginContext.registerTask("intellij", new IntelliJTask(), EmptyTaskOptions.class, "IDEs");
+		IntelliJTask intelliJTask = new IntelliJTask(pluginContext.buildEnvironment());
+		pluginContext.registerTask("intellij", intelliJTask, EmptyTaskOptions.class, "IDEs");
 	}
 	
 	@Override

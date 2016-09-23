@@ -28,4 +28,8 @@ public class TaskContext {
 		taskInfo.addDependency(dependencyInfo);
 		return (T) dependencyInfo.getTask();
 	}
+	
+	public ProjectInfo projectInfo() {
+		return projectInfo;
+	}
 }

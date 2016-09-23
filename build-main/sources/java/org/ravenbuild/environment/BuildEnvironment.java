@@ -37,4 +37,8 @@ public class BuildEnvironment {
 			return new File(currentDirectory, path);
 		}
 	}
+	
+	public void writeFile(final String path, final FileWriterHandler fileWriterHandler) {
+		
+	}
 }

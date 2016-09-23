@@ -7,8 +7,12 @@
 	"subprojects": {
 		"list": [
 			"build-main",
+
 			"plugins/build", "plugins/dependencies", "plugins/help", "plugins/project-structure",
-			"plugins/java/intellij", "plugins/java/java-dependencies", "plugins/java/java-main"
+			"plugins/java/java-dependencies", "plugins/java/java-main",
+			"plugins/ides/intellij",
+
+			"utilities/ravenvalue", "utilities/ravenxml"
 		],
 
 		"plugins": [
@@ -31,7 +35,9 @@
 		"java": [
 			"ravenbuild:build-main",
 			"ravenbuild:build-plugin", "ravenbuild:dependencies-plugin", "ravenbuild:help-plugin", "ravenbuild:project-structure-plugin",
-			"ravenbuild:java-intellij-plugin", "ravenbuild:java-dependencies-plugin", "ravenbuild:java-main-plugin"
+			"ravenbuild:java-intellij-plugin", "ravenbuild:java-dependencies-plugin", "ravenbuild:java-main-plugin",
+
+			"ravenbuild:ravenvalue", "ravenbuild:ravenxml"
 		]
 	}
 }
