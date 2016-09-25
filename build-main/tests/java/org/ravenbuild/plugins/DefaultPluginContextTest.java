@@ -19,7 +19,7 @@ public class DefaultPluginContextTest {
 		TaskGraph taskGraph = mock(TaskGraph.class);
 		final DefaultPluginContext pluginContext = new DefaultPluginContext(
 				mock(PluginSystem.class), taskGraph, mock(TaskRepository.class), mock(BuildConfiguration.class),
-				mock(AllProjects.class), mock(BuildEnvironment.class), mock(Logger.class));
+				mock(AllProjects.class), mock(BuildEnvironment.class), mock(Logger.class), mock(PluginEvents.class));
 		
 		final Task task = mock(Task.class);
 		pluginContext.registerTask("taskName", task, Class.class);

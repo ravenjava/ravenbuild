@@ -28,10 +28,15 @@ public class JavaPlugin implements BuildPlugin {
 		intelliJPlugin = pluginContext.optionallyDependsOnPlugin(IntellijJavaPlugin.class);
 		
 		javaDependenciesPlugin.reportDependenciesTo(javaProjectStructure);
+		pluginContext.events().onDependenciesResolved(this::onDependenciesResolved);
 	}
 	
 	@Override
 	public String getId() {
 		return "org.ravenbuild.java";
+	}
+	
+	private void onDependenciesResolved() {
+		intelliJPlugin.ifPresent(ijp -> ijp.setProjectStructure(javaProjectStructure));
 	}
 }

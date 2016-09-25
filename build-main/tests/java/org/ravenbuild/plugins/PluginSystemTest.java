@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeNotNull;
@@ -116,9 +117,24 @@ public class PluginSystemTest {
 		assumeNotNull(BuildPluginMock2.pluginInitializedWithContext);
 		assumeNotNull(BuildPluginMock.pluginInitializedWithContext);
 		
-		assertThat(BuildPluginMock.initCount, CoreMatchers.is(1));
+		assertThat(BuildPluginMock.initCount, is(1));
 	}
 	
+	@Test
+	public void notifiesEventListenersAfterResolvingOptionalPlugins() {
+		BuildPluginMock.pluginInitializedWithContext = null;
+		BuildPluginMock.dependenciesResolved = false;
+		final TaskGraph taskgraph = mock(TaskGraph.class);
+		final ClasspathScanner classpathScanner = mock(ClasspathScanner.class);
+		when(classpathScanner.findAllClassesImplementing(eq(BuildPlugin.class))).thenReturn(Arrays.asList(BuildPluginMock.class));
+		PluginSystem pluginSystem = new PluginSystem(taskgraph, mock(TaskRepository.class), classpathScanner, mock(AllProjects.class), mock(BuildEnvironment.class), mock(Logger.class));
+		
+		BuildConfiguration buildConfiguration = mock(BuildConfiguration.class);
+		when(buildConfiguration.getConfigurationFor("plugins", List.class)).thenReturn(Arrays.asList("org.ravenbuild.MockPlugin"));
+		pluginSystem.loadPlugins(buildConfiguration);
+		
+		assertThat(BuildPluginMock.dependenciesResolved, is(true));
+	}
 	
 	@Test
 	@Ignore("FIXME: Should detect cycles in plugin dependencies!")
@@ -135,10 +151,12 @@ public class PluginSystemTest {
 	public static class BuildPluginMock implements BuildPlugin {
 		private static PluginContext pluginInitializedWithContext;
 		private static int initCount = 0;
+		public static boolean dependenciesResolved;
 		
 		@Override
 		public void initialize(final PluginContext pluginContext) {
 			pluginInitializedWithContext = pluginContext;
+			pluginContext.events().onDependenciesResolved(() -> dependenciesResolved=true);
 			initCount++;
 		}
 		

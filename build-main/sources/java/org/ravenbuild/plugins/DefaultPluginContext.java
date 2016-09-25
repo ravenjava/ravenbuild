@@ -20,9 +20,11 @@ class DefaultPluginContext implements PluginContext {
 	private final AllProjects allProjects;
 	private final Logger logger;
 	private final BuildEnvironment buildEnvironment;
+	private final PluginEvents events;
 	
 	public DefaultPluginContext(final PluginSystem pluginSystem, final TaskGraph taskGraph, final TaskRepository taskRepository,
-			final BuildConfiguration configuration, final AllProjects allProjects, final BuildEnvironment buildEnvironment, final Logger logger) {
+			final BuildConfiguration configuration, final AllProjects allProjects, final BuildEnvironment buildEnvironment, final Logger logger,
+			final PluginEvents events) {
 		Args.notNull(pluginSystem, "pluginSystem");
 		Args.notNull(taskGraph, "taskGraph");
 		Args.notNull(taskRepository, "taskRepository");
@@ -30,6 +32,7 @@ class DefaultPluginContext implements PluginContext {
 		Args.notNull(allProjects, "allProjects");
 		Args.notNull(buildEnvironment, "buildEnvironment");
 		Args.notNull(logger, "logger");
+		Args.notNull(events, "events");
 		
 		this.pluginSystem = pluginSystem;
 		this.taskGraph = taskGraph;
@@ -38,6 +41,7 @@ class DefaultPluginContext implements PluginContext {
 		this.allProjects = allProjects;
 		this.buildEnvironment = buildEnvironment;
 		this.logger = logger;
+		this.events = events;
 	}
 	
 	@Override
@@ -79,6 +83,11 @@ class DefaultPluginContext implements PluginContext {
 	@Override
 	public BuildEnvironment buildEnvironment() {
 		return buildEnvironment;
+	}
+	
+	@Override
+	public PluginEvents events() {
+		return events;
 	}
 	
 	@Override

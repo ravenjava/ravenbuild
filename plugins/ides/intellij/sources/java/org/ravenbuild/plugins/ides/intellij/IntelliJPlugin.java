@@ -15,4 +15,8 @@ public class IntelliJPlugin implements BuildPlugin {
 	public String getId() {
 		return "org.ravenbuild.java.intellij";
 	}
+	
+	public void addProjectDataProvider(final ProjectDataProvider projectDataProvider) {
+		
+	}
 }

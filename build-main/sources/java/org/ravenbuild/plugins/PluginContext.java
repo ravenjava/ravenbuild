@@ -25,4 +25,6 @@ public interface PluginContext {
 	AllProjects allProjects();
 	
 	BuildEnvironment buildEnvironment();
+	
+	PluginEvents events();
 }
