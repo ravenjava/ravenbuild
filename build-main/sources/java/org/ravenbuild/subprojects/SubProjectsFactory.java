@@ -44,7 +44,7 @@ public class SubProjectsFactory {
 		FastClasspathClasspathScanner classpathScanner = new FastClasspathClasspathScanner();
 		PluginSystem pluginSystem = new PluginSystem(taskgraph, taskRepository, classpathScanner, allProjects, buildEnvironment, logger);
 		
-		return new SubProjectBuilder(subProject, buildOptions, buildConfiguration, taskgraph, classpathScanner, pluginSystem, this);
+		return new SubProjectBuilder(subProject, buildOptions, buildConfiguration, taskgraph, classpathScanner, pluginSystem, this, allProjects);
 	}
 	
 	public SubProjects createSubProjects(final ProjectType projectType) {

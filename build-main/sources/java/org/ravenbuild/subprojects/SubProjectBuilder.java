@@ -5,6 +5,7 @@ import org.ravenbuild.BuildOptions;
 import org.ravenbuild.classpath.FastClasspathClasspathScanner;
 import org.ravenbuild.config.BuildConfiguration;
 import org.ravenbuild.plugins.PluginSystem;
+import org.ravenbuild.projectinfo.AllProjects;
 import org.ravenbuild.projectinfo.ProjectInfo;
 import org.ravenbuild.projectinfo.ProjectInfoLoader;
 import org.ravenbuild.tasks.TaskGraph;
@@ -20,11 +21,12 @@ public class SubProjectBuilder {
 	private final BuildConfiguration buildConfiguration;
 	private final SubProjectsFactory subProjectsFactory;
 	private final SubProject subProject;
+	private final AllProjects allProjects;
 	private ProjectInfoLoader projectInfoLoader;
 	
 	public SubProjectBuilder(final SubProject subProject, final BuildOptions buildOptions, final BuildConfiguration buildConfiguration,
 			final TaskGraph taskgraph, final FastClasspathClasspathScanner classpathScanner,
-			final PluginSystem pluginSystem, final SubProjectsFactory subProjectsFactory) {
+			final PluginSystem pluginSystem, final SubProjectsFactory subProjectsFactory, final AllProjects allProjects) {
 		Args.notNull(subProject, "subProject");
 		Args.notNull(buildOptions, "buildOptions");
 		Args.notNull(buildConfiguration, "buildConfiguration");
@@ -32,6 +34,7 @@ public class SubProjectBuilder {
 		Args.notNull(classpathScanner, "classpathScanner");
 		Args.notNull(pluginSystem, "pluginSystem");
 		Args.notNull(subProjectsFactory, "subProjectsFactory");
+		Args.notNull(allProjects, "allProjects");
 		
 		this.subProject = subProject;
 		this.buildOptions = buildOptions;
@@ -40,6 +43,7 @@ public class SubProjectBuilder {
 		this.classpathScanner = classpathScanner;
 		this.pluginSystem = pluginSystem;
 		this.subProjectsFactory = subProjectsFactory;
+		this.allProjects = allProjects;
 		
 		this.projectInfoLoader = new ProjectInfoLoader();
 	}
@@ -51,6 +55,7 @@ public class SubProjectBuilder {
 		
 		projectInfoLoader.loadProjectInfo(subProject.getPath());
 		taskgraph.setProjectInfo(projectInfoLoader.projectInfo());
+		allProjects.addProjectInfo(projectInfoLoader.projectInfo());
 	}
 	
 	public void run(final String taskName, final Map<String, String> taskOptions, final ProjectType projectType) {

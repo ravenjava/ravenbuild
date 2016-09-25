@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Element implements Node {
+	private static final String DEFAULT_INDENT_LEVEL = "  ";
 	private final List<Node> children = new ArrayList<>();
 	private Attributes attributes = new Attributes();
 	private final TagName tagName;
@@ -34,33 +35,41 @@ public abstract class Element implements Node {
 	@Override
 	public String render() {
 		StringBuilder renderedResultBuilder = new StringBuilder();
-		render(renderedResultBuilder);
+		render(renderedResultBuilder, "");
 		return renderedResultBuilder.toString();
 	}
 	
 	@Override
-	public void render(final StringBuilder renderedResultBuilder) {
-		renderOpenTag(renderedResultBuilder);
-		renderChildren(renderedResultBuilder);
-		renderCloseTag(renderedResultBuilder);
+	public void render(final StringBuilder renderedResultBuilder, final String indent) {
+		renderOpenTag(renderedResultBuilder, indent);
+		renderChildren(renderedResultBuilder, indent+DEFAULT_INDENT_LEVEL);
+		renderCloseTag(renderedResultBuilder, indent);
 	}
 	
-	private void renderOpenTag(final StringBuilder renderedResultBuilder) {
+	private void renderOpenTag(final StringBuilder renderedResultBuilder, final String indent) {
+		renderedResultBuilder.append(indent);
 		renderedResultBuilder.append("<");
 		renderedResultBuilder.append(tagName.value());
 		attributes.render(renderedResultBuilder);
-		renderedResultBuilder.append(">");
+		if(children.isEmpty()) {
+			renderedResultBuilder.append("/>\n");
+		} else {
+			renderedResultBuilder.append(">\n");
+		}
 	}
 	
-	private void renderCloseTag(final StringBuilder renderedResultBuilder) {
-		renderedResultBuilder.append("</");
-		renderedResultBuilder.append(tagName.value());
-		renderedResultBuilder.append(">");
+	private void renderCloseTag(final StringBuilder renderedResultBuilder, final String indent) {
+		if(!children.isEmpty()) {
+			renderedResultBuilder.append(indent);
+			renderedResultBuilder.append("</");
+			renderedResultBuilder.append(tagName.value());
+			renderedResultBuilder.append(">\n");
+		}
 	}
 
-	private void renderChildren(final StringBuilder renderedResultBuilder) {
+	private void renderChildren(final StringBuilder renderedResultBuilder, final String indent) {
 		for(Node child : children) {
-			child.render(renderedResultBuilder);
+			child.render(renderedResultBuilder, indent);
 		}
 	}
 }

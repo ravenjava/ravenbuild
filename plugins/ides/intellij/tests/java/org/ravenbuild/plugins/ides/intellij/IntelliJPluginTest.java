@@ -3,6 +3,7 @@ package org.ravenbuild.plugins.ides.intellij;
 import org.junit.Test;
 import org.ravenbuild.environment.BuildEnvironment;
 import org.ravenbuild.plugins.PluginContext;
+import org.ravenbuild.projectinfo.AllProjects;
 import org.ravenbuild.tasks.EmptyTaskOptions;
 
 import static org.mockito.Matchers.any;
@@ -16,6 +17,7 @@ public class IntelliJPluginTest {
 		
 		PluginContext context = mock(PluginContext.class);
 		when(context.buildEnvironment()).thenReturn(mock(BuildEnvironment.class));
+		when(context.allProjects()).thenReturn(mock(AllProjects.class));
 		plugin.initialize(context);
 		
 		verify(context).registerTask(eq("intellij"), any(IntelliJTask.class), eq(EmptyTaskOptions.class), eq("IDEs"));

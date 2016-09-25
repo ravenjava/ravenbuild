@@ -33,4 +33,56 @@ public class BuildEnvironmentTest {
 		String line = reader.readLine();
 		assertThat(line, is("Subdirectory"));
 	}
+	
+	@Test
+	public void inNormalModeWritesFileToOutputDirectory() throws IOException {
+		File baseDir = new File("build-main/resources/test/buildout");
+		File currentDir = new File(baseDir, "subdir");
+		BuildEnvironment buildEnvironment = new BuildEnvironment(RunMode.ALLOW_MODIFICATIONS, baseDir, currentDir);
+		
+		buildEnvironment.writeFile("/testfile", (f) -> {});
+		
+		assertTrue(new File(baseDir, "testfile").exists());
+		
+		baseDir.delete();
+	}
+	
+	@Test
+	public void inNormalModeWritesRelativeFileToCurrentDirectory() throws IOException {
+		File baseDir = new File("build-main/resources/test/buildout");
+		File currentDir = new File(baseDir, "subdir");
+		BuildEnvironment buildEnvironment = new BuildEnvironment(RunMode.ALLOW_MODIFICATIONS, baseDir, currentDir);
+		
+		buildEnvironment.writeFile("testfile", (f) -> {});
+		
+		assertTrue(new File(currentDir, "testfile").exists());
+		
+		baseDir.delete();
+	}
+	
+	@Test
+	public void inDryRunModeWritesFileToDryRunDirectory() throws IOException {
+		File baseDir = new File("build-main/resources/test/buildout");
+		File currentDir = new File(baseDir, "subdir");
+		BuildEnvironment buildEnvironment = new BuildEnvironment(RunMode.DRY_RUN, baseDir, currentDir);
+		
+		buildEnvironment.writeFile("/testfile", (f) -> {});
+		
+		assertTrue(new File(baseDir, "dryrun/testfile").exists());
+		
+		baseDir.delete();
+	}
+	
+	@Test
+	public void inDryRunModeWritesRelativeFileToDryRunDirectory() throws IOException {
+		File baseDir = new File("build-main/resources/test/buildout");
+		File currentDir = new File(baseDir, "subdir");
+		BuildEnvironment buildEnvironment = new BuildEnvironment(RunMode.DRY_RUN, baseDir, currentDir);
+		
+		buildEnvironment.writeFile("testfile", (f) -> {});
+		
+		assertTrue(new File(baseDir, "dryrun/subdir/testfile").exists());
+		
+		baseDir.delete();
+	}
 }

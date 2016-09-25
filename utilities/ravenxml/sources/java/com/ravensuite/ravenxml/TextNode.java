@@ -14,12 +14,13 @@ public class TextNode implements Node {
 	@Override
 	public String render() {
 		StringBuilder renderedResultBuilder = new StringBuilder();
-		render(renderedResultBuilder);
+		render(renderedResultBuilder, "");
 		return renderedResultBuilder.toString();
 	}
 	
 	@Override
-	public void render(final StringBuilder renderedResultBuilder) {
+	public void render(final StringBuilder renderedResultBuilder, final String indent) {
+		renderedResultBuilder.append(indent);
 		renderedResultBuilder.append(text);
 	}
 }

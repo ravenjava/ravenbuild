@@ -3,6 +3,7 @@ package org.ravenbuild.plugins.ides.intellij;
 import org.junit.Test;
 import org.ravenbuild.environment.BuildEnvironment;
 import org.ravenbuild.environment.FileWriterHandler;
+import org.ravenbuild.projectinfo.AllProjects;
 import org.ravenbuild.projectinfo.ProjectInfo;
 import org.ravenbuild.tasks.EmptyTaskOptions;
 import org.ravenbuild.tasks.TaskContext;
@@ -17,7 +18,7 @@ import static org.mockito.Mockito.*;
 public class IntelliJTaskTest {
 	@Test
 	public void dependsOnDependenciesTask() {
-		IntelliJTask task = new IntelliJTask(mock(BuildEnvironment.class));
+		IntelliJTask task = new IntelliJTask(mock(BuildEnvironment.class), mock(AllProjects.class));
 		
 		TaskContext taskContext = mock(TaskContext.class);
 		task.initialize(taskContext);
@@ -27,8 +28,8 @@ public class IntelliJTaskTest {
 	
 	@Test
 	public void writesImlFileInCurrentDirectory() {
-		BuildEnvironment buildEnvironment = mock(BuildEnvironment.class);
-		IntelliJTask task = new IntelliJTask(buildEnvironment);
+		BuildEnvironment buildEnvironment = mock(BuildEnvironment.class, RETURNS_DEEP_STUBS);
+		IntelliJTask task = new IntelliJTask(buildEnvironment, mock(AllProjects.class));
 		TaskContext taskContext = mock(TaskContext.class);
 		ProjectInfo projectInfo = mock(ProjectInfo.class);
 		when(projectInfo.getParent()).thenReturn(Optional.empty());
@@ -43,8 +44,8 @@ public class IntelliJTaskTest {
 	
 	@Test
 	public void writesCompilerXmlInRootProject() {
-		BuildEnvironment buildEnvironment = mock(BuildEnvironment.class);
-		IntelliJTask task = new IntelliJTask(buildEnvironment);
+		BuildEnvironment buildEnvironment = mock(BuildEnvironment.class, RETURNS_DEEP_STUBS);
+		IntelliJTask task = new IntelliJTask(buildEnvironment, mock(AllProjects.class));
 		TaskContext taskContext = mock(TaskContext.class);
 		ProjectInfo projectInfo = mock(ProjectInfo.class);
 		when(projectInfo.getParent()).thenReturn(Optional.empty());
@@ -59,8 +60,8 @@ public class IntelliJTaskTest {
 	
 	@Test
 	public void writesModulesXmlInRootProject() {
-		BuildEnvironment buildEnvironment = mock(BuildEnvironment.class);
-		IntelliJTask task = new IntelliJTask(buildEnvironment);
+		BuildEnvironment buildEnvironment = mock(BuildEnvironment.class, RETURNS_DEEP_STUBS);
+		IntelliJTask task = new IntelliJTask(buildEnvironment, mock(AllProjects.class));
 		TaskContext taskContext = mock(TaskContext.class);
 		ProjectInfo projectInfo = mock(ProjectInfo.class);
 		when(projectInfo.getParent()).thenReturn(Optional.empty());
@@ -76,7 +77,7 @@ public class IntelliJTaskTest {
 	@Test
 	public void doesNotWriteDotIdeaFolderInSubProjects() {
 		BuildEnvironment buildEnvironment = mock(BuildEnvironment.class);
-		IntelliJTask task = new IntelliJTask(buildEnvironment);
+		IntelliJTask task = new IntelliJTask(buildEnvironment, mock(AllProjects.class));
 		TaskContext taskContext = mock(TaskContext.class);
 		ProjectInfo projectInfo = mock(ProjectInfo.class);
 		when(projectInfo.getProjectName()).thenReturn("project-name");

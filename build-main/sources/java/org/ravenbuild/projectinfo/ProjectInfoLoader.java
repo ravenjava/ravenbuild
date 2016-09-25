@@ -8,11 +8,13 @@ public class ProjectInfoLoader {
 	private final ProjectInfo projectInfo = new ProjectInfo();
 	
 	public ProjectInfoLoader() {
-		String defaultName = new File("").getAbsoluteFile().getName();
+		File buildDirectory = new File("");
+		String defaultName = buildDirectory.getAbsoluteFile().getName();
 		
 		projectInfo.setProjectName(defaultName);
 		projectInfo.setProjectGroup(defaultName);
 		projectInfo.setProjectVersion("UNKNOWN_VERSION");
+		projectInfo.setLocationOnDisk(buildDirectory);
 	}
 	
 	public ProjectInfoLoader(final ProjectInfo parent) {
@@ -31,8 +33,10 @@ public class ProjectInfoLoader {
 		Args.notNull(basePath, "basePath");
 		
 		if(basePath.length() > 0 && !basePath.equals(".")) {
-			String defaultName = new File(basePath).getAbsoluteFile().getName();
+			File locationOnDisk = new File(basePath);
+			String defaultName = locationOnDisk.getAbsoluteFile().getName();
 			projectInfo.setProjectName(defaultName);
+			projectInfo.setLocationOnDisk(locationOnDisk);
 		}
 	}
 }

@@ -7,7 +7,7 @@ import org.ravenbuild.tasks.EmptyTaskOptions;
 public class IntelliJPlugin implements BuildPlugin {
 	@Override
 	public void initialize(final PluginContext pluginContext) {
-		IntelliJTask intelliJTask = new IntelliJTask(pluginContext.buildEnvironment());
+		IntelliJTask intelliJTask = new IntelliJTask(pluginContext.buildEnvironment(), pluginContext.allProjects());
 		pluginContext.registerTask("intellij", intelliJTask, EmptyTaskOptions.class, "IDEs");
 	}
 	

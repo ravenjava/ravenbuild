@@ -5,6 +5,7 @@ import org.ravenbuild.environment.BuildEnvironment;
 import org.ravenbuild.plugins.dependencies.DependenciesTask;
 import org.ravenbuild.plugins.help.LongDescription;
 import org.ravenbuild.plugins.help.ShortDescription;
+import org.ravenbuild.projectinfo.AllProjects;
 import org.ravenbuild.projectinfo.ProjectInfo;
 import org.ravenbuild.tasks.EmptyTaskOptions;
 import org.ravenbuild.tasks.Task;
@@ -18,13 +19,16 @@ import org.ravenbuild.tasks.TaskContext;
 })
 public class IntelliJTask implements Task<EmptyTaskOptions> {
 	private final BuildEnvironment buildEnvironment;
+	private final AllProjects allProjects;
 	private DependenciesTask dependenciesTask;
 	private ProjectInfo projectInfo;
 	
-	public IntelliJTask(final BuildEnvironment buildEnvironment) {
+	public IntelliJTask(final BuildEnvironment buildEnvironment, final AllProjects allProjects) {
 		Args.notNull(buildEnvironment, "buildEnvironment");
+		Args.notNull(allProjects, "allProjects");
 		
 		this.buildEnvironment = buildEnvironment;
+		this.allProjects = allProjects;
 	}
 	
 	@Override
@@ -39,7 +43,7 @@ public class IntelliJTask implements Task<EmptyTaskOptions> {
 		buildEnvironment.writeFile(projectInfo.getProjectName()+".iml", new ImlFileWriter());
 		if(!projectInfo.getParent().isPresent()) {
 			buildEnvironment.writeFile(".idea/compiler.xml", new CompilerXmlWriter());
-			buildEnvironment.writeFile(".idea/modules.xml", new ModulesXmlWriter());
+			buildEnvironment.writeFile(".idea/modules.xml", new ModulesXmlWriter(allProjects, buildEnvironment.buildBaseDirectory()));
 		}
 	}
 }
