@@ -11,6 +11,10 @@ import org.ravenbuild.tasks.EmptyTaskOptions;
 import org.ravenbuild.tasks.Task;
 import org.ravenbuild.tasks.TaskContext;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @ShortDescription("Writes IntelliJ IDEA project files for the current project.")
 @LongDescription({
 		"Use this task to write the IntelliJ IDEA project files for the current project.",
@@ -18,6 +22,7 @@ import org.ravenbuild.tasks.TaskContext;
 		"IDEA."
 })
 public class IntelliJTask implements Task<EmptyTaskOptions> {
+	private final List<ProjectDataProvider> projectDataProviders = new ArrayList<>();
 	private final BuildEnvironment buildEnvironment;
 	private final AllProjects allProjects;
 	private DependenciesTask dependenciesTask;
@@ -42,8 +47,19 @@ public class IntelliJTask implements Task<EmptyTaskOptions> {
 	public void run(final EmptyTaskOptions taskOptions) {
 		buildEnvironment.writeFile(projectInfo.getProjectName()+".iml", new ImlFileWriter());
 		if(!projectInfo.getParent().isPresent()) {
-			buildEnvironment.writeFile(".idea/compiler.xml", new CompilerXmlWriter());
+			List<CompilerConfiguraitonProvider> compilerConfigurationProviders = projectDataProviders.stream()
+					.map(pdp -> pdp.compilerConfigurationProvider())
+					.filter(ccp -> ccp.isPresent())
+					.map(ccp -> ccp.get())
+					.collect(Collectors.toList());
+			buildEnvironment.writeFile(".idea/compiler.xml", new CompilerXmlWriter(compilerConfigurationProviders));
 			buildEnvironment.writeFile(".idea/modules.xml", new ModulesXmlWriter(allProjects, buildEnvironment.buildBaseDirectory()));
 		}
+	}
+	
+	public void addProjectDataProvider(final ProjectDataProvider projectDataProvider) {
+		Args.notNull(projectDataProvider, "projectDataProvider");
+		
+		projectDataProviders.add(projectDataProvider);
 	}
 }

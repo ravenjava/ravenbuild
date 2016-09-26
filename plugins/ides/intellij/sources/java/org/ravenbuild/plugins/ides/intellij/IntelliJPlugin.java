@@ -5,9 +5,11 @@ import org.ravenbuild.plugins.PluginContext;
 import org.ravenbuild.tasks.EmptyTaskOptions;
 
 public class IntelliJPlugin implements BuildPlugin {
+	private IntelliJTask intelliJTask;
+	
 	@Override
 	public void initialize(final PluginContext pluginContext) {
-		IntelliJTask intelliJTask = new IntelliJTask(pluginContext.buildEnvironment(), pluginContext.allProjects());
+		intelliJTask = new IntelliJTask(pluginContext.buildEnvironment(), pluginContext.allProjects());
 		pluginContext.registerTask("intellij", intelliJTask, EmptyTaskOptions.class, "IDEs");
 	}
 	
@@ -17,6 +19,6 @@ public class IntelliJPlugin implements BuildPlugin {
 	}
 	
 	public void addProjectDataProvider(final ProjectDataProvider projectDataProvider) {
-		
+		intelliJTask.addProjectDataProvider(projectDataProvider);
 	}
 }

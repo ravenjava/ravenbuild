@@ -42,7 +42,8 @@ public class SubProjectsFactory {
 		TaskRunner taskRunner = new TaskRunner();
 		TaskGraph taskgraph = new TaskGraph(taskRepository, taskRunner, buildConfiguration, logger);
 		FastClasspathClasspathScanner classpathScanner = new FastClasspathClasspathScanner();
-		PluginSystem pluginSystem = new PluginSystem(taskgraph, taskRepository, classpathScanner, allProjects, buildEnvironment, logger);
+		BuildEnvironment currentBuildEnvironment = new BuildEnvironment(buildEnvironment, subProject.getPath());
+		PluginSystem pluginSystem = new PluginSystem(taskgraph, taskRepository, classpathScanner, allProjects, currentBuildEnvironment, logger);
 		
 		return new SubProjectBuilder(subProject, buildOptions, buildConfiguration, taskgraph, classpathScanner, pluginSystem, this, allProjects);
 	}

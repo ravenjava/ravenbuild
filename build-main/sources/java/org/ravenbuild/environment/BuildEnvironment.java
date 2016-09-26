@@ -31,6 +31,10 @@ public class BuildEnvironment {
 		}
 	}
 	
+	public BuildEnvironment(final BuildEnvironment parent, final String currentPath) {
+		this(parent.runMode, parent.buildBaseDirectory, new File(parent.buildBaseDirectory, currentPath));
+	}
+	
 	public Reader readFile(final String path) {
 		try {
 			return new FileReader(getFile(path));
