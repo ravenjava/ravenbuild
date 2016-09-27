@@ -6,6 +6,7 @@
 			"net.davidtanzer:jobjectformatter",
 			"junit:junit",
 			"org.mockito:mockito-all",
+			"com.google.code.gson:gson",
 			"ravenbuild:build-main",
 			"ravenbuild:help"
 		]

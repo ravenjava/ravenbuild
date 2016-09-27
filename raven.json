@@ -10,7 +10,7 @@
 
 			"plugins/build", "plugins/dependencies", "plugins/help", "plugins/project-structure",
 			"plugins/java/java-dependencies", "plugins/java/java-main",
-			"plugins/ides/intellij",
+			"plugins/ides/intellij", "plugins/ides/intellij-java",
 
 			"utilities/ravenvalue", "utilities/ravenxml"
 		],
@@ -35,7 +35,8 @@
 		"java": [
 			"ravenbuild:build-main",
 			"ravenbuild:build", "ravenbuild:dependencies", "ravenbuild:help", "ravenbuild:project-structure",
-			"ravenbuild:intellij", "ravenbuild:java-dependencies", "ravenbuild:java-main",
+			"ravenbuild:java-dependencies", "ravenbuild:java-main",
+			"ravenbuild:intellij", "ravenbuild:intellij-java",
 
 			"ravenbuild:ravenvalue", "ravenbuild:ravenxml"
 		]

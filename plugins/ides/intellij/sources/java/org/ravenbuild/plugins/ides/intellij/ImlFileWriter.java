@@ -39,7 +39,7 @@ public class ImlFileWriter implements FileWriterHandler {
 			for(Dependency dependency : mdp.dependencies()) {
 				if(dependency.locationOnDisk().getAbsolutePath().contains(".raven/libraries")) {
 					//FIXME should use relative path and $PROJECT_DIR$ here!
-					newModuleRootManager.add(new ModuleLibrary(new ModuleLibrary.JarUrl(dependency.locationOnDisk().getAbsolutePath())));
+					newModuleRootManager.add(new ModuleLibrary(new ModuleLibrary.JarUrl("file://"+dependency.locationOnDisk().getAbsolutePath())));
 				} else {
 					String moduleId = dependency.artifactId().substring(dependency.artifactId().indexOf(":")+1);
 					newModuleRootManager.add(new ModuleDependency(new ModuleDependency.ModuleName(moduleId)));
