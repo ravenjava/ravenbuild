@@ -5,9 +5,7 @@
 			"net.davidtanzer:jdefensive",
 			"net.davidtanzer:jobjectformatter",
 			"junit:junit",
-			"org.mockito:mockito-all",
-			"io.github.lukehutch:fast-classpath-scanner",
-			"com.google.code.gson:gson"
+			"org.mockito:mockito-all"
 		]
 	}
 }

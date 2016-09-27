@@ -1,4 +1,4 @@
-package org.ravenbuild.plugins.ides.intellij.xml;
+package org.ravenbuild.plugins.ides.intellij.xml.project;
 
 import com.ravensuite.ravenxml.Node;
 

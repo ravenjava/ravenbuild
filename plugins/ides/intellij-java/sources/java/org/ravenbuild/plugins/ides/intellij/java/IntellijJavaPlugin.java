@@ -5,20 +5,20 @@ import org.ravenbuild.plugins.BuildPlugin;
 import org.ravenbuild.plugins.PluginContext;
 import org.ravenbuild.plugins.ides.intellij.CompilerConfiguraitonProvider;
 import org.ravenbuild.plugins.ides.intellij.IntelliJPlugin;
+import org.ravenbuild.plugins.ides.intellij.ModuleDataProvider;
 import org.ravenbuild.plugins.ides.intellij.ProjectDataProvider;
 
 import java.util.Optional;
 
-public class IntellijJavaPlugin implements BuildPlugin, ProjectDataProvider {
+public class IntellijJavaPlugin implements BuildPlugin {
 	private IntelliJPlugin intellijPlugin;
-	private JavaProjectStructure javaProjectStructure;
-	private Optional<CompilerConfiguraitonProvider> compilerConfigurationProvider = Optional.of(new JavaCompilerConfigurationProvider());
+	private final JavaProjectDataProvider projectDataProvider = new JavaProjectDataProvider();
 	
 	@Override
 	public void initialize(final PluginContext pluginContext) {
 		intellijPlugin = pluginContext.dependsOnPlugin(IntelliJPlugin.class);
 		
-		intellijPlugin.addProjectDataProvider(this);
+		intellijPlugin.addProjectDataProvider(projectDataProvider);
 	}
 	
 	@Override
@@ -28,11 +28,6 @@ public class IntellijJavaPlugin implements BuildPlugin, ProjectDataProvider {
 	
 	public void setProjectStructure(final JavaProjectStructure javaProjectStructure) {
 		Args.notNull(javaProjectStructure, "javaProjectStructure");
-		this.javaProjectStructure = javaProjectStructure;
-	}
-	
-	@Override
-	public Optional<CompilerConfiguraitonProvider> compilerConfigurationProvider() {
-		return compilerConfigurationProvider;
+		projectDataProvider.setProjectStructure(javaProjectStructure);
 	}
 }

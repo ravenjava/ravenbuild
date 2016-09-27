@@ -6,8 +6,11 @@
 			"net.davidtanzer:jobjectformatter",
 			"junit:junit",
 			"org.mockito:mockito-all",
-			"io.github.lukehutch:fast-classpath-scanner",
-			"com.google.code.gson:gson"
+			"ravenbuild:build-main",
+			"ravenbuild:help",
+			"ravenbuild:dependencies",
+			"ravenbuild:ravenvalue",
+			"ravenbuild:ravenxml"
 		]
 	}
 }

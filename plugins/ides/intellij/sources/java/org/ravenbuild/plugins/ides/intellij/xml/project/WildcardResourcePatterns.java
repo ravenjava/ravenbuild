@@ -1,6 +1,7 @@
-package org.ravenbuild.plugins.ides.intellij.xml;
+package org.ravenbuild.plugins.ides.intellij.xml.project;
 
 import com.ravensuite.ravenxml.*;
+import org.ravenbuild.plugins.ides.intellij.xml.project.CompilerConfigurationSection;
 
 public class WildcardResourcePatterns extends Element implements CompilerConfigurationSection {
 	public WildcardResourcePatterns() {

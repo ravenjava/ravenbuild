@@ -45,7 +45,13 @@ public class IntelliJTask implements Task<EmptyTaskOptions> {
 	
 	@Override
 	public void run(final EmptyTaskOptions taskOptions) {
-		buildEnvironment.writeFile(projectInfo.getProjectName()+".iml", new ImlFileWriter());
+		List<ModuleDataProvider> moduleDataProviders = projectDataProviders.stream()
+				.map(pdp -> pdp.moduleDataProvider())
+				.filter(mdp -> mdp.isPresent())
+				.map(mdp -> mdp.get())
+				.collect(Collectors.toList());
+		buildEnvironment.writeFile(projectInfo.getProjectName()+".iml", new ImlFileWriter(moduleDataProviders));
+		
 		if(!projectInfo.getParent().isPresent()) {
 			List<CompilerConfiguraitonProvider> compilerConfigurationProviders = projectDataProviders.stream()
 					.map(pdp -> pdp.compilerConfigurationProvider())

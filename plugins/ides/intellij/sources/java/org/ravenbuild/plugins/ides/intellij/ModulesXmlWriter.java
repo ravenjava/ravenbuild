@@ -2,9 +2,9 @@ package org.ravenbuild.plugins.ides.intellij;
 
 import net.davidtanzer.jdefensive.Args;
 import org.ravenbuild.environment.FileWriterHandler;
-import org.ravenbuild.plugins.ides.intellij.xml.Modules;
-import org.ravenbuild.plugins.ides.intellij.xml.Project;
-import org.ravenbuild.plugins.ides.intellij.xml.ProjectModuleManager;
+import org.ravenbuild.plugins.ides.intellij.xml.project.Modules;
+import org.ravenbuild.plugins.ides.intellij.xml.project.Project;
+import org.ravenbuild.plugins.ides.intellij.xml.project.ProjectModuleManager;
 import org.ravenbuild.projectinfo.AllProjects;
 import org.ravenbuild.projectinfo.ProjectInfo;
 

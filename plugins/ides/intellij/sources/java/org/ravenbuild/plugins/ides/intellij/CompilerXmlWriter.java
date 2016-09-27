@@ -2,7 +2,7 @@ package org.ravenbuild.plugins.ides.intellij;
 
 import net.davidtanzer.jdefensive.Args;
 import org.ravenbuild.environment.FileWriterHandler;
-import org.ravenbuild.plugins.ides.intellij.xml.*;
+import org.ravenbuild.plugins.ides.intellij.xml.project.*;
 
 import java.io.FileWriter;
 import java.io.IOException;

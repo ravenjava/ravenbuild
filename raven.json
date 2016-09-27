@@ -34,8 +34,8 @@
 	"dependencies": {
 		"java": [
 			"ravenbuild:build-main",
-			"ravenbuild:build-plugin", "ravenbuild:dependencies-plugin", "ravenbuild:help-plugin", "ravenbuild:project-structure-plugin",
-			"ravenbuild:java-intellij-plugin", "ravenbuild:java-dependencies-plugin", "ravenbuild:java-main-plugin",
+			"ravenbuild:build", "ravenbuild:dependencies", "ravenbuild:help", "ravenbuild:project-structure",
+			"ravenbuild:intellij", "ravenbuild:java-dependencies", "ravenbuild:java-main",
 
 			"ravenbuild:ravenvalue", "ravenbuild:ravenxml"
 		]
