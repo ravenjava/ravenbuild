@@ -1,7 +1,8 @@
 {
 	"plugins": [
 		"org.ravenbuild.java",
-		"org.ravenbuild.java.intellij"
+		"org.ravenbuild.java.intellij",
+		"org.ravenbuild.mactools"
 	],
 
 	"subprojects": {
@@ -11,6 +12,7 @@
 			"plugins/build", "plugins/dependencies", "plugins/help", "plugins/project-structure",
 			"plugins/java/java-dependencies", "plugins/java/java-main",
 			"plugins/ides/intellij", "plugins/ides/intellij-java",
+			"plugins/mactools/mactools-main",
 
 			"utilities/ravenvalue", "utilities/ravenxml"
 		],
@@ -34,9 +36,11 @@
 	"dependencies": {
 		"java": [
 			"ravenbuild:build-main",
+
 			"ravenbuild:build", "ravenbuild:dependencies", "ravenbuild:help", "ravenbuild:project-structure",
 			"ravenbuild:java-dependencies", "ravenbuild:java-main",
 			"ravenbuild:intellij", "ravenbuild:intellij-java",
+			"ravenbuild:mactools-main",
 
 			"ravenbuild:ravenvalue", "ravenbuild:ravenxml"
 		]

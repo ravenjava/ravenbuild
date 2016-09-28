@@ -2,8 +2,7 @@ package org.ravenbuild.plugins.ides.intellij.xml.module;
 
 import com.ravensuite.ravenxml.*;
 import net.davidtanzer.jdefensive.Args;
-
-import java.util.List;
+import org.ravenbuild.plugins.ides.intellij.xml.ModuleContent;
 
 public class Content extends Element implements ModuleContent {
 	public Content(final Url url) {

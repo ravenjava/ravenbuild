@@ -5,6 +5,7 @@ import com.ravensuite.ravenxml.AttributeValue;
 import com.ravensuite.ravenxml.Element;
 import com.ravensuite.ravenxml.TagName;
 import net.davidtanzer.jdefensive.Args;
+import org.ravenbuild.plugins.ides.intellij.xml.ModuleContent;
 
 public abstract class OrderEntry extends Element implements ModuleContent {
 	protected OrderEntry(final Type type) {

@@ -2,15 +2,15 @@ package org.ravenbuild.plugins.ides.intellij.xml.module;
 
 import com.ravensuite.ravenxml.AttributeName;
 import com.ravensuite.ravenxml.AttributeValue;
-import com.ravensuite.value.StringValue;
 import net.davidtanzer.jdefensive.Args;
 import org.ravenbuild.plugins.ides.intellij.xml.Component;
+import org.ravenbuild.plugins.ides.intellij.xml.ModuleContent;
 
 public class NewModuleRootManager extends Component {
-	public NewModuleRootManager() {
+	public NewModuleRootManager(final boolean inheritCompilerOutput) {
 		super(new ComponentName("NewModuleRootManager"));
 		
-		setAttribute(AttributeName.of("inherit-compiler-output"), new AttributeValue("false"));
+		setAttribute(AttributeName.of("inherit-compiler-output"), new AttributeValue(String.valueOf(inheritCompilerOutput)));
 	}
 	
 	public void setLanguageLevel(final LanguageLevel languageLevel) {

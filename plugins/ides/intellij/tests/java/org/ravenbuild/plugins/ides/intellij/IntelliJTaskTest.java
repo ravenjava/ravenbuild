@@ -75,6 +75,22 @@ public class IntelliJTaskTest {
 	}
 	
 	@Test
+	public void writesMiscXmlInRootProject() {
+		BuildEnvironment buildEnvironment = mock(BuildEnvironment.class, RETURNS_DEEP_STUBS);
+		IntelliJTask task = new IntelliJTask(buildEnvironment, mock(AllProjects.class));
+		TaskContext taskContext = mock(TaskContext.class);
+		ProjectInfo projectInfo = mock(ProjectInfo.class);
+		when(projectInfo.getParent()).thenReturn(Optional.empty());
+		when(projectInfo.getProjectName()).thenReturn("project-name");
+		when(taskContext.projectInfo()).thenReturn(projectInfo);
+		task.initialize(taskContext);
+		
+		task.run(mock(EmptyTaskOptions.class));
+		
+		verify(buildEnvironment).writeFile(eq(".idea/misc.xml"), any(FileWriterHandler.class));
+	}
+	
+	@Test
 	public void doesNotWriteDotIdeaFolderInSubProjects() {
 		BuildEnvironment buildEnvironment = mock(BuildEnvironment.class);
 		IntelliJTask task = new IntelliJTask(buildEnvironment, mock(AllProjects.class));

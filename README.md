@@ -8,6 +8,25 @@ Start with:
 
     ./raven help
 
+### Developing with IntelliJ IDEA
+
+After checking out raven, use raven to create the IntelliJ IDEA project files:
+
+    ./raven intellij
+
+Then open the project in the IDE. Check the project settings, especially whether the project JDK and
+the language level are correct.
+
+Then you can create a run configuration for raven itself:
+
+![Run configuration for raven](https://raw.githubusercontent.com/ravensuite/ravenbuild/master/documentation/screenshot-raven-runconfig.png)
+
+And one for running all tests:
+
+![Run configuration for running all tests](https://raw.githubusercontent.com/ravensuite/ravenbuild/master/documentation/screenshot-raven-testconfig.png)
+
+Congratulations, now you can start developing raven with IntelliJ IDEA!
+
 ## Design Goals
 
  - **Declarative**: The build configuration (raven.json) cannot contain any logic. There is no build script

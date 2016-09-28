@@ -6,6 +6,12 @@
 		{ "id": "net.davidtanzer:jdefensive", "version": "0.3.0", "file": "jdefensive-0.3.0.jar" },
 		{ "id": "net.davidtanzer:jobjectformatter", "version": "0.2.1", "file": "jobjectformatter-0.2.1.jar" },
 		{ "id": "junit:junit", "version": "4.12", "file": "junit-4.12.jar" },
-		{ "id": "org.mockito:mockito-all", "version": "2.0.2-beta", "file": "mockito-all-2.0.2-beta.jar" }
+		{ "id": "org.mockito:mockito-all", "version": "2.0.2-beta", "file": "mockito-all-2.0.2-beta.jar" },
+		{ "id": "org.openbakery:xcode-plugin", "version": "0.14.2.3", "file": "xcode-plugin-0.14.2.3.jar" },
+		{ "id": "org.codehaus.groovy:groovy-all", "version": "2.4.7", "file": "groovy-all-2.4.7.jar" },
+		{ "id": "ch.qos.logback:logback-core", "version": "1.1.7", "file": "logback-core-1.1.7.jar" },
+		{ "id": "org.slf4j:slf4j-api", "version": "1.7.21", "file": "slf4j-api-1.7.21.jar" },
+		{ "id": "commons-collections:commons-collections", "version": "3.2.2", "file": "commons-collections-3.2.2.jar" },
+		{ "id": "commons-io:commons-io", "version": "2.5", "file": "commons-io-2.5.jar" }
 	]
 }

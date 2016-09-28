@@ -22,7 +22,7 @@ public class ImlFileWriter implements FileWriterHandler {
 	public void write(final FileWriter fileWriter) throws IOException {
 		fileWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		
-		NewModuleRootManager newModuleRootManager = new NewModuleRootManager();
+		NewModuleRootManager newModuleRootManager = new NewModuleRootManager(true);
 		setModuleLanguageLevel(newModuleRootManager);
 		setModuleOutput(newModuleRootManager);
 		setOtherBookeepingAttributes(newModuleRootManager);
@@ -59,8 +59,6 @@ public class ImlFileWriter implements FileWriterHandler {
 	}
 	
 	private void setModuleOutput(final NewModuleRootManager newModuleRootManager) {
-		newModuleRootManager.add(new Output(new Output.Url("file://$PROJECT_DIR$/.raven/target/production/ravenbuild")));
-		newModuleRootManager.add(new TestOutput(new Output.Url("file://$PROJECT_DIR$/.raven/target/test/ravenbuild")));
 		newModuleRootManager.add(new ExcludeOutput());
 	}
 	
