@@ -1,12 +1,6 @@
 {
 	"dependencies": {
 		"java": [
-			"org.hamcrest:hamcrest-all",
-			"net.davidtanzer:jdefensive",
-			"net.davidtanzer:jobjectformatter",
-			"junit:junit",
-			"org.mockito:mockito-all",
-
 			"org.openbakery:xcode-plugin",
 			"org.codehaus.groovy:groovy-all",
 			"ch.qos.logback:logback-core",
