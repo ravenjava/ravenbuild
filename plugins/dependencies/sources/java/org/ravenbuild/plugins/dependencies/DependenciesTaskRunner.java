@@ -12,7 +12,7 @@ class DependenciesTaskRunner {
 	private final ExistingDependenciesInformation dependenciesInfo;
 	private final AllProjects allProjects;
 	private final Map<String, DependenciesType> dependenciesTypes;
-	private Map<String, List<String>> configuration;
+	private DependenciesConfiguration configuration;
 	
 	DependenciesTaskRunner(final ExistingDependenciesInformation dependenciesInfo, final AllProjects allProjects, final Map<String, DependenciesType> dependenciesTypes) {
 		Args.notNull(dependenciesInfo, "dependenciesInfo");
@@ -24,7 +24,7 @@ class DependenciesTaskRunner {
 		this.dependenciesTypes = dependenciesTypes;
 	}
 	
-	void initialize(final Map<String, List<String>> configuration) {
+	void initialize(final DependenciesConfiguration configuration) {
 		Args.notNull(configuration, "configuration");
 		this.configuration = configuration;
 		
@@ -32,8 +32,8 @@ class DependenciesTaskRunner {
 	}
 
 	void initializeDependencies() {
-		for(String configType : configuration.keySet()) {
-			List<String> dependencies = configuration.get(configType);
+		for(String configType : configuration.configurationTypes()) {
+			List<String> dependencies = configuration.getDependenciesFor(configType);
 			DependenciesType dependenciesType = dependenciesTypes.get(configType);
 			for(String artifactId : dependencies) {
 				ProjectInfo projectInfo = allProjects.findProject(artifactId);

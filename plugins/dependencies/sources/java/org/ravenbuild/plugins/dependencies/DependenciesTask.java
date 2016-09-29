@@ -29,7 +29,7 @@ import java.util.Map;
 })
 public class DependenciesTask implements Task<DependenciesTaskOptions> {
 	private final DependenciesTaskRunner dependenciesTaskRunner;
-	private Map<String, List<String>> configuration;
+	private DependenciesConfiguration configuration;
 	
 	DependenciesTask(final DependenciesTaskRunner dependenciesTaskRunner) {
 		Args.notNull(dependenciesTaskRunner, "dependenciesTaskRunner");
@@ -40,7 +40,7 @@ public class DependenciesTask implements Task<DependenciesTaskOptions> {
 	public void initialize(final TaskContext taskContext) {
 	}
 	
-	void configurationLoaded(final Map<String, List<String>> configuration) {
+	void configurationLoaded(final DependenciesConfiguration configuration) {
 		Args.notNull(configuration, "configuration");
 		this.configuration = configuration;
 	}

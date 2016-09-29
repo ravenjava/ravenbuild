@@ -17,7 +17,7 @@ public class DependenciesPlugin implements BuildPlugin {
 	@Override
 	public void initialize(final PluginContext pluginContext) {
 		this.logger = pluginContext.logger();
-		pluginContext.configuration().registerConfigurationListener("dependencies", Map.class, this::configurationLoaded);
+		pluginContext.configuration().registerConfigurationListener("dependencies", DependenciesConfiguration.class, this::configurationLoaded);
 		
 		ExistingDependenciesInformation dependenciesInfo = new ExistingDependenciesInformation(pluginContext.buildEnvironment());
 		DependenciesTaskRunner taskRunner = new DependenciesTaskRunner(dependenciesInfo, pluginContext.allProjects(), dependenciesTypes);
@@ -26,7 +26,7 @@ public class DependenciesPlugin implements BuildPlugin {
 		pluginContext.registerTask("dependencies", dependenciesTask, DependenciesTaskOptions.class);
 	}
 	
-	private void configurationLoaded(final Map<String, List<String>> configuration) {
+	private void configurationLoaded(final DependenciesConfiguration configuration) {
 		dependenciesTask.configurationLoaded(configuration);
 	}
 	

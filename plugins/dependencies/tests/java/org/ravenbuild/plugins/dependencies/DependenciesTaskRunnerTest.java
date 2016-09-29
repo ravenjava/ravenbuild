@@ -22,7 +22,7 @@ public class DependenciesTaskRunnerTest {
 		AllProjects allProjects = mock(AllProjects.class);
 		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, mock(Map.class));
 		
-		runner.initialize(Collections.emptyMap());
+		runner.initialize(mock(DependenciesConfiguration.class));
 		
 		verify(dependenciesInfo).load();
 	}
@@ -33,9 +33,10 @@ public class DependenciesTaskRunnerTest {
 		AllProjects allProjects = mock(AllProjects.class);
 		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, mock(Map.class));
 		
-		HashMap<String, List<String>> configuration = new HashMap<String, List<String>>() {{
-			put("java", Arrays.asList("mygroup:subproject"));
-		}};
+		DependenciesConfiguration configuration = mock(DependenciesConfiguration.class);
+		when(configuration.configurationTypes()).thenReturn(new HashSet<String>() {{ add("java"); }});
+		when(configuration.getDependenciesFor("java")).thenReturn(Arrays.asList("mygroup:subproject"));
+
 		runner.initialize(configuration);
 		runner.initializeDependencies();
 		
@@ -52,9 +53,10 @@ public class DependenciesTaskRunnerTest {
 			put("java", mock(DependenciesType.class));
 		}});
 		
-		HashMap<String, List<String>> configuration = new HashMap<String, List<String>>() {{
-			put("java", Arrays.asList("mygroup:subproject"));
-		}};
+		DependenciesConfiguration configuration = mock(DependenciesConfiguration.class);
+		when(configuration.configurationTypes()).thenReturn(new HashSet<String>() {{ add("java"); }});
+		when(configuration.getDependenciesFor("java")).thenReturn(Arrays.asList("mygroup:subproject"));
+		
 		runner.initialize(configuration);
 		runner.initializeDependencies();
 		
@@ -71,9 +73,10 @@ public class DependenciesTaskRunnerTest {
 			put("java", mock(DependenciesType.class));
 		}});
 		
-		HashMap<String, List<String>> configuration = new HashMap<String, List<String>>() {{
-			put("java", Arrays.asList("somegroup:someid"));
-		}};
+		DependenciesConfiguration configuration = mock(DependenciesConfiguration.class);
+		when(configuration.configurationTypes()).thenReturn(new HashSet<String>() {{ add("java"); }});
+		when(configuration.getDependenciesFor("java")).thenReturn(Arrays.asList("somegroup:someid"));
+		
 		runner.initialize(configuration);
 		runner.initializeDependencies();
 		
@@ -86,9 +89,10 @@ public class DependenciesTaskRunnerTest {
 		AllProjects allProjects = mock(AllProjects.class);
 		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, mock(Map.class));
 		
-		HashMap<String, List<String>> configuration = new HashMap<String, List<String>>() {{
-			put("java", Arrays.asList("somegroup:someid"));
-		}};
+		DependenciesConfiguration configuration = mock(DependenciesConfiguration.class);
+		when(configuration.configurationTypes()).thenReturn(new HashSet<String>() {{ add("java"); }});
+		when(configuration.getDependenciesFor("java")).thenReturn(Arrays.asList("somegroup:someid"));
+		
 		runner.initialize(configuration);
 		runner.initializeDependencies();
 		
@@ -108,9 +112,10 @@ public class DependenciesTaskRunnerTest {
 			put("java", dependenciesType);
 		}});
 		
-		HashMap<String, List<String>> configuration = new HashMap<String, List<String>>() {{
-			put("java", Arrays.asList("mygroup:subproject"));
-		}};
+		DependenciesConfiguration configuration = mock(DependenciesConfiguration.class);
+		when(configuration.configurationTypes()).thenReturn(new HashSet<String>() {{ add("java"); }});
+		when(configuration.getDependenciesFor("java")).thenReturn(Arrays.asList("mygroup:subproject"));
+		
 		runner.initialize(configuration);
 		runner.initializeDependencies();
 		
@@ -135,9 +140,10 @@ public class DependenciesTaskRunnerTest {
 			put("java", dependenciesType);
 		}});
 		
-		HashMap<String, List<String>> configuration = new HashMap<String, List<String>>() {{
-			put("java", Arrays.asList("somegroup:someid"));
-		}};
+		DependenciesConfiguration configuration = mock(DependenciesConfiguration.class);
+		when(configuration.configurationTypes()).thenReturn(new HashSet<String>() {{ add("java"); }});
+		when(configuration.getDependenciesFor("java")).thenReturn(Arrays.asList("somegroup:someid"));
+		
 		runner.initialize(configuration);
 		runner.initializeDependencies();
 		
