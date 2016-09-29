@@ -49,7 +49,7 @@ class ExistingDependenciesInformation {
 	public Dependency getDependency(final String artifactId) {
 		if(existingDependenciesByArtifactId.containsKey(artifactId)) {
 			ExistingDependency existingDependency = existingDependenciesByArtifactId.get(artifactId);
-			Dependency dependency = new Dependency(artifactId, buildEnvironment.getFile("/.raven/libraries/" + existingDependency.getFile()), Optional.empty());
+			Dependency dependency = new Dependency(artifactId, buildEnvironment.getFile("/.raven/libraries/" + existingDependency.getFile()), Optional.empty(), existingDependency.getDependencies());
 			return dependency;
 		}
 		return null;

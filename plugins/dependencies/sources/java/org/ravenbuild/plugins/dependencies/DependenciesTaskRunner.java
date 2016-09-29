@@ -4,6 +4,7 @@ import net.davidtanzer.jdefensive.Args;
 import org.ravenbuild.projectinfo.AllProjects;
 import org.ravenbuild.projectinfo.ProjectInfo;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -36,16 +37,20 @@ class DependenciesTaskRunner {
 			List<String> dependencies = configuration.getDependenciesFor(configType);
 			DependenciesType dependenciesType = dependenciesTypes.get(configType);
 			for(String artifactId : dependencies) {
-				ProjectInfo projectInfo = allProjects.findProject(artifactId);
-				if(projectInfo != null) {
-					allProjects.waitFor(projectInfo);
-					dependenciesType.dependencyResolved(new Dependency(artifactId, projectInfo.getLocationOnDisk(), Optional.empty()));
-				} else {
-					Dependency dependency = dependenciesInfo.getDependency(artifactId);
-					if(dependency != null) {
-						dependenciesType.dependencyResolved(dependency);
-					}
-				}
+				resolveDependency(dependenciesType, artifactId);
+			}
+		}
+	}
+	
+	private void resolveDependency(final DependenciesType dependenciesType, final String artifactId) {
+		ProjectInfo projectInfo = allProjects.findProject(artifactId);
+		if(projectInfo != null) {
+			allProjects.waitFor(projectInfo);
+			dependenciesType.dependencyResolved(new Dependency(artifactId, projectInfo.getLocationOnDisk(), Optional.empty(), Collections.emptyList()));
+		} else {
+			Dependency dependency = dependenciesInfo.getDependency(artifactId);
+			if(dependency != null) {
+				dependenciesType.dependencyResolved(dependency);
 			}
 		}
 	}

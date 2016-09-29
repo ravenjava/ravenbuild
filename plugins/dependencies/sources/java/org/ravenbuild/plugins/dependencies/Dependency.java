@@ -4,21 +4,25 @@ import net.davidtanzer.jdefensive.Args;
 
 import java.io.File;
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 
 public class Dependency {
 	private final String artifactId;
 	private final File locationOnDisk;
 	private final Optional<URL> downloadURL;
+	private final List<DependencyInfo> dependencies;
 	
-	public Dependency(final String artifactId, final File locationOnDisk, final Optional<URL> downloadURL) {
+	public Dependency(final String artifactId, final File locationOnDisk, final Optional<URL> downloadURL, final List<DependencyInfo> dependencies) {
 		Args.notEmpty(artifactId, "artifactId");
 		Args.notNull(locationOnDisk, "locationOnDisk");
 		Args.notNull(downloadURL, "downloadURL");
+		Args.notNull(dependencies, "dependencies");
 		
 		this.artifactId = artifactId;
 		this.locationOnDisk = locationOnDisk;
 		this.downloadURL = downloadURL;
+		this.dependencies = dependencies;
 	}
 	
 	public String artifactId() {
@@ -31,6 +35,10 @@ public class Dependency {
 	
 	public Optional<URL> downloadURL() {
 		return downloadURL;
+	}
+	
+	public List<DependencyInfo> dependencies() {
+		return dependencies;
 	}
 	
 	@Override
@@ -50,7 +58,10 @@ public class Dependency {
 		if (!locationOnDisk.equals(that.locationOnDisk)) {
 			return false;
 		}
-		return downloadURL.equals(that.downloadURL);
+		if (!downloadURL.equals(that.downloadURL)) {
+			return false;
+		}
+		return dependencies.equals(that.dependencies);
 		
 	}
 	
@@ -59,6 +70,7 @@ public class Dependency {
 		int result = artifactId.hashCode();
 		result = 31 * result + locationOnDisk.hashCode();
 		result = 31 * result + downloadURL.hashCode();
+		result = 31 * result + dependencies.hashCode();
 		return result;
 	}
 }

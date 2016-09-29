@@ -133,7 +133,7 @@ public class DependenciesTaskRunnerTest {
 		when(dependenciesInfo.getDependency("somegroup:someid")).thenReturn(mock(Dependency.class));
 		File location = mock(File.class);
 		when(dependenciesInfo.getDependency("somegroup:someid")).thenReturn(
-				new Dependency("somegroup:someid", location, Optional.of(new URL("http://example.com/artifact"))));
+				new Dependency("somegroup:someid", location, Optional.of(new URL("http://example.com/artifact")), Collections.emptyList()));
 		AllProjects allProjects = mock(AllProjects.class);
 		DependenciesType dependenciesType = mock(DependenciesType.class);
 		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, new HashMap<String, DependenciesType>() {{

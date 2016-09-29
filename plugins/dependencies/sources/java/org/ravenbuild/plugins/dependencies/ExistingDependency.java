@@ -1,19 +1,20 @@
 package org.ravenbuild.plugins.dependencies;
 
-public class ExistingDependency {
-	private String id;
-	private String version;
+import java.util.Collections;
+import java.util.List;
+
+public class ExistingDependency extends DependencyInfo {
 	private String file;
+	private List<DependencyInfo> dependencies = Collections.emptyList();
 	
-	public String getId() {
-		return id;
-	}
-	
-	public String getVersion() {
-		return version;
+	public ExistingDependency() {
 	}
 	
 	public String getFile() {
 		return file;
+	}
+	
+	public List<DependencyInfo> getDependencies() {
+		return dependencies;
 	}
 }
