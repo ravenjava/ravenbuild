@@ -2,11 +2,6 @@
 	"dependencies": {
 		"java": [
 			"org.openbakery:xcode-plugin",
-			"org.codehaus.groovy:groovy-all",
-			"ch.qos.logback:logback-core",
-			"org.slf4j:slf4j-api",
-			"commons-collections:commons-collections",
-			"commons-io:commons-io",
 
 			"ravenbuild:build-main",
 			"ravenbuild:help"

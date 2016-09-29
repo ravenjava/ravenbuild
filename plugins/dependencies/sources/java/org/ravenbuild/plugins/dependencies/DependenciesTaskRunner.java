@@ -49,6 +49,9 @@ class DependenciesTaskRunner {
 			dependenciesType.dependencyResolved(new Dependency(artifactId, projectInfo.getLocationOnDisk(), Optional.empty(), Collections.emptyList()));
 		} else {
 			Dependency dependency = dependenciesInfo.getDependency(artifactId);
+			for(DependencyInfo transitiveDependencyInfo : dependency.dependencies()) {
+				resolveDependency(dependenciesType, transitiveDependencyInfo.getId());
+			}
 			if(dependency != null) {
 				dependenciesType.dependencyResolved(dependency);
 			}

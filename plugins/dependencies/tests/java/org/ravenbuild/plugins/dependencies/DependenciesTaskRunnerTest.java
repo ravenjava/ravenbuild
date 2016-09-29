@@ -29,9 +29,11 @@ public class DependenciesTaskRunnerTest {
 	
 	@Test
 	public void checksProjectInfoIfDependencyIsAKnownSubProject() {
-		ExistingDependenciesInformation dependenciesInfo = mock(ExistingDependenciesInformation.class);
+		ExistingDependenciesInformation dependenciesInfo = mock(ExistingDependenciesInformation.class, RETURNS_DEEP_STUBS);
+
 		AllProjects allProjects = mock(AllProjects.class);
-		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, mock(Map.class));
+		DependenciesType javaDependenciesType = mock(DependenciesType.class);
+		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, new HashMap<String, DependenciesType>() {{ put("java", javaDependenciesType); }});
 		
 		DependenciesConfiguration configuration = mock(DependenciesConfiguration.class);
 		when(configuration.configurationTypes()).thenReturn(new HashSet<String>() {{ add("java"); }});
@@ -86,8 +88,11 @@ public class DependenciesTaskRunnerTest {
 	@Test
 	public void checksExistingDependencyInfoIfTheDependencyExistsIfItsNoProjectDependency() {
 		ExistingDependenciesInformation dependenciesInfo = mock(ExistingDependenciesInformation.class);
+		when(dependenciesInfo.getDependency("somegroup:someid")).thenReturn(mock(Dependency.class));
+
 		AllProjects allProjects = mock(AllProjects.class);
-		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, mock(Map.class));
+		DependenciesType javaDependenciesType = mock(DependenciesType.class);
+		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, new HashMap<String, DependenciesType>() {{ put("java", javaDependenciesType); }});
 		
 		DependenciesConfiguration configuration = mock(DependenciesConfiguration.class);
 		when(configuration.configurationTypes()).thenReturn(new HashSet<String>() {{ add("java"); }});
@@ -97,6 +102,28 @@ public class DependenciesTaskRunnerTest {
 		runner.initializeDependencies();
 		
 		verify(dependenciesInfo).getDependency("somegroup:someid");
+	}
+	
+	@Test
+	public void resolvesTransitiveDependencies() {
+		ExistingDependenciesInformation dependenciesInfo = mock(ExistingDependenciesInformation.class, RETURNS_DEEP_STUBS);
+
+		Dependency directDependency = mock(Dependency.class);
+		when(directDependency.dependencies()).thenReturn(Arrays.asList(new DependencyInfo("transitive:dependency", "1.2.3")));
+		when(dependenciesInfo.getDependency("somegroup:someid")).thenReturn(directDependency);
+		
+		AllProjects allProjects = mock(AllProjects.class);
+		DependenciesType javaDependenciesType = mock(DependenciesType.class);
+		DependenciesTaskRunner runner = new DependenciesTaskRunner(dependenciesInfo, allProjects, new HashMap<String, DependenciesType>() {{ put("java", javaDependenciesType); }});
+		
+		DependenciesConfiguration configuration = mock(DependenciesConfiguration.class);
+		when(configuration.configurationTypes()).thenReturn(new HashSet<String>() {{ add("java"); }});
+		when(configuration.getDependenciesFor("java")).thenReturn(Arrays.asList("somegroup:someid"));
+		
+		runner.initialize(configuration);
+		runner.initializeDependencies();
+		
+		verify(dependenciesInfo).getDependency("transitive:dependency");
 	}
 	
 	@Test
