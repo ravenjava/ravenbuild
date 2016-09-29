@@ -5,13 +5,18 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasEntry;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.contains;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -77,8 +82,37 @@ public class BuildConfigurationTest {
 		
 		ConfigValuesTestConfigType config = captor.getValue();
 		assertThat(config.configValues, is(notNullValue()));
-		assertThat(config.configValues.get("foo"), hasItems("1", "2"));
-		assertThat(config.configValues.get("bar"), hasItems("3", "4"));
+		assertThat(config.configValues.get("foo"), containsInAnyOrder("1", "2"));
+		assertThat(config.configValues.get("bar"), containsInAnyOrder("3", "4"));
+	}
+	
+	@Test
+	public void mergesObjectsWithParentConfiguration() {
+		BuildConfiguration parentConfiguration = new BuildConfiguration();
+		parentConfiguration.loadFromString("{ \"fromParent\": { \"section\": {" +
+				"\"foo\": [ \"1\", \"2\"]," +
+				"\"bar\": { \"a\": \"1\", \"b\": \"4\" }" +
+				"}}}");
+		BuildConfiguration buildConfiguration = new BuildConfiguration(parentConfiguration.getConfigurationFor("fromParent", Map.class));
+		buildConfiguration.loadFromString("{ \"section\": {" +
+				"\"foo\": [ \"3\", \"4\" ]," +
+				"\"bar\": { \"b\": \"2\", \"c\": \"3\" }," +
+				"\"baz\": \"value\"" +
+				"}," +
+				"\"new-value\": \"hello\"" +
+				"}");
+		
+		String newValue = buildConfiguration.getConfigurationFor("new-value", String.class);
+		assertThat(newValue, is("hello"));
+		
+		Map section = buildConfiguration.getConfigurationFor("section", Map.class);
+		assertThat((List<String>) section.get("foo"), containsInAnyOrder("1", "2", "3", "4"));
+
+		assertThat((Map<String, String>) section.get("bar"), hasEntry("a", "1"));
+		assertThat((Map<String, String>) section.get("bar"), hasEntry("b", "2"));
+		assertThat((Map<String, String>) section.get("bar"), hasEntry("c", "3"));
+		
+		assertThat(section.get("baz"), is("value"));
 	}
 	
 	@Test
