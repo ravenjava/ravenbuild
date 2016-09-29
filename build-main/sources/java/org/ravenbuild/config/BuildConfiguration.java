@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,9 +71,29 @@ public class BuildConfiguration {
 			Gson gson = new Gson();
 			final String jsonConfig = gson.toJson(configurationMap);
 			
-			T configuration = gson.fromJson(jsonConfig, configType);
+			try {
+				setInnerConfigurationValuesField(gson, jsonConfig);
+			} catch (NoSuchFieldException e) {
+				T configuration = gson.fromJson(jsonConfig, configType);
+				configurationListener.configurationLoaded(configuration);
+			}
+		}
+		
+		private void setInnerConfigurationValuesField(final Gson gson, final String jsonConfig) throws NoSuchFieldException {
+			Field configValuesField = configType.getDeclaredField("configValues");
+			boolean wasAccessible = configValuesField.isAccessible();
+			configValuesField.setAccessible(true);
 			
-			configurationListener.configurationLoaded(configuration);
+			try {
+				T configuration = configType.newInstance();
+				Object configurationValues = gson.fromJson(jsonConfig, configValuesField.getType());
+				configValuesField.set(configuration, configurationValues);
+				configurationListener.configurationLoaded(configuration);
+			} catch (InstantiationException | IllegalAccessException e) {
+				throw new IllegalStateException("FIXME: Better error message; Could not instantiate configuration type", e);
+			}
+			
+			configValuesField.setAccessible(wasAccessible);
 		}
 	}
 }

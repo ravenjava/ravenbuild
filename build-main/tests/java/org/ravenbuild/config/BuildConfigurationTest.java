@@ -6,10 +6,9 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
 import java.util.List;
+import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
@@ -63,7 +62,27 @@ public class BuildConfigurationTest {
 	}
 	
 	@Test
-	@Ignore("FIXME: Should report a sensible error message if there is no listener for a given section")
+	public void canPutConfigurationMapIntoInnerConfigValuesField() {
+		buildConfiguration.loadFromString("{ \"sectionName\": {" +
+				"\"foo\": [ \"1\", \"2\" ], " +
+				"\"bar\": [ \"3\", \"4\" ] " +
+				"}}");
+		
+		final ConfigurationListener<ConfigValuesTestConfigType> configurationListener = mock(ConfigurationListener.class);
+		buildConfiguration.registerConfigurationListener("sectionName", ConfigValuesTestConfigType.class, configurationListener);
+		buildConfiguration.processConfigurationForListeners();
+		
+		final ArgumentCaptor<ConfigValuesTestConfigType> captor = ArgumentCaptor.forClass(ConfigValuesTestConfigType.class);
+		verify(configurationListener).configurationLoaded(captor.capture());
+		
+		ConfigValuesTestConfigType config = captor.getValue();
+		assertThat(config.configValues, is(notNullValue()));
+		assertThat(config.configValues.get("foo"), hasItems("1", "2"));
+		assertThat(config.configValues.get("bar"), hasItems("3", "4"));
+	}
+	
+	@Test
+	@Ignore("FIXME: Should report a meaningful error message if there is no listener for a given section")
 	public void reportsAnErrorIfThereIsNoListenerForASection() {
 		fail("Implement me!");
 	}
@@ -86,17 +105,21 @@ public class BuildConfigurationTest {
 		fail("Implement me!");
 	}
 	
-	private static class TestConfigType {
+	public static class TestConfigType {
 	}
 	
-	private static class ComplextTestConfigType {
+	public static class ComplextTestConfigType {
 		private String strValue;
 		private int intValue;
 		private List<String> list;
 		private SubObject subObject;
 	}
 	
-	private static class SubObject {
+	public static class SubObject {
 		private String foo;
+	}
+	
+	public static class ConfigValuesTestConfigType {
+		private Map<String, List<String>> configValues;
 	}
 }
