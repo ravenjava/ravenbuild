@@ -63,4 +63,28 @@ public class Logger {
 			outputStream.println();
 		}
 	}
+	
+	public void logMajorSeparator(final LogLevel logLevel) {
+		log(logLevel, "===============================================",
+				"==================================================");
+		
+	}
+	
+	public void logSeparator(final LogLevel logLevel, final String name) {
+		log(logLevel, "--------------------------------------", padMessage(name));
+	}
+	
+	private String padMessage(final String message) {
+		StringBuilder paddedMessageBuilder = new StringBuilder();
+		paddedMessageBuilder.append(message);
+		paddedMessageBuilder.append(" ");
+		final int messageLength = paddedMessageBuilder.length();
+		
+		for(int i=messageLength; i<50; i++) {
+			paddedMessageBuilder.append("-");
+		}
+		
+		return paddedMessageBuilder.toString();
+	}
+	
 }

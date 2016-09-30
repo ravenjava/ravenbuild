@@ -1,3 +1,4 @@
 #!/bin/sh
 
+PATH=$PATH:bin
 java -cp ../../.raven/ravenbuild.jar org.ravenbuild.RavenBuild $@

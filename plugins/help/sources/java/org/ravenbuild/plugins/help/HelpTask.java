@@ -50,14 +50,13 @@ public class HelpTask implements Task<HelpTaskOptions> {
 		final String shortDescription = getShortDescription(taskInfo.getTask());
 		final String[] longDescription = getLongDescription(taskInfo.getTask());
 		logger.log(LogLevel.DEFAULT, taskName, shortDescription);
-		logger.log(LogLevel.DEFAULT, "===============================================",
-				"==================================================");
+		logger.logMajorSeparator(LogLevel.DEFAULT);
 		
 		for(String descriptionLine : longDescription) {
 			logger.log(LogLevel.DEFAULT, "", descriptionLine);
 		}
 		
-		logger.log(LogLevel.DEFAULT, "--------------------------------------", padMessage("Parameters"));
+		logger.logSeparator(LogLevel.DEFAULT, "Parameters");
 		printTaskOptionsHelpFor(taskName, taskInfo.getTaskOptionsType());
 	}
 	
@@ -89,16 +88,14 @@ public class HelpTask implements Task<HelpTaskOptions> {
 	
 	private void printTaskList() {
 		logger.log(LogLevel.DEFAULT, "Task", "Description:");
-		logger.log(LogLevel.DEFAULT, "===============================================",
-				"==================================================");
+		logger.logMajorSeparator(LogLevel.DEFAULT);
 		
 		final List<TaskGroup> taskGroups = taskRepository.allTaskGroups();
 		for(TaskGroup taskGroup : taskGroups) {
 			if(taskGroup.getName().equals("Internal")) {
 				continue;
 			}
-			
-			logger.log(LogLevel.DEFAULT, "----------------------------------------------", padMessage(taskGroup.getName() + " tasks"));
+			logger.logSeparator(LogLevel.DEFAULT, taskGroup.getName() + " tasks");
 			
 			for(TaskGroup.NamedTask task : taskGroup.tasksInGroup()) {
 				final String shortDescription = getShortDescription(task.task());
@@ -116,19 +113,6 @@ public class HelpTask implements Task<HelpTaskOptions> {
 		
 		final ShortDescription shortDescriptionAnnotation = task.getClass().getAnnotation(ShortDescription.class);
 		return shortDescriptionAnnotation.value();
-	}
-	
-	private String padMessage(final String message) {
-		StringBuilder paddedMessageBuilder = new StringBuilder();
-		paddedMessageBuilder.append(message);
-		paddedMessageBuilder.append(" ");
-		final int messageLength = paddedMessageBuilder.length();
-		
-		for(int i=messageLength; i<50; i++) {
-			paddedMessageBuilder.append("-");
-		}
-		
-		return paddedMessageBuilder.toString();
 	}
 	
 	private void printGeneralHelp() {

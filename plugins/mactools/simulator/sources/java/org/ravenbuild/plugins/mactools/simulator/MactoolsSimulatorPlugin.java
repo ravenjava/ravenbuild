@@ -8,7 +8,7 @@ import org.ravenbuild.tasks.Task;
 public class MactoolsSimulatorPlugin implements BuildPlugin {
 	@Override
 	public void initialize(final PluginContext pluginContext) {
-		SimulatorListTask simulatorListTask = new SimulatorListTask();
+		SimulatorListTask simulatorListTask = new SimulatorListTask(pluginContext.logger());
 		pluginContext.registerTask("simulator-list", simulatorListTask, EmptyTaskOptions.class, "iOS Simulator");
 	}
 	
