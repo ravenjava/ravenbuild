@@ -12,7 +12,7 @@
 			"plugins/build", "plugins/dependencies", "plugins/help", "plugins/project-structure",
 			"plugins/java/java-dependencies", "plugins/java/java-main",
 			"plugins/ides/intellij", "plugins/ides/intellij-java",
-			"plugins/mactools/mactools-main",
+			"plugins/mactools/mactools-main", "plugins/mactools/simulator",
 
 			"utilities/ravenvalue", "utilities/ravenxml"
 		],
@@ -35,12 +35,16 @@
 
 	"dependencies": {
 		"java": [
+			"org.hamcrest:hamcrest-all",
+			"junit:junit",
+			"org.mockito:mockito-all",
+
 			"ravenbuild:build-main",
 
 			"ravenbuild:build", "ravenbuild:dependencies", "ravenbuild:help", "ravenbuild:project-structure",
 			"ravenbuild:java-dependencies", "ravenbuild:java-main",
 			"ravenbuild:intellij", "ravenbuild:intellij-java",
-			"ravenbuild:mactools-main",
+			"ravenbuild:mactools-main", "ravenbuild:simulator",
 
 			"ravenbuild:ravenvalue", "ravenbuild:ravenxml"
 		]

@@ -46,24 +46,28 @@ public class IntelliJTask implements Task<EmptyTaskOptions> {
 	@Override
 	public void run(final EmptyTaskOptions taskOptions) {
 		boolean isRootModule = !projectInfo.getParent().isPresent();
-		boolean shouldCreateIdeaFolder = !buildEnvironment.getFile(".idea").exists();
+		boolean shouldCreateMissingDotIdeaFiles = !buildEnvironment.getFile(".idea").exists();
 
 		List<ModuleDataProvider> moduleDataProviders = projectDataProviders.stream()
 				.map(pdp -> pdp.moduleDataProvider())
 				.filter(mdp -> mdp.isPresent())
 				.map(mdp -> mdp.get())
 				.collect(Collectors.toList());
+
 		buildEnvironment.writeFile(projectInfo.getProjectName()+".iml", new ImlFileWriter(moduleDataProviders));
 		
-		if(isRootModule && shouldCreateIdeaFolder) {
+		if(isRootModule) {
 			List<CompilerConfiguraitonProvider> compilerConfigurationProviders = projectDataProviders.stream()
 					.map(pdp -> pdp.compilerConfigurationProvider())
 					.filter(ccp -> ccp.isPresent())
 					.map(ccp -> ccp.get())
 					.collect(Collectors.toList());
-			buildEnvironment.writeFile(".idea/compiler.xml", new CompilerXmlWriter(compilerConfigurationProviders));
 			buildEnvironment.writeFile(".idea/modules.xml", new ModulesXmlWriter(allProjects, buildEnvironment.buildBaseDirectory()));
-			buildEnvironment.writeFile(".idea/misc.xml", new MiscXmlWriter());
+			
+			if(shouldCreateMissingDotIdeaFiles) {
+				buildEnvironment.writeFile(".idea/compiler.xml", new CompilerXmlWriter(compilerConfigurationProviders));
+				buildEnvironment.writeFile(".idea/misc.xml", new MiscXmlWriter());
+			}
 		}
 	}
 	

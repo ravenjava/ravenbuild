@@ -5,6 +5,7 @@ import org.ravenbuild.environment.FileWriterHandler;
 import org.ravenbuild.plugins.dependencies.Dependency;
 import org.ravenbuild.plugins.ides.intellij.xml.module.*;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -37,9 +38,10 @@ public class ImlFileWriter implements FileWriterHandler {
 	private void addDependencies(final NewModuleRootManager newModuleRootManager) {
 		for(ModuleDataProvider mdp : moduleDataProviders) {
 			for(Dependency dependency : mdp.dependencies()) {
-				if(dependency.locationOnDisk().getAbsolutePath().contains(".raven/libraries")) {
+				File locationOnDisk = dependency.locationOnDisk();
+				if(locationOnDisk.getAbsolutePath().contains(".raven/libraries")) {
 					//FIXME should use relative path and $PROJECT_DIR$ here!
-					newModuleRootManager.add(new ModuleLibrary(new ModuleLibrary.JarUrl("file://"+dependency.locationOnDisk().getAbsolutePath())));
+					newModuleRootManager.add(new ModuleLibrary(new ModuleLibrary.JarUrl("jar:///"+locationOnDisk.getAbsolutePath()+"!/")));
 				} else {
 					String moduleId = dependency.artifactId().substring(dependency.artifactId().indexOf(":")+1);
 					newModuleRootManager.add(new ModuleDependency(new ModuleDependency.ModuleName(moduleId)));

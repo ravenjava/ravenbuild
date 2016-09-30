@@ -1,6 +1,8 @@
 {
 	"dependencies": {
 		"java": [
+			"org.openbakery:xcode-plugin",
+
 			"ravenbuild:build-main",
 			"ravenbuild:help",
 			"ravenbuild:simulator"
