@@ -2,7 +2,6 @@
 	"plugins": [
 		"org.ravenbuild.java",
 		"org.ravenbuild.java.intellij",
-		"org.ravenbuild.mactools"
 	],
 
 	"subprojects": {

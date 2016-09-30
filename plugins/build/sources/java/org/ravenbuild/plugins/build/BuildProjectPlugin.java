@@ -2,12 +2,17 @@ package org.ravenbuild.plugins.build;
 
 import org.ravenbuild.plugins.BuildPlugin;
 import org.ravenbuild.plugins.PluginContext;
+import org.ravenbuild.plugins.dependencies.DependenciesPlugin;
 import org.ravenbuild.tasks.EmptyTaskOptions;
 import org.ravenbuild.tasks.extensible.ExtensibleTaskSubtasks;
 
 public class BuildProjectPlugin implements BuildPlugin {
+	private DependenciesPlugin dependenciesPlugin;
+	
 	@Override
 	public void initialize(final PluginContext pluginContext) {
+		dependenciesPlugin = pluginContext.dependsOnPlugin(DependenciesPlugin.class);
+
 		ExtensibleTaskSubtasks compileSubtasks = new ExtensibleTaskSubtasks();
 		pluginContext.registerTask("compileSubtasks", compileSubtasks, EmptyTaskOptions.class, "Internal");
 		pluginContext.registerTask("compile", new CompileTask(compileSubtasks, "compileSubtasks"), EmptyTaskOptions.class, "Build");

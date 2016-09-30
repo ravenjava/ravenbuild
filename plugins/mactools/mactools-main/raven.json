@@ -3,6 +3,7 @@
 		"java": [
 			"ravenbuild:build-main",
 			"ravenbuild:help",
+			"ravenbuild:build",
 			"ravenbuild:simulator"
 		]
 	}
