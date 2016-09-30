@@ -8,6 +8,7 @@ import org.ravenbuild.projectinfo.ProjectInfo;
 import org.ravenbuild.tasks.EmptyTaskOptions;
 import org.ravenbuild.tasks.TaskContext;
 
+import java.io.File;
 import java.util.Optional;
 
 import static org.junit.Assert.fail;
@@ -92,12 +93,31 @@ public class IntelliJTaskTest {
 	
 	@Test
 	public void doesNotWriteDotIdeaFolderInSubProjects() {
-		BuildEnvironment buildEnvironment = mock(BuildEnvironment.class);
+		BuildEnvironment buildEnvironment = mock(BuildEnvironment.class, RETURNS_DEEP_STUBS);
 		IntelliJTask task = new IntelliJTask(buildEnvironment, mock(AllProjects.class));
 		TaskContext taskContext = mock(TaskContext.class);
 		ProjectInfo projectInfo = mock(ProjectInfo.class);
 		when(projectInfo.getProjectName()).thenReturn("project-name");
 		when(projectInfo.getParent()).thenReturn(Optional.of(mock(ProjectInfo.class)));
+		when(taskContext.projectInfo()).thenReturn(projectInfo);
+		task.initialize(taskContext);
+		
+		task.run(mock(EmptyTaskOptions.class));
+		
+		verify(buildEnvironment, never()).writeFile(eq(".idea/compiler.xml"), any(FileWriterHandler.class));
+	}
+	
+	@Test
+	public void doesNotWriteDotIdeaFolderWhenItAlreadyExists() {
+		BuildEnvironment buildEnvironment = mock(BuildEnvironment.class, RETURNS_DEEP_STUBS);
+		File ideaDirectory = mock(File.class);
+		when(ideaDirectory.exists()).thenReturn(true);
+		when(buildEnvironment.getFile(".idea")).thenReturn(ideaDirectory);
+		IntelliJTask task = new IntelliJTask(buildEnvironment, mock(AllProjects.class));
+		TaskContext taskContext = mock(TaskContext.class);
+		ProjectInfo projectInfo = mock(ProjectInfo.class);
+		when(projectInfo.getParent()).thenReturn(Optional.empty());
+		when(projectInfo.getProjectName()).thenReturn("project-name");
 		when(taskContext.projectInfo()).thenReturn(projectInfo);
 		task.initialize(taskContext);
 		

@@ -46,6 +46,7 @@ public class IntelliJTask implements Task<EmptyTaskOptions> {
 	@Override
 	public void run(final EmptyTaskOptions taskOptions) {
 		boolean isRootModule = !projectInfo.getParent().isPresent();
+		boolean shouldCreateIdeaFolder = !buildEnvironment.getFile(".idea").exists();
 
 		List<ModuleDataProvider> moduleDataProviders = projectDataProviders.stream()
 				.map(pdp -> pdp.moduleDataProvider())
@@ -54,7 +55,7 @@ public class IntelliJTask implements Task<EmptyTaskOptions> {
 				.collect(Collectors.toList());
 		buildEnvironment.writeFile(projectInfo.getProjectName()+".iml", new ImlFileWriter(moduleDataProviders));
 		
-		if(isRootModule) {
+		if(isRootModule && shouldCreateIdeaFolder) {
 			List<CompilerConfiguraitonProvider> compilerConfigurationProviders = projectDataProviders.stream()
 					.map(pdp -> pdp.compilerConfigurationProvider())
 					.filter(ccp -> ccp.isPresent())
